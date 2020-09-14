@@ -1,0 +1,294 @@
+body{
+    margin: 0;
+    height: 100vh;
+    font-family: Arial, Helvetica, sans-serif;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+}
+
+*{
+    border: none;
+}
+header{
+    align-self: flex-start;
+    flex-basis: 100%;
+    background-color: #242323;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    white-space: nowrap;
+    max-height: 10vh;
+}
+.user h2{
+    color: white;
+    margin: 0;
+    font-size: 20px;
+}
+nav{
+    flex-grow: 2;
+}
+.user{
+    display: flex;
+    flex-direction: column;
+}
+.user a{
+    align-self: flex-end;
+    color: white;
+    display: block;
+}
+nav a{
+    display: inline-block;
+    text-align: center;
+    padding: 2.5vh;
+    color: whitesmoke;
+    white-space: nowrap;
+}
+nav a:hover{
+    background-color: #313131 ;
+    cursor: pointer;
+}
+.logo{
+    display: inline-block;
+    height: min-content;
+    display: flex;
+    align-items: center;
+    width: 20vw;
+}
+.logo h1{
+    color: whitesmoke;
+    display: inline-block;
+    margin: 0 0 0 10px;
+}
+.logo .ball{
+    background-color: lemonchiffon;
+    border: 3px solid black;
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.logo:hover{
+    cursor:pointer;
+}
+
+
+.content{
+    flex-basis: 100%;
+    height: 90vh;
+    display: grid;
+    grid-template-columns: repeat(12,1fr);
+    grid-template-rows: .3fr 1fr 1fr .5fr 8fr 1fr;
+    gap: 10px;
+}
+.today{
+    grid-area: 2/2/2/4;
+    width: min-content;
+    white-space: nowrap;
+    margin: 0;
+    color: #242323;
+    font-size: 20px;
+}
+.newRes{
+    grid-area: 3/10/3/12;
+    white-space: nowrap;
+    color: white;
+    background-color: #343434;
+    border-radius: 4px;
+    border: none;
+    justify-self: right;
+    padding: 20px;
+    height: min-content;
+    font-size: 15px;
+}
+.newRes:hover{
+    background-color: #242323;
+    cursor: pointer;
+}
+.arrivals{
+    grid-area: 3/2/3/3;
+}
+.departures{
+    grid-area: 3/3/3/4;
+}
+.beds{
+    grid-area: 3/4/3/5;
+}
+.number{
+    margin: 0;
+}
+
+
+table{
+    min-width:47.5%;
+    width: 100%;
+}
+table, tr, td{
+    border-bottom: 1px solid #ddd;
+    border-collapse: collapse;
+}
+th{
+    height: 40px;
+    position: sticky;
+    top: 0;
+    background-color: white;
+    background-color: rgb(241, 239, 239);
+}
+.over{
+    display: flex;
+    overflow-y: auto;
+    justify-content: space-between;
+}
+.arrival{
+    grid-area: 5/2/5/7;
+}
+.departure{
+    grid-area: 5/7/5/12;
+
+}
+.room{
+    width: 20%;
+    text-align: center;
+}
+.check{
+    text-align: center;
+    width: 6vw;
+}
+
+.arrival .check{
+    background-color: lightseagreen;
+    color: white;
+}
+
+
+.arrival .check:hover{
+    background-color: rgb(24, 119, 114);
+    cursor: pointer;
+}
+
+
+.departure .check{
+    background-color: orange;
+    color: white;
+}
+
+.departure .check:hover{
+    background-color: rgb(175, 114, 1);
+    cursor: pointer;
+}
+
+
+.booking{
+    font-size: 15px;
+}
+.guest{
+    font-weight: bold;
+}
+tbody tr:hover, td:hover{
+    background-color: #f5f5f5;
+}
+tbody td{
+    padding: 10px;
+}
+
+
+form{
+    display: flex;
+    flex-basis: 90%;
+    flex-direction: column;
+    height: min-content;
+    margin: 0;
+}
+
+input{
+    flex-basis: 100%;
+    border-radius: 3px;
+    padding: 7px;
+    border: 1px solid rgb(170, 170, 170);
+    margin: 3px 0;
+    width: 100%;
+}
+
+input:focus, select:focus{
+    border-color: #9ecaed;
+    box-shadow: 0 0 10px #9ecaed;
+}
+
+select{
+    padding: 7px;
+    border-radius: 3px;
+    border: 1px solid rgb(170, 170, 170);
+}
+
+button, input[type=submit]{
+    flex-basis: 30%;
+    padding: 10px;
+    text-transform: capitalize;
+    background-color: #343434;
+    border-radius: 5px;
+    height: min-content;
+    color: white;
+    border: none;
+    margin: 0;
+}
+
+button{
+    background-color: #4e4e4e;
+}
+
+input[type=submit]:hover, button:hover{
+    background-color: #242323;
+    cursor: pointer;
+}
+
+
+.modal{
+    display: none;
+    position: fixed;
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0,0,0,0.4);
+}
+
+.modal-content {
+    background-color: whitesmoke;
+    display: flex;
+    flex-direction: column;
+    border-radius: 5px;
+    width: 40vw;
+}
+.modal-header h1{
+    margin: 0;
+    font-weight: normal;
+    font-size:  25px;
+}
+.modal-body{
+    border-top: 1px solid rgb(209, 208, 208);
+    border-bottom: 1px solid rgb(209, 208, 208);
+    padding: 30px;
+}
+
+.modal-header, .modal-footer{
+    padding: 20px 30px ;
+}
+
+.modal-footer{
+    display: flex;
+    flex-basis: 100%;
+    align-self: flex-end;
+    padding: 0;
+    padding-top: 10px;
+}
+
+.modal-footer button {
+    margin-right: 20px;
+}
+
+a{
+    text-decoration: none;
+}

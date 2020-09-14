@@ -1,0 +1,179 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: Lavinha
+  Date: 5/3/2020
+  Time: 12:52 PM
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="/css/form.css">
+    <title>Bookings</title>
+    <meta name="viewport" content="width=device-width, user-scalable=0">
+</head>
+<body>
+<header>
+    <div class="logo" onclick="window.location.href='/dashboard';">
+        <h1>HMS</h1>
+    </div>
+    <nav>
+        <a href="/bookings/">Bookings</a><a href="/guests/">Guests</a></a><a href="/rooms/">Rooms</a><a href="/roomTypes/">Room Types</a>
+    </nav>
+    <div class="user">
+        <h2>${sessionStaff.getName()}</h2>
+        <a href="/auth/logout">Logout</a>
+    </div>
+</header>
+<div class="content">
+    <form action="/bookings" id="form" <c:if test="${booking == null}">method="POST" </c:if> >
+        <h1><c:choose><c:when test="${booking == null}">New</c:when><c:otherwise>Edit</c:otherwise></c:choose> Booking</h1>
+        <label for="arrival">Arrival</label>
+        <input type="date" name="arrival" id="arrival" autocomplete="off" value="${booking.getArrival()}">
+        <label for="departure">Departure</label>
+        <input type="date" name="departure" id="departure" autocomplete="off" value="${booking.getDeparture()}">
+        <div class="split">
+            <label for="room_type">Room Type</label>
+            <label for="id_room">Number</label>
+            <select name="room_type" id="room_type"<c:if test="${booking == null}">disabled </c:if>>
+                <c:if test="${booking == null}"><option disabled selected value></option></c:if>
+                <c:forEach items="${roomTypeList}" var="roomType">
+                    <option value="${roomType.getId()}" <c:if test="${booking.getRoom().getIdRoomType() == roomType.getId()}">selected</c:if>>${roomType.getName()}</option>
+                </c:forEach>
+            </select>
+            <select name="id_room" id="id_room" <c:if test="${booking == null}">disabled </c:if>>
+                <c:if test="${booking != null}"><option value="${booking.getIdRoom()}">${booking.getRoom().getNumber()}</option> </c:if>
+            </select>
+        </div>
+        <label for="id_guest">Guest</label>
+        <select name="id_guest" id="id_guest">
+            <option disabled selected value></option>
+            <c:forEach items="${guestList}" var="guest">
+                <option value="${guest.getId()}" <c:if test="${guest.getId() == booking.getIdGuest()}"> selected </c:if>>${guest.getName()}</option>
+            </c:forEach>
+        </select>
+        <input type="text" value="${sessionStaff.getId()}" style="display: none" id="id_staff" name="id_staff">
+        <span class="total">Total $<span id="result">${booking.getTotal()}</span></span>
+        <input type="number" style="display: none" name="id_staff" id="id_staff" value="${sessionStaff.getId()}">
+        <div class="submit">
+            <button onclick="window.history.go(-1);" type="button">Cancel</button>
+            <input type="submit" value="Submit" id="button">
+        </div>
+    </form>
+</div>
+</body>
+<script>
+    function send(e){
+        e.preventDefault();
+        let url = "/bookings/${booking.getId()}";
+
+        fetch(url, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: new URLSearchParams({
+                'id_room': document.getElementById("id_room").value,
+                'id_guest': document.getElementById("id_guest").value,
+                'arrival': document.getElementById("arrival").value,
+                'departure': document.getElementById("departure").value,
+                'id_staff': ${sessionStaff.getId()},
+                'total': calcPrice()
+            }),
+        }).then(resp => {   window.location.href = url });
+    }
+
+    if(document.getElementById("form").method !== "post"){
+        document.getElementById("form").addEventListener("submit", send);
+    }
+
+    function validate() {
+        if(document.getElementById("arrival").value >= document.getElementById("departure").value){
+            document.getElementById("arrival").setCustomValidity("Date start is bigger than date end.");
+        }else{
+            document.getElementById("arrival").setCustomValidity("");
+        }
+    }
+    document.getElementById("departure").addEventListener("focusout", validate);
+
+    document.getElementById("departure").oninput = function () {
+        if((document.getElementById("departure").value !== "") && (document.getElementById("arrival").value !== "")){
+            document.getElementById("room_type").disabled = false;
+        }else{
+            document.getElementById("room_type").disabled = true;
+        }
+
+        if(document.getElementById("arrival").value !== "" && document.getElementById("room_type").value !== ""){
+            calcPrice();
+        }
+
+    };
+
+    document.getElementById("arrival").oninput = function () {
+        if((document.getElementById("departure").value !== "") && (document.getElementById("arrival").value !== "")){
+            document.getElementById("room_type").disabled = false;
+        }else{
+            document.getElementById("room_type").disabled = true;
+        }
+
+        if(document.getElementById("departure").value !== "" && document.getElementById("room_type").value !== ""){
+            calcPrice();
+        }
+    };
+
+    let roomContent = document.getElementById("id_room").innerHTML;
+    let roomTypeValue = document.getElementById("room_type").value;
+
+    document.getElementById("room_type").onchange = function () {
+        calcPrice();
+        if(roomContent !== ""){
+            if(document.getElementById("room_type").value === roomTypeValue){
+                document.getElementById("id_room").innerHTML = roomContent;
+            }else{
+                document.getElementById("id_room").innerHTML = "";
+            }
+        }else{
+            document.getElementById("id_room").innerHTML = "";
+        }
+        if(document.querySelector("#room_type").value !== ""){
+            document.querySelector("#id_room").disabled = false;
+            let url = "/api/room?arrival="+ document.getElementById("arrival").value + "&departure=" + document.getElementById("departure").value +"&room_type=" + document.getElementById("room_type").value;
+            fetch(url, {
+                method: 'GET',
+            }).then(resp => resp.json())
+                .then(data => {
+                    for (i = 0; i< data.length; i++) {
+                        let opt = document.createElement("option");
+                        opt.value = data[i].id;
+                        opt.innerText = data[i].number;
+                        document.querySelector("#id_room").appendChild(opt);
+                    }
+                });
+
+        }else{
+            document.querySelector("#id_room").disabled = true;
+        }
+    };
+
+
+    function calcPrice(){
+        let url = "/api/roomtype?room_type=" + document.getElementById("room_type").value;
+        fetch(url, {
+            method: 'GET',
+        }).then(resp => resp.json())
+            .then(data => {
+                let dailyPrice = data[0].dailyPrice;
+                let total = dailyPrice * (document.getElementById("departure").valueAsNumber - document.getElementById("arrival").valueAsNumber) / (1000 * 3600 * 24);
+                document.getElementById("result").innerHTML = total + ".0000";
+                return total;
+            });
+    }
+
+
+
+
+
+</script>
+</html>
+

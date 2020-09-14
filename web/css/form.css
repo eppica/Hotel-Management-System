@@ -1,0 +1,200 @@
+body{
+    margin: 0;
+    height: 100vh;
+    font-family: Arial, Helvetica, sans-serif;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+}
+
+*{
+    border: none;
+}
+header{
+    align-self: flex-start;
+    flex-basis: 100%;
+    background-color: #242323;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    white-space: nowrap;
+    max-height: 10vh;
+}
+.user h2{
+    color: white;
+    margin: 0;
+    font-size: 20px;
+}
+nav{
+    flex-grow: 2;
+}
+.user{
+    display: flex;
+    flex-direction: column;
+}
+.user a{
+    align-self: flex-end;
+    color: white;
+    display: block;
+}
+nav a{
+    display: inline-block;
+    text-align: center;
+    padding: 2.5vh;
+    color: whitesmoke;
+    white-space: nowrap;
+}
+nav a:hover{
+    background-color: #313131 ;
+    cursor: pointer;
+}
+.logo{
+    display: inline-block;
+    height: min-content;
+    display: flex;
+    align-items: center;
+    width: 20vw;
+}
+.logo h1{
+    color: whitesmoke;
+    display: inline-block;
+    margin: 0 0 0 10px;
+}
+.logo .ball{
+    background-color: lemonchiffon;
+    border: 3px solid black;
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.logo:hover{
+    cursor:pointer;
+}
+
+
+.content{
+    height: 90vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+form{
+    min-width: min-content;
+    display: flex;
+    flex-direction: column;
+    height: min-content;
+    flex-basis: 100%;
+    max-width: 400px;
+    border-radius: 4px;
+}
+
+form h1, .submit {
+    margin: 10px 0;
+}
+input{
+    flex-basis: 100%;
+    margin: 3px 0;
+    width: 100%;
+}
+
+input, select, textarea{
+    border: 1px solid rgb(170, 170, 170);
+    padding: 7px;
+    border-radius: 3px;
+}
+
+input:focus, select:focus, textarea:focus{
+    border: 1px solid rgba(23, 133, 127, 0.596);
+    box-shadow: 0 0 6px rgba(23, 133, 127, 0.596);
+}
+
+input:hover, select:hover, textarea:hover{
+    border: 1px solid rgb(92, 90, 90);
+}
+
+
+textarea{
+    resize: none;
+}
+
+button, input[type=submit]{
+    flex-basis: 30%;
+    padding: 10px;
+    text-transform: capitalize;
+    background-color: #343434;
+    border-radius: 5px;
+    height: min-content;
+    color: white;
+    border: none;
+    margin: 0;
+    margin-top: 20px;
+}
+
+button{
+    background-color: #4e4e4e;
+}
+
+input[type=submit]:hover, button:hover{
+    background-color: #242323;
+    cursor: pointer;
+}
+
+form h1{
+    font-weight: normal;
+    flex-basis: 100%;
+    margin: 10px 0;
+    align-self: center;
+
+}
+
+
+form label{
+    margin-top: 10px;
+}
+.submit{
+    display: flex;
+    width: 30vw;
+    max-width: inherit;
+    align-self: center;
+    justify-content: space-around;
+}
+
+.total{
+    font-size: 20px;
+    font-weight: bold;
+    align-self: flex-end;
+    margin-top: 40px;
+}
+
+a{
+    text-decoration: none;
+}
+
+.split{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.split label[for=id_room]{
+    flex-basis: 15%;
+
+}
+
+.split label[for=room_type]{
+    flex-basis: 80%;
+}
+
+.split select[id=room_type]{
+    flex-basis: 80%;
+}
+
+.split select[id=id_room]{
+    flex-basis: 17%;
+}
+

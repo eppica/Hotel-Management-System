@@ -1,0 +1,437 @@
+body{
+    margin: 0;
+    height: 100vh;
+    font-family: Arial, Helvetica, sans-serif;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+}
+
+*{
+    border: none;
+}
+header{
+    align-self: flex-start;
+    flex-basis: 100%;
+    background-color: #242323;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    white-space: nowrap;
+    max-height: 10vh;
+}
+.user h2{
+    color: white;
+    margin: 0;
+    font-size: 20px;
+}
+nav{
+    flex-grow: 2;
+}
+.user{
+    display: flex;
+    flex-direction: column;
+}
+.user a{
+    align-self: flex-end;
+    color: white;
+    display: block;
+}
+nav a{
+    display: inline-block;
+    text-align: center;
+    padding: 2.5vh;
+    color: whitesmoke;
+    white-space: nowrap;
+}
+nav a:hover{
+    background-color: #313131 ;
+    cursor: pointer;
+}
+.logo{
+    height: min-content;
+    display: flex;
+    align-items: center;
+    width: 20vw;
+}
+.logo h1{
+    color: whitesmoke;
+    display: inline-block;
+    margin: 0 0 0 10px;
+}
+.logo .ball{
+    background-color: lemonchiffon;
+    border: 3px solid black;
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.logo:hover{
+    cursor:pointer;
+}
+
+.content{
+    height: 80vh;
+    align-self: flex-start;
+    display: grid;
+    width: 100%;
+    grid-template-columns: 3fr repeat(4, 1fr) .5fr repeat(4, 1fr) 3fr;
+    grid-auto-rows:min-content;
+    row-gap: 20px;
+}
+
+.content .model{
+    grid-area: 2/2/2/4;
+}
+.model *{
+    font-weight: normal;
+    margin: 0;
+    width: min-content;
+    white-space: nowrap;
+}
+.model h1{
+    font-size: 27px;
+}
+
+.model{
+    align-self: center;
+}
+
+.edit{
+    grid-area: 2/9/2/11;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.edit button{
+    flex-basis: 40%;
+    padding: 10px;
+    text-transform: capitalize;
+    background-color: #343434;
+    border-radius: 5px;
+    height: min-content;
+    color: white;
+    border: none;
+    margin: 0;
+}
+
+.edit .delete{
+    background-color: #4e4e4e;
+}
+
+.edit button:hover{
+    background-color: #242323;
+    cursor: pointer;
+}
+
+.about , .booking-info{
+    grid-area: 3/2/3/11;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: min-content;
+    gap: 10px;
+    padding: 20px;
+    border: 1px solid #ddd;
+}
+
+
+.bookings h2{
+    margin: 0;
+    font-weight: bold;
+    font-size: 17px;
+    height: min-content;
+    flex-basis: 100%;
+}
+
+.about h2, .checkin h2, .checkout h2, .guest-bookings h2{
+    margin: 0;
+    grid-area: 1/1/1/4;
+    font-weight: normal;
+    font-size: 19px;
+    height: min-content;
+}
+
+.property{
+    height: min-content;
+    display: flex;
+    flex-direction: column;
+}
+
+.label{
+    font-size: 11px;
+}
+
+.data{
+    font-size: 17px;
+}
+
+.guest-bookings{
+    grid-area: 4/2/4/11;
+    padding: 20px;
+    border: 1px solid #ddd;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+table{
+    width: 100%;
+    text-align: center;
+}
+table, tr, td{
+    border-bottom: 1px solid #ddd;
+    border-collapse: collapse;
+}
+th{
+    padding: 10px;
+    position: sticky;
+    top: 0;
+
+    background-color: rgb(241, 239, 239);
+}
+td{
+    padding: 10px;
+}
+.over{
+    display: flex;
+    overflow-y: auto;
+    max-height: 30vh;
+    width: 100%;
+    align-items: stretch;
+    justify-content: stretch;
+    margin-top: 10px;
+}
+tbody tr:hover, td:hover{
+    background-color: #f5f5f5;
+    cursor: pointer;
+}
+table a:visited{
+    color:white;
+}
+
+
+.checkin-info{
+    display: none;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: min-content;
+    gap: 10px;
+    align-content: center;
+    padding: 20px;
+}
+.checkout-info{
+    display: none;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: min-content;
+    align-content: center;
+    gap: 10px;
+    padding: 20px;
+}
+.checkin{
+    height: 18vh;
+    grid-area: 4/2/4/6;
+    border: 1px solid #ddd;
+    align-content: stretch;
+    justify-content: stretch;
+}
+.checkout{
+    height: 18vh;
+    grid-area: 4/7/4/11;
+    border: 1px solid #ddd;
+    align-content: stretch;
+    justify-content: stretch;
+}
+.check{
+    justify-self: end;
+    flex-direction: column;
+    grid-area:1/3/3/4;
+}
+.check button{
+    width: 80px;
+}
+
+.check .delete{
+    margin-bottom: 10px;
+}
+#do-checkin{
+    height: 100%;
+    width: 100%;
+    grid-area: 1/1/1/3;
+    font-size: 17px;
+    color: white;
+    background-color: lightseagreen;
+}
+#do-checkin:hover{
+    background-color: rgb(24, 119, 114);
+    cursor: pointer;
+}
+#do-checkout{
+    display: block;
+    height: 100%;
+    width: 100%;
+    grid-area: 1/1/3/3;
+    font-size: 17px;
+    color: white;
+    background-color: orange;;
+}
+#do-checkout:hover{
+    background-color:rgb(175, 114, 1);
+    cursor: pointer;
+}
+
+
+.modal{
+    display: none;
+    position: fixed;
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0,0,0,0.4);
+}
+#modal-check .modal-content{
+    width: 40vw;
+}
+#modal-delete .modal-content {
+    width: 30vw;
+}
+.modal-content {
+    background-color: whitesmoke;
+    display: flex;
+    flex-direction: column;
+    border-radius: 5px;
+}
+.modal-header h1{
+    margin: 0;
+    font-weight: normal;
+    font-size:  25px;
+}
+
+.modal-body{
+    border-top: 1px solid rgb(209, 208, 208);
+    border-bottom: 1px solid rgb(209, 208, 208);
+    padding: 30px;
+}
+
+.modal-header, .modal-footer{
+    padding: 20px 30px ;
+}
+
+.modal-footer{
+    display: flex;
+    flex-basis: 100%;
+    align-self: flex-end;
+
+}
+
+#modal-check .modal-footer{
+    justify-content: flex-end;
+}
+
+.modal-footer button {
+    margin-right: 20px;
+}
+
+a{
+    text-decoration: none;
+}
+#modal-delete .modal-footer button{
+    flex-basis: 40%;
+    padding: 10px;
+    text-transform: capitalize;
+    background-color: #343434;
+    border-radius: 5px;
+    height: min-content;
+    color: white;
+    border: none;
+    margin: 0;
+    margin-left: 20px;
+}
+
+#modal-delete  .modal-footer .cancel{
+    background-color: #4e4e4e;
+}
+#modal-delete  .modal-footer button:hover{
+    background-color: #242323;
+    cursor: pointer;
+}
+
+form{
+    display: flex;
+    flex-basis: 90%;
+    flex-direction: column;
+    height: min-content;
+    margin: 0;
+}
+
+form input{
+    flex-basis: 100%;
+    border-radius: 3px;
+    padding: 7px;
+    border: 1px solid rgb(170, 170, 170);
+    margin: 3px 0;
+    width: 100%;
+}
+
+form input:focus, form select:focus{
+    border-color: #9ecaed;
+    box-shadow: 0 0 10px #9ecaed;
+}
+
+form select{
+    padding: 7px;
+    border-radius: 3px;
+    border: 1px solid rgb(170, 170, 170);
+}
+
+form button, form input[type=submit]{
+    flex-basis: 30%;
+    padding: 10px;
+    text-transform: capitalize;
+    background-color: #343434;
+    border-radius: 5px;
+    height: min-content;
+    color: white;
+    border: none;
+    margin: 0;
+}
+
+form button{
+    background-color: #4e4e4e;
+}
+
+form input[type=submit]:hover,form  button:hover{
+    background-color: #242323;
+    cursor: pointer;
+}
+
+.checkout-info .property{
+    grid-area: 2/1/2/4 ;
+}
+
+.checkin-info .property  {
+    grid-area: 2/1/2/4;
+}
+
+
+.link .data:hover{
+    color: #3c3cb1;
+    cursor: pointer;
+}
+.link .data{
+    color: darkblue;
+    text-decoration: underline;
+}
+
+.booking-info{
+    grid-area: 4/2/4/11;
+}
+
+.booking-info:hover{
+    cursor: pointer;
+    background-color: rgb(241, 239, 239);
+}
+
