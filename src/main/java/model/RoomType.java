@@ -4,6 +4,7 @@ import dao.RoomTypeDAO;
 
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -101,7 +102,7 @@ public class RoomType {
     }
 
     public BigDecimal getDailyPrice() {
-        return dailyPrice;
+        return dailyPrice.setScale(2, RoundingMode.CEILING);
     }
 
     public RoomType setDailyPrice(BigDecimal dailyPrice) {

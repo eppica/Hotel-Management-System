@@ -4,6 +4,7 @@ import dao.BookingDAO;
 
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -178,7 +179,7 @@ public class Booking {
     }
 
     public BigDecimal getTotal() {
-        return total;
+        return total.setScale(2, RoundingMode.CEILING);
     }
 
     public Booking setTotal(BigDecimal total) {
