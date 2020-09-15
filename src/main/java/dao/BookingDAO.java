@@ -129,8 +129,10 @@ public class BookingDAO implements DAO<Booking> {
         try {
             statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery("SELECT * FROM booking WHERE room_fk = " + id + " AND id NOT IN (SELECT booking_fk FROM `check` WHERE status = 0)");
-            resultSet.first();
-            booking = new Booking(resultSet);
+            if (resultSet.first()){
+                resultSet.first();
+                booking = new Booking(resultSet);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }finally {
