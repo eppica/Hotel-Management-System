@@ -69,7 +69,13 @@ public class APIController extends HttpServlet {
             if((arrival!= null) && (departure!= null)){
                 json = new StringBuilder("[");
                 for (RoomType rT: RoomType.findAll() ){
-                    Integer count = Room.countAll("WHERE id NOT IN (SELECT room_fk FROM booking WHERE arrival <= \" " + departure + "\" AND departure >= \" " +arrival +"\") AND room_type_fk = " + rT.getId());
+                    int count = 0;//Room.countAll("WHERE id NOT IN (SELECT room_fk FROM booking WHERE arrival <= \" " + departure + "\" AND departure >= \" " +arrival +"\") AND room_type_fk = " + rT.getId());
+                    List<Room> rooms = Room.findAll();
+                    for(Room room : rooms){
+                        if (room.getAvailability().equals("Available")){
+                            count++;
+                        }
+                    }
                     json.append("{\"id\":\""+rT.getId()+"\"");
                     json.append(", \"count\":\""+ count + "\"},");
                 }
