@@ -1,4 +1,3 @@
-drop database hms;
 create database hms;
 use hms;
 create table if not exists booking
