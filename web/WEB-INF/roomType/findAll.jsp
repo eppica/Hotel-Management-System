@@ -58,36 +58,58 @@
 </body>
 <script>
     document.getElementById("departure").oninput = function () {
-        if((document.getElementById("departure").value !== "") && (document.getElementById("arrival").value !== "")){
-            let url = "/api/count?arrival="+ document.getElementById("arrival").value + "&departure=" + document.getElementById("departure").value;
-            let rts = document.querySelectorAll(".count");
-            fetch(url, {
-                method: 'GET',
-            }).then(resp => resp.json())
-                .then(data => {
-                    let i = 0;
-                    for(let x of rts){
-                        x.innerHTML = data[i].count;
-                        i++;
-                    }
-                });
+        let rts = document.querySelectorAll(".count");
+        if(validate()){
+            if((document.getElementById("departure").value !== "") && (document.getElementById("arrival").value !== "")){
+                let url = "/api/count?arrival="+ document.getElementById("arrival").value + "&departure=" + document.getElementById("departure").value;
+                fetch(url, {
+                    method: 'GET',
+                }).then(resp => resp.json())
+                    .then(data => {
+                        let i = 0;
+                        for(let x of rts){
+                            x.innerHTML = data[i].count;
+                            i++;
+                        }
+                    });
+            }
+        }else{
+            for(let x of rts){
+                x.innerHTML= '-';
+            }
         }
     }
 
     document.getElementById("arrival").oninput = function () {
-        if ((document.getElementById("departure").value !== "") && (document.getElementById("arrival").value !== "")) {
-            let url = "/api/count?arrival="+ document.getElementById("arrival").value + "&departure=" + document.getElementById("departure").value;
-            let rts = document.querySelectorAll(".count");
-            fetch(url, {
-                method: 'GET',
-            }).then(resp => resp.json())
-                .then(data => {
-                    for (let i=0; i<data.length; i++) {
-                        for(let x of rts){
-                            x.innerHTML = data[i].count;
+        let rts = document.querySelectorAll(".count");
+        if(validate()){
+            if ((document.getElementById("departure").value !== "") && (document.getElementById("arrival").value !== "")) {
+                let url = "/api/count?arrival="+ document.getElementById("arrival").value + "&departure=" + document.getElementById("departure").value;
+                fetch(url, {
+                    method: 'GET',
+                }).then(resp => resp.json())
+                    .then(data => {
+                        for (let i=0; i<data.length; i++) {
+                            for(let x of rts){
+                                x.innerHTML = data[i].count;
+                            }
                         }
-                    }
-                });
+                    });
+            }
+        }else{
+            for(let x of rts){
+                x.innerHTML= '-';
+            }
+        }
+    }
+
+    function validate() {
+        if(document.getElementById("arrival").value >= document.getElementById("departure").value){
+            document.getElementById("arrival").setCustomValidity("Date start is bigger than date end.");
+            return false;
+        }else{
+            document.getElementById("arrival").setCustomValidity("");
+            return true;
         }
     }
 </script>
