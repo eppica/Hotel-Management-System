@@ -65,6 +65,7 @@
 </body>
 <script>
     function send(e){
+
         e.preventDefault();
         let url = "/bookings/${booking.getId()}";
 
@@ -88,43 +89,40 @@
         document.getElementById("form").addEventListener("submit", send);
     }
 
-    function validate() {
-        if(document.getElementById("arrival").value >= document.getElementById("departure").value){
-            document.getElementById("arrival").setCustomValidity("Date start is bigger than date end.");
-        }else{
-            document.getElementById("arrival").setCustomValidity("");
-        }
-    }
+    let roomContent = document.getElementById("id_room").innerHTML;
+    let roomTypeValue = document.getElementById("room_type").value;
+    let roomTypeContent = document.getElementById("room_type").innerHTML;
+
     document.getElementById("departure").addEventListener("focusout", validate);
 
     document.getElementById("departure").oninput = function () {
         if((document.getElementById("departure").value !== "") && (document.getElementById("arrival").value !== "")){
-            document.getElementById("room_type").disabled = false;
+            reset(validate(), document.getElementById("room_type").value !== "");
         }else{
-            document.getElementById("room_type").disabled = true;
-        }
+            reset(false);
 
+        }
         if(document.getElementById("arrival").value !== "" && document.getElementById("room_type").value !== ""){
-            calcPrice();
+            if(validate()){
+                calcPrice();
+            }
         }
 
     };
-
     document.getElementById("arrival").oninput = function () {
         if((document.getElementById("departure").value !== "") && (document.getElementById("arrival").value !== "")){
-            document.getElementById("room_type").disabled = false;
+            reset(validate(), document.getElementById("room_type").value !== "");
         }else{
-            document.getElementById("room_type").disabled = true;
-        }
+            reset(false);
 
+        }
         if(document.getElementById("departure").value !== "" && document.getElementById("room_type").value !== ""){
-            calcPrice();
+            if(validate()){
+                calcPrice();
+            }
         }
+
     };
-
-    let roomContent = document.getElementById("id_room").innerHTML;
-    let roomTypeValue = document.getElementById("room_type").value;
-
     document.getElementById("room_type").onchange = function () {
         calcPrice();
         if(roomContent !== ""){
@@ -138,24 +136,56 @@
         }
         if(document.querySelector("#room_type").value !== ""){
             document.querySelector("#id_room").disabled = false;
-            let url = "/api/room?arrival="+ document.getElementById("arrival").value + "&departure=" + document.getElementById("departure").value +"&room_type=" + document.getElementById("room_type").value;
-            fetch(url, {
-                method: 'GET',
-            }).then(resp => resp.json())
-                .then(data => {
-                    for (i = 0; i< data.length; i++) {
-                        let opt = document.createElement("option");
-                        opt.value = data[i].id;
-                        opt.innerText = data[i].number;
-                        document.querySelector("#id_room").appendChild(opt);
-                    }
-                });
-
+            research_rooms();
         }else{
             document.querySelector("#id_room").disabled = true;
         }
     };
 
+    function validate() {
+        if(document.getElementById("arrival").value >= document.getElementById("departure").value){
+            document.getElementById("arrival").setCustomValidity("Date start is bigger than date end.");
+            return false;
+        }else{
+            document.getElementById("arrival").setCustomValidity("");
+            return true;
+        }
+    }
+
+    function reset(validator, rt){
+        if(validator){
+            if(!rt){
+                document.getElementById("room_type").disabled = false;
+                document.getElementById("room_type").innerHTML = roomTypeContent;
+            }else{
+                document.getElementById("id_room").innerHTML = '';
+                research_rooms();
+            }
+            calcPrice();
+        }else{
+            document.getElementById("room_type").disabled = true;
+            document.getElementById("room_type").innerHTML = '';
+            document.getElementById("result").innerHTML = '';
+            document.getElementById("id_room").innerHTML = '';
+            document.getElementById("id_room").disabled = true;
+        }
+
+    }
+
+    function research_rooms() {
+        let url = "/api/room?arrival="+ document.getElementById("arrival").value + "&departure=" + document.getElementById("departure").value +"&room_type=" + document.getElementById("room_type").value;
+        fetch(url, {
+            method: 'GET',
+        }).then(resp => resp.json())
+            .then(data => {
+                for (i = 0; i< data.length; i++) {
+                    let opt = document.createElement("option");
+                    opt.value = data[i].id;
+                    opt.innerText = data[i].number;
+                    document.querySelector("#id_room").appendChild(opt);
+                }
+            });
+    }
 
     function calcPrice(){
         let url = "/api/roomtype?room_type=" + document.getElementById("room_type").value;
@@ -165,14 +195,10 @@
             .then(data => {
                 let dailyPrice = data[0].dailyPrice;
                 let total = dailyPrice * (document.getElementById("departure").valueAsNumber - document.getElementById("arrival").valueAsNumber) / (1000 * 3600 * 24);
-                document.getElementById("result").innerHTML = total + ".0000";
+                document.getElementById("result").innerHTML = total + ".00";
                 return total;
             });
     }
-
-
-
-
 
 </script>
 </html>
