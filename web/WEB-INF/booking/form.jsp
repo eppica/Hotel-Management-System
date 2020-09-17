@@ -30,7 +30,7 @@
     <form action="/bookings" id="form" <c:if test="${booking == null}">method="POST" </c:if> >
         <h1><c:choose><c:when test="${booking == null}">New</c:when><c:otherwise>Edit</c:otherwise></c:choose> Booking</h1>
         <label for="arrival">Arrival</label>
-        <input type="date" name="arrival" id="arrival" autocomplete="off" value="${booking.getArrival()}">
+        <input type="date" name="arrival" id="arrival" autocomplete="off" min="${minDateArrival}" value="${booking.getArrival()}">
         <label for="departure">Departure</label>
         <input type="date" name="departure" id="departure" autocomplete="off" value="${booking.getDeparture()}">
         <div class="split">
