@@ -28,7 +28,7 @@
     </div>
 </header>
 <div class="content">
-    <h1 class="today">${today}</h1>
+    <h1 id="today"></h1>
     <button onclick="window.location.href='/bookings/new';" class="newRes">New Booking</button>
     <div class="arrivals"><h1 class="number">${arrivalList.size()}</h1>Arrivals</div>
     <div class="departures"><h1 class="number">${departureList.size()}</h1> Departures</div>
@@ -85,6 +85,7 @@
 <script>
     let modal = document.getElementById("modal");
     let title = document.getElementById("title");
+    let today = document.getElementById("today");
     function openModal(test, booking, room) {
         if(test){
             title.innerHTML = "Checkin";
@@ -109,6 +110,16 @@
     function cancel(){
         modal.style.display = "none";
     }
+
+    const monthNames = ["January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+    ];
+
+    setTimeout(function() {
+        let now = new Date();
+        let data = monthNames[now.getMonth()] +" " + now.getDate() + ", " + now.getFullYear();
+        today.innerText = data;
+    }, 1000)
 
 </script>
 </html>

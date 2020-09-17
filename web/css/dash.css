@@ -83,7 +83,7 @@ nav a:hover{
     grid-template-rows: .3fr 1fr 1fr .5fr 8fr 1fr;
     gap: 10px;
 }
-.today{
+#today{
     grid-area: 2/2/2/4;
     width: min-content;
     white-space: nowrap;

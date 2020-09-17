@@ -24,8 +24,6 @@ public class DashboardController extends HttpServlet {
             req.setAttribute("arrivalList", arrivalList);
             List<Booking> departureList = Booking.findAllDeparture();
             req.setAttribute("departureList", departureList);
-            String today = LocalDateTime.now().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG));
-            req.setAttribute("today", today);
             req.getRequestDispatcher("/WEB-INF/dashboard.jsp").forward(req, resp);
         }
     }
