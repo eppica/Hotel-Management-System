@@ -11,6 +11,7 @@ import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.time.LocalDate;
 import java.util.List;
 
 @WebServlet(name = "BookingController", urlPatterns = {"/bookings/*"})
@@ -51,6 +52,8 @@ public class BookingController extends HttpServlet {
                 req.setAttribute("roomList", Room.findAll());
                 req.setAttribute("guestList", Guest.findAll());
                 req.setAttribute("roomTypeList", RoomType.findAll());
+                LocalDate today = LocalDate.now();
+                req.setAttribute("minDateArrival", today.toString());
                 req.getRequestDispatcher("/WEB-INF/booking/form.jsp").forward(req, resp);
             }else{
                 req.getRequestDispatcher("404.jsp").forward(req, resp);
