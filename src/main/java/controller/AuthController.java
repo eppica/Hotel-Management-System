@@ -39,7 +39,9 @@ public class AuthController extends HttpServlet {
             if(Staff.authenticate(req)){
                 resp.sendRedirect("/dashboard");
             }else {
-                resp.sendRedirect("/auth/login");
+                String message = "Invalid username or password";
+                req.setAttribute("errorMessage", message);
+                req.getRequestDispatcher("/WEB-INF/auth/login.jsp").forward(req, resp);
             }
         }else{
 

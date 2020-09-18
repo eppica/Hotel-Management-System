@@ -198,3 +198,10 @@ a{
     flex-basis: 17%;
 }
 
+#error{
+    flex-basis: 100%;
+    width: 100%;
+    color:#cd5c5c;
+    text-align: center;
+    font-weight: 700;
+}
