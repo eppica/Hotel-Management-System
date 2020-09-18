@@ -190,7 +190,24 @@
             do_checkout.style.display = "none";
             checkout_info.style.display = "grid";
         }
+        beautifulTimestamp();
     }
+
+    function beautifulTimestamp() {
+
+        const regex = new RegExp('[0-9]{1,4}-[0-9]{1,2}-[0-9]{1,2}T[0-9]{1,2}:[0-9]{1,2}', 'g');
+
+        var classes = document.getElementsByClassName("data");
+        console.log(classes);
+
+        for(let classe of classes) {
+            if (regex.test(classe.innerText)) {
+                classe.innerText = classe.innerText.replace("T", " ");
+            }
+        }
+    };
+
+    beautifulTimestamp()
 
 </script>
 </html>
