@@ -15,18 +15,7 @@
     <meta name="viewport" content="width=device-width, user-scalable=0">
 </head>
 <body>
-<header>
-    <div class="logo" onclick="window.location.href='/dashboard';">
-        <h1>HMS</h1>
-    </div>
-    <nav>
-        <a href="/bookings/">Bookings</a><a href="/guests/">Guests</a></a><a href="/rooms/">Rooms</a><a href="/roomTypes/">Room Types</a>
-    </nav>
-    <div class="user">
-        <h2>${sessionStaff.getName()}</h2>
-        <a href="/auth/logout">Logout</a>
-    </div>
-</header>
+<c:import url="/WEB-INF/header/main.jsp"/>
 <div class="content">
     <form action="/staff" id="form" <c:if test="${staff == null}">method="POST" </c:if> >
         <h1><c:choose><c:when test="${staff == null}">New</c:when><c:otherwise>Edit</c:otherwise></c:choose> Staff</h1>

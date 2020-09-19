@@ -15,18 +15,9 @@
     <link rel="stylesheet" type="text/css" href="/css/dash.css">
 </head>
 <body>
-<header>
-    <div class="logo" onclick="window.location.href='/dashboard';">
-        <h1>HMS</h1>
-    </div>
-    <nav>
-        <a href="/bookings/">Bookings</a><a href="/guests/">Guests</a></a><a href="/rooms/">Rooms</a><a href="/roomTypes/">Room Types</a>
-    </nav>
-    <div class="user">
-        <h2>${sessionStaff.getName()}</h2>
-        <a href="/auth/logout">Logout</a>
-    </div>
-</header>
+
+<c:import url="/WEB-INF/header/main.jsp"/>
+
 <div class="content">
     <h1 id="today"></h1>
     <button onclick="window.location.href='/bookings/new';" class="newRes">New Booking</button>
