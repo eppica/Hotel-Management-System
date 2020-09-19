@@ -110,7 +110,6 @@ input, select, textarea{
 
 input:focus, select:focus, textarea:focus{
     border: 1px solid rgba(23, 133, 127, 0.596);
-    box-shadow: 0 0 6px rgba(23, 133, 127, 0.596);
 }
 
 input:hover, select:hover, textarea:hover{
