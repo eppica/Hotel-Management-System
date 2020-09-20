@@ -81,21 +81,22 @@ public class Payment {
     }
 
     public Payment(String[] data){
-        Pattern pattern = Pattern.compile("(\\w+)(=)([\\w\\-\\+]*)");
         for(String x : data){
-            Matcher matcher = pattern.matcher(x);
-            if(matcher.matches()){
-                if(matcher.group(1).equals("value")){
-                    this.value = new BigDecimal(matcher.group(3));
-                }else if(matcher.group(1).equals("payment_method")){
-                    this.paymentMethod = PaymentMethod.valueOf(matcher.group(3));
-                }else if(matcher.group(1).equals("id_booking")){
-                    this.idBooking = Integer.valueOf(matcher.group(3));
-                }else if(matcher.group(1).equals("pay_time")){
-                    this.payTime = LocalDateTime.parse(matcher.group(3));
-                }else if(matcher.group(1).equals("id_staff")){
-                    this.idStaff = Integer.valueOf(matcher.group(3));
-                }
+            String[] add = x.split("=");
+            if(add[0].equals("value")){
+                this.value = new BigDecimal(add[1]);
+            }
+            if(add[0].equals("payment_method")){
+                this.paymentMethod = PaymentMethod.valueOf(add[1]);
+            }
+            if(add[0].equals("id_booking")){
+                this.idBooking = Integer.valueOf(add[1]);
+            }
+            if(add[0].equals("pay_time")){
+                this.payTime = LocalDateTime.parse(add[1]);
+            }
+            if(add[0].equals("id_staff")){
+                this.idStaff = Integer.valueOf(add[1]);
             }
         }
     }
