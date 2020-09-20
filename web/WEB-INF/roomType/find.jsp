@@ -23,7 +23,7 @@
 
     <div class="edit">
         <button class="delete" onclick="openModal('${roomType.getName()}')">Delete</button>
-        <button onclick="window.location.href='/bookings/${roomType.getId()}/edit';">Edit</button>
+        <button onclick="window.location.href='/roomTypes/${roomType.getId()}/edit';">Edit</button>
     </div>
     <div class="about">
         <h2>About</h2>
