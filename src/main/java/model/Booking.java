@@ -39,23 +39,25 @@ public class Booking {
     }
 
     public Booking(String[] data){
-        Pattern pattern = Pattern.compile("(\\w+)(=)([\\w\\-\\+]*)");
         for(String x : data){
-            Matcher matcher = pattern.matcher(x);
-            if(matcher.matches()){
-                if(matcher.group(1).equals("id_room")){
-                    this.idRoom = Integer.valueOf(matcher.group(3));
-                }else if(matcher.group(1).equals("id_guest")){
-                    this.idGuest = Integer.valueOf(matcher.group(3));
-                }else if(matcher.group(1).equals("arrival")){
-                    this.arrival = LocalDate.parse(matcher.group(3));
-                }else if(matcher.group(1).equals("departure")){
-                    this.departure = LocalDate.parse(matcher.group(3));
-                }else if(matcher.group(1).equals("total")){
-                    this.total = new BigDecimal(matcher.group(3));
-                }else if(matcher.group(1).equals("id_staff")){
-                    this.idStaff = Integer.valueOf(matcher.group(3));
-                }
+            String[] add = x.split("=");
+            if(add[0].equals("id_room")){
+                this.idRoom = Integer.valueOf(add[1]);
+            }
+            if(add[0].equals("id_guest")){
+                this.idGuest = Integer.valueOf(add[1]);
+            }
+            if(add[0].equals("arrival")){
+                this.arrival = LocalDate.parse(add[1]);
+            }
+            if(add[0].equals("departure")){
+                this.departure = LocalDate.parse(add[1]);
+            }
+            if(add[0].equals("total")){
+                this.total = new BigDecimal(add[1]);
+            }
+            if(add[0].equals("id_staff")){
+                this.idStaff = Integer.valueOf(add[1]);
             }
         }
     }

@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @WebServlet(name = "CheckController", urlPatterns = {"/checks/*"})
@@ -59,7 +61,7 @@ public class CheckController extends HttpServlet {
         if (operation == 2) {
             BufferedReader br = new BufferedReader(new InputStreamReader(req.getInputStream()));
             String data = br.readLine();
-            Check check = new Check(data.split("&"));
+            Check check = new Check(URLDecoder.decode(data,  StandardCharsets.UTF_8.toString()).split("&"));
             check.setId(Servlet.getId(req));
             check.update();
         }else{

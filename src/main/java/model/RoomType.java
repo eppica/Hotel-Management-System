@@ -28,17 +28,17 @@ public class RoomType {
     }
 
     public RoomType(String[] data){
-        Pattern pattern = Pattern.compile("(\\w+)(=)([\\w\\-\\+]*)");
         for(String x : data){
-            Matcher matcher = pattern.matcher(x);
-            if(matcher.matches()){
-                if(matcher.group(1).equals("name")){
-                    this.name = matcher.group(3).replace('+', ' ');
-                }else if(matcher.group(1).equals("description")){
-                    this.description = matcher.group(3).replace('+', ' ');
-                }else if(matcher.group(1).equals("daily_price")){
-                    this.dailyPrice = new BigDecimal(matcher.group(3));
-                }
+            String[] add = x.split("=");
+            if(add[0].equals("name")){
+                this.name = add[1];
+            }
+            if(add[0].equals("description")){
+                this.description = add[1];
+            }
+
+            if(add[0].equals("daily_price")){
+                this.dailyPrice = new BigDecimal(add[1]);
             }
         }
     }

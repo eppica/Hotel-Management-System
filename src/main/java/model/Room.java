@@ -5,6 +5,7 @@ import dao.RoomDAO;
 import javax.servlet.http.HttpServletRequest;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -25,15 +26,13 @@ public class Room {
     }
 
     public Room(String[] data){
-        Pattern pattern = Pattern.compile("(\\w+)(=)([\\w\\-\\+]*)");
         for(String x : data){
-            Matcher matcher = pattern.matcher(x);
-            if(matcher.matches()){
-                if(matcher.group(1).equals("id_room_type")){
-                    this.idRoomType = Integer.valueOf(matcher.group(3));
-                }else if(matcher.group(1).equals("number")){
-                    this.number = Integer.valueOf(matcher.group(3));
-                }
+            String[] add = x.split("=");
+            if(add[0].equals("id_room_type")){
+                this.idRoomType = Integer.valueOf(add[1]);
+            }
+            if(add[0].equals("number")){
+                this.number = Integer.valueOf(add[1]);
             }
         }
     }
