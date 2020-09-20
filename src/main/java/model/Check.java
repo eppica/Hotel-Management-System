@@ -31,19 +31,19 @@ public class Check {
     }
 
     public Check(String[] data){
-        Pattern pattern = Pattern.compile("(\\w+)(=)([\\w\\-\\+]*)");
         for(String x : data){
-            Matcher matcher = pattern.matcher(x);
-            if(matcher.matches()){
-                if(matcher.group(1).equals("check")){
-                    this.check = LocalDateTime.parse(matcher.group(3));
-                }else if(matcher.group(1).equals("id_guest")){
-                    this.idStaff = Integer.valueOf(matcher.group(3));
-                }else if(matcher.group(1).equals("id_booking")){
-                    this.idBooking = Integer.valueOf(matcher.group(3));
-                }else if(matcher.group(1).equals("status")){
-                    this.status = Boolean.valueOf(matcher.group(3));
-                }
+            String[] add = x.split("=");
+            if(add[0].equals("check")){
+                this.check = LocalDateTime.parse(add[1]);
+            }
+            if(add[0].equals("id_guest")){
+                this.idStaff = Integer.valueOf(add[1]);
+            }
+            if(add[0].equals("id_booking")){
+                this.idBooking = Integer.valueOf(add[1]);
+            }
+            if(add[0].equals("status")){
+                this.status = Boolean.valueOf(add[1]);
             }
         }
     }

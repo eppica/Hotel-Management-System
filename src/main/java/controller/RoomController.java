@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,7 +67,7 @@ public class RoomController extends HttpServlet {
         if(operation == 2){
             BufferedReader br = new BufferedReader(new InputStreamReader(req.getInputStream()));
             String data = br.readLine();
-            Room room = new Room(data.split("&"));
+            Room room = new Room(URLDecoder.decode(data,  StandardCharsets.UTF_8.toString()).split("&"));
             room.setId(Servlet.getId(req));
             room.update();
         }else {
