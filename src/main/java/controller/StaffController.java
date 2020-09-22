@@ -19,6 +19,8 @@ public class StaffController extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         if(!Servlet.isLogged(req)){
             resp.sendRedirect("/auth/login");
+        }else if(!Servlet.isAllowed(req, AccessLevel.OWNER)){
+            resp.sendRedirect("/dashboard");
         }else{
 
             Integer operation = Servlet.getOperation(req);
@@ -46,37 +48,56 @@ public class StaffController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Integer operation = Servlet.getOperation(req);
-        if(operation == 1){
-            Staff staff = new Staff(req);
-            staff.save();
-            resp.sendRedirect("/staff/" + staff.getId());
-        }else{
-            req.getRequestDispatcher("404.jsp").forward(req, resp);
+        if(!Servlet.isLogged(req)){
+            resp.sendRedirect("/auth/login");
+        }else if(!Servlet.isAllowed(req, AccessLevel.OWNER)){
+            resp.sendRedirect("/dashboard");
+        }else {
+
+            Integer operation = Servlet.getOperation(req);
+            if (operation == 1) {
+                Staff staff = new Staff(req);
+                staff.save();
+                resp.sendRedirect("/staff/" + staff.getId());
+            } else {
+                req.getRequestDispatcher("404.jsp").forward(req, resp);
+            }
         }
     }
 
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Integer operation = Servlet.getOperation(req);
-        if (operation == 2) {
-            BufferedReader br = new BufferedReader(new InputStreamReader(req.getInputStream()));
-            String data = br.readLine();
-            Staff staff = new Staff(data.split("&"));
-            staff.setId(Servlet.getId(req));
-            staff.update();
+        if(!Servlet.isLogged(req)){
+            resp.sendRedirect("/auth/login");
+        }else if(!Servlet.isAllowed(req, AccessLevel.OWNER)){
+            resp.sendRedirect("/dashboard");
         }else {
-            req.getRequestDispatcher("404.jsp").forward(req, resp);
+            Integer operation = Servlet.getOperation(req);
+            if (operation == 2) {
+                BufferedReader br = new BufferedReader(new InputStreamReader(req.getInputStream()));
+                String data = br.readLine();
+                Staff staff = new Staff(data.split("&"));
+                staff.setId(Servlet.getId(req));
+                staff.update();
+            } else {
+                req.getRequestDispatcher("404.jsp").forward(req, resp);
+            }
         }
     }
 
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Integer operation = Servlet.getOperation(req);
-        if (operation == 2) {
-            Staff.delete(Servlet.getId(req));
+        if(!Servlet.isLogged(req)){
+            resp.sendRedirect("/auth/login");
+        }else if(!Servlet.isAllowed(req, AccessLevel.OWNER)){
+            resp.sendRedirect("/dashboard");
         }else {
-            req.getRequestDispatcher("404.jsp").forward(req, resp);
+            Integer operation = Servlet.getOperation(req);
+            if (operation == 2) {
+                Staff.delete(Servlet.getId(req));
+            } else {
+                req.getRequestDispatcher("404.jsp").forward(req, resp);
+            }
         }
     }
 }

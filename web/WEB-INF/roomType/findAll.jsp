@@ -27,11 +27,21 @@
     <div class="over">
         <table>
             <thead>
-                <tr><th>Name</th><th>Description</th><th>Daily Price</th><th>Available Rooms</th></tr>
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Daily Price</th>
+                <th>Available Rooms</th>
+            </tr>
             </thead>
             <tbody>
             <c:forEach items="${roomTypeList}" var="roomType">
-                <tr onclick="window.location.href='/roomTypes/${roomType.getId()}';"><td>${roomType.getName()}</td><td>${roomType.getDescription()}</td><td>$${roomType.getDailyPrice()}</td><td class="count"> - </td></tr>
+                <tr onclick="window.location.href='/roomTypes/${roomType.getId()}';">
+                    <td>${roomType.getName()}</td>
+                    <td>${roomType.getDescription()}</td>
+                    <td>$${roomType.getDailyPrice()}</td>
+                    <td class="count"> -</td>
+                </tr>
             </c:forEach>
 
             </tbody>
@@ -39,64 +49,66 @@
     </div>
 
     </table>
-    <div class="submit">
-        <button onclick="window.location.href='/roomTypes/new';">New Room Type</button>
-    </div>
+    <c:if test="${sessionStaff.getAccessLevel() == 'OWNER'}">
+        <div class="submit">
+            <button onclick="window.location.href='/roomTypes/new';">New Room Type</button>
+        </div>
+    </c:if>
 </div>
 
 </body>
 <script>
     document.getElementById("departure").oninput = function () {
         let rts = document.querySelectorAll(".count");
-        if(validate()){
-            if((document.getElementById("departure").value !== "") && (document.getElementById("arrival").value !== "")){
-                let url = "/api/count?arrival="+ document.getElementById("arrival").value + "&departure=" + document.getElementById("departure").value;
+        if (validate()) {
+            if ((document.getElementById("departure").value !== "") && (document.getElementById("arrival").value !== "")) {
+                let url = "/api/count?arrival=" + document.getElementById("arrival").value + "&departure=" + document.getElementById("departure").value;
                 fetch(url, {
                     method: 'GET',
                 }).then(resp => resp.json())
                     .then(data => {
                         let i = 0;
-                        for(let x of rts){
+                        for (let x of rts) {
                             x.innerHTML = data[i].count;
                             i++;
                         }
                     });
             }
-        }else{
-            for(let x of rts){
-                x.innerHTML= '-';
+        } else {
+            for (let x of rts) {
+                x.innerHTML = '-';
             }
         }
     }
 
     document.getElementById("arrival").oninput = function () {
         let rts = document.querySelectorAll(".count");
-        if(validate()){
+        if (validate()) {
             if ((document.getElementById("departure").value !== "") && (document.getElementById("arrival").value !== "")) {
-                let url = "/api/count?arrival="+ document.getElementById("arrival").value + "&departure=" + document.getElementById("departure").value;
+                let url = "/api/count?arrival=" + document.getElementById("arrival").value + "&departure=" + document.getElementById("departure").value;
                 fetch(url, {
                     method: 'GET',
                 }).then(resp => resp.json())
                     .then(data => {
-                        for (let i=0; i<data.length; i++) {
-                            for(let x of rts){
+                        for (let i = 0; i < data.length; i++) {
+                            for (let x of rts) {
                                 x.innerHTML = data[i].count;
                             }
                         }
                     });
             }
-        }else{
-            for(let x of rts){
-                x.innerHTML= '-';
+        } else {
+            for (let x of rts) {
+                x.innerHTML = '-';
             }
         }
     }
 
     function validate() {
-        if(document.getElementById("arrival").value >= document.getElementById("departure").value){
+        if (document.getElementById("arrival").value >= document.getElementById("departure").value) {
             document.getElementById("arrival").setCustomValidity("Date start is bigger than date end.");
             return false;
-        }else{
+        } else {
             document.getElementById("arrival").setCustomValidity("");
             return true;
         }

@@ -1,4 +1,3 @@
-
 <%--
   Created by IntelliJ IDEA.
   User: Lavinha
@@ -23,8 +22,10 @@
     </div>
 
     <div class="edit">
-        <button class="delete" onclick="openModal(${room.getNumber()})">Delete</button>
-        <button onclick="window.location.href='/rooms/${room.getId()}/edit';">Edit</button>
+        <c:if test="${sessionStaff.getAccessLevel() == 'OWNER'}">
+            <button class="delete" onclick="openModal(${room.getNumber()})">Delete</button>
+            <button onclick="window.location.href='/rooms/${room.getId()}/edit';">Edit</button>
+        </c:if>
     </div>
     <div class="about">
         <h2>About</h2>
@@ -42,25 +43,25 @@
         </div>
     </div>
     <c:if test="${booking != null}">
-    <div class="booking-info about" onclick="window.location.href='/bookings/${booking.getId()}';">
-        <h2>Booking</h2>
-        <div class="property">
-            <span class="label">ID</span>
-            <span class="data">${booking.getId()}</span>
+        <div class="booking-info about" onclick="window.location.href='/bookings/${booking.getId()}';">
+            <h2>Booking</h2>
+            <div class="property">
+                <span class="label">ID</span>
+                <span class="data">${booking.getId()}</span>
+            </div>
+            <div class="property">
+                <span class="label">Arrival</span>
+                <span class="data">${booking.getArrival()}</span>
+            </div>
+            <div class="property">
+                <span class="label">Departure</span>
+                <span class="data">${booking.getDeparture()}</span>
+            </div>
+            <div class="property">
+                <span class="label">Guest</span>
+                <span class="data">${booking.getGuest().getName()}</span>
+            </div>
         </div>
-        <div class="property">
-            <span class="label">Arrival</span>
-            <span class="data">${booking.getArrival()}</span>
-        </div>
-        <div class="property">
-            <span class="label">Departure</span>
-            <span class="data">${booking.getDeparture()}</span>
-        </div>
-        <div class="property">
-            <span class="label">Guest</span>
-            <span class="data">${booking.getGuest().getName()}</span>
-        </div>
-    </div>
     </c:if>
 </div>
 <div class="modal" id="modal-delete">
@@ -72,36 +73,40 @@
         </div>
         <div class="modal-footer">
             <button onclick="cancel()" type="button">Cancel</button>
-            <button onclick="link(${room.getId()})" class="cancel"> Delete </button>
+            <button onclick="link(${room.getId()})" class="cancel"> Delete</button>
         </div>
     </div>
 </div>
 </body>
 <script>
     let modal = document.getElementById("modal-delete");
+
     function openModal(room) {
         modal.style.display = "flex";
         document.getElementById("sure").innerHTML = "Delete room " + room + "?";
     }
-    window.onclick = function(event) {
+
+    window.onclick = function (event) {
         if (event.target === modal) {
             modal.style.display = "none";
         }
     };
 
-    function cancel(){
+    function cancel() {
         modal.style.display = "none";
     }
 
 
     function link(id) {
-        let url = "/rooms/"+ id;
+        let url = "/rooms/" + id;
         fetch(url, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
             },
-        }).then(resp => {   window.location.href = "/rooms" });
+        }).then(resp => {
+            window.location.href = "/rooms"
+        });
     }
 </script>
 </html>

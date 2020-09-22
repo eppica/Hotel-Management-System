@@ -32,9 +32,11 @@
     </div>
 
     </table>
+    <c:if test="${sessionStaff.getAccessLevel() == 'OWNER'}">
     <div class="submit">
         <button onclick="window.location.href='/rooms/new';">New Room</button>
     </div>
+    </c:if>
 </div>
 
 </body>

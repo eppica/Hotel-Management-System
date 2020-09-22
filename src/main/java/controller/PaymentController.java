@@ -1,5 +1,6 @@
 package controller;
 
+import model.AccessLevel;
 import model.Payment;
 
 import javax.servlet.ServletException;
@@ -17,42 +18,62 @@ import java.nio.charset.StandardCharsets;
 public class PaymentController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.doGet(req, resp);
+        if (!Servlet.isLogged(req)) {
+            resp.sendRedirect("/auth/login");
+        } else {
+            super.doGet(req, resp);
+        }
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Integer operation = Servlet.getOperation(req);
-        if(operation == 1){
-            Payment payment = new Payment(req);
-            payment = payment.save();
-            resp.sendRedirect("/bookings/" + payment.getIdBooking());
-        }else {
-            req.getRequestDispatcher("404.jsp").forward(req, resp);
+        if (!Servlet.isLogged(req)) {
+            resp.sendRedirect("/auth/login");
+        } else {
+            Integer operation = Servlet.getOperation(req);
+            if (operation == 1) {
+                Payment payment = new Payment(req);
+                payment = payment.save();
+                resp.sendRedirect("/bookings/" + payment.getIdBooking());
+            } else {
+                req.getRequestDispatcher("404.jsp").forward(req, resp);
+            }
         }
     }
 
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Integer operation = Servlet.getOperation(req);
-        if(operation == 2){
-            BufferedReader br = new BufferedReader(new InputStreamReader(req.getInputStream()));
-            String data = br.readLine();
-            Payment payment = new Payment((URLDecoder.decode(data,  StandardCharsets.UTF_8.toString()).split("&")));
-            payment.setId(Servlet.getId(req));
-            payment.update();
-        }else{
-            req.getRequestDispatcher("404.jsp").forward(req, resp);
+        if (!Servlet.isLogged(req)) {
+            resp.sendRedirect("/auth/login");
+        } else if (!Servlet.isAllowed(req, AccessLevel.OWNER)) {
+            resp.sendRedirect("/dashboard");
+        } else {
+            Integer operation = Servlet.getOperation(req);
+            if (operation == 2) {
+                BufferedReader br = new BufferedReader(new InputStreamReader(req.getInputStream()));
+                String data = br.readLine();
+                Payment payment = new Payment((URLDecoder.decode(data, StandardCharsets.UTF_8.toString()).split("&")));
+                payment.setId(Servlet.getId(req));
+                payment.update();
+            } else {
+                req.getRequestDispatcher("404.jsp").forward(req, resp);
+            }
         }
     }
 
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Integer operation = Servlet.getOperation(req);
-        if (operation == 2) {
-            Payment.delete(Servlet.getId(req));
-        }else {
-            req.getRequestDispatcher("404.jsp").forward(req, resp);
+        if (!Servlet.isLogged(req)) {
+            resp.sendRedirect("/auth/login");
+        } else if (!Servlet.isAllowed(req, AccessLevel.OWNER)) {
+            resp.sendRedirect("/dashboard");
+        } else {
+            Integer operation = Servlet.getOperation(req);
+            if (operation == 2) {
+                Payment.delete(Servlet.getId(req));
+            } else {
+                req.getRequestDispatcher("404.jsp").forward(req, resp);
+            }
         }
     }
 }
