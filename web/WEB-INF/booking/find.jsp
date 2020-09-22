@@ -59,23 +59,12 @@
         <div class="over">
             <table>
                 <thead>
-                <tr>
-                    <th>Paid out</th>
-                    <th>Method</th>
-                    <th>Timestamp</th>
-                </tr>
+                <tr><th>Paid out</th><th>Method</th><th>Timestamp</th></tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td>$ 10,00</td>
-                    <td>CARD</td>
-                    <td>09-20-2020 20:49</td>
-                </tr>
-                <tr>
-                    <td>$ 70,00</td>
-                    <td>CASH</td>
-                    <td>09-20-2020 20:49</td>
-                </tr>
+                <c:forEach items="${paymentList}" var="payment">
+                    <tr><td>${payment.getValue()}</td><td>${payment.getPaymentMethod()}</td><td>${payment.getPayTime()}</td></tr>
+                </c:forEach>
                 </tbody>
             </table>
 
@@ -83,11 +72,11 @@
 
         <div class="property" style="grid-area: 3/1/3/2;">
             <span class="label">Paid out</span>
-            <span class="data">$ 10,00</span>
+            <span class="data">${paid}</span>
         </div>
         <div class="property" id="remaining" onclick="openModalPayment()">
             <span class="label">Remaining</span>
-            <span class="data" id="transformButton">$ 100,00</span>
+            <span class="data" id="transformButton">${booking.getTotal() - paid}</span>
             <button type="button">PAY</button>
         </div>
 
@@ -168,21 +157,20 @@
             <h1>New Payment</h1>
         </div>
         <div class="modal-body">
-            <form action="#" id="form" method="POST">
+            <form action="/payments" id="form" method="POST">
                 <label for="value">Value</label>
                 <input type="number" name="value" id="value" class="moneyInput" min="0" step="any"
                        autocomplete="off">
 
-                <br>
-                <fieldset>
-                    <legend>Type</legend>
-                    <label for="cc">Credit Card</label>
-                    <input type="radio" name="type" id="cc">
-                    &nbsp; &nbsp; &nbsp;
-                    <label for="cash">Cash</label>
-                    <input type="radio" name="type" id="cash">
-                </fieldset>
-
+                <label for="payment_method">Method</label>
+                <select name="payment_method" id="payment_method">
+                    <option value="CASH">CASH</option>
+                    <option value="CARD">CARD</option>
+                </select>
+                <input type="number" style="display: none" name="id_staff" id="id_staff"
+                       value="${sessionStaff.getId()}">
+                <input type="text" name="idbooking" id="idbooking" style="display: none" value="${booking.getId()}">
+                <input type="datetime-local" name="pay_time" id="pay_time" autocomplete="off" style="display: none">
                 <div class="modal-footer">
                     <button onclick="cancel()" type="button">Cancel</button>
                     <input type="submit" value="Receive" id="button">
@@ -245,6 +233,9 @@
 
     function openModalPayment() {
         modalPayment.style.display = "flex";
+        let now = new Date();
+        now.setHours(now.getHours() - 3); //because of the timezone
+        document.getElementById("pay_time").value = now.toISOString().substring(0, 16);
     }
 
     function action(operation) {

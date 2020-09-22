@@ -2,6 +2,7 @@ package dao;
 
 import model.Payment;
 
+import java.math.BigDecimal;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +21,7 @@ public class PaymentDAO implements DAO<Payment>{
                     "pay_time = ?, " +
                     "staff_fk = ?", Statement.RETURN_GENERATED_KEYS );
             statement.setObject(1, object.getValue());
-            statement.setObject(2, object.getPaymentMethod());
+            statement.setObject(2, object.getPaymentMethod().toString());
             statement.setObject(3, object.getIdBooking());
             statement.setObject(4, object.getPayTime());
             statement.setObject(5, object.getIdStaff());
@@ -59,6 +60,23 @@ public class PaymentDAO implements DAO<Payment>{
     @Override
     public List<Payment> findAll() {
         return findAll("");
+    }
+
+    public BigDecimal sumAll(Integer bookingId) {
+        Connection connection = DB.getConnection();
+        Statement statement = null;
+        BigDecimal value = null;
+        try {
+            statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT SUM(value) FROM payment WHERE booking_fk = " + bookingId);
+            resultSet.first();
+            value = resultSet.getBigDecimal(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }finally {
+            DB.closeConnection(connection, statement);
+        }
+        return value;
     }
 
     @Override
@@ -118,4 +136,6 @@ public class PaymentDAO implements DAO<Payment>{
         }
         return paymentList;
     }
+
+
 }

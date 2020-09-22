@@ -55,16 +55,16 @@ public class Payment {
             this.value = new BigDecimal(request.getParameter("value"));
         }
 
-        if(request.getParameter("access_level").isEmpty()){
+        if(request.getParameter("payment_method").isEmpty()){
             this.paymentMethod = null;
         }else{
             this.paymentMethod = PaymentMethod.valueOf(request.getParameter("payment_method"));
         }
 
-        if(request.getParameter("id_booking").isEmpty()){
+        if(request.getParameter("idbooking").isEmpty()){
             this.idBooking = null;
         }else{
-            this.idBooking = Integer.valueOf(request.getParameter("id_booking"));
+            this.idBooking = Integer.valueOf(request.getParameter("idbooking"));
         }
 
         if(request.getParameter("pay_time").isEmpty()){
@@ -181,6 +181,9 @@ public class Payment {
         return DAO.findAll("WHERE booking_fk = " + id);
     }
 
+    public static BigDecimal sumAll(Integer id){
+        return DAO.sumAll(id);
+    }
 
     public static void update(Payment payment){
         DAO.update(payment);

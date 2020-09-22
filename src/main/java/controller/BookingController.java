@@ -31,7 +31,8 @@ public class BookingController extends HttpServlet {
                 Booking booking = Booking.find(Servlet.getId(req));
                 req.setAttribute("booking", booking);
                 List<Check> checks = Check.findAll(booking.getId());
-                req.setAttribute("payments", Payment.findAll(booking.getId()));
+                req.setAttribute("paymentList", Payment.findAll(booking.getId()));
+                req.setAttribute("paid", Payment.sumAll(booking.getId()));
                 if(checks!=null){
                     for(Check check : checks){
                         if(check.getStatus()){
