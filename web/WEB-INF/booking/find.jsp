@@ -25,7 +25,7 @@
         <button class="delete" onclick="openModalDelete(${booking.getId()})">Delete</button>
         <button onclick="window.location.href='/bookings/${booking.getId()}/edit';">Edit</button>
     </div>
-    <div class="aboutBooking">
+    <div class="about">
         <h2>About</h2>
         <div class="property">
             <span class="label">ID</span>
@@ -54,33 +54,36 @@
     </div>
 
     <div class="payment">
-        <h2>Payments</h2>
-
-        <div class="over">
-            <table>
-                <thead>
-                <tr><th>Paid out</th><th>Method</th><th>Timestamp</th></tr>
-                </thead>
-                <tbody>
-                <c:forEach items="${paymentList}" var="payment">
-                    <tr><td>${payment.getValue()}</td><td>${payment.getPaymentMethod()}</td><td>${payment.getPayTime()}</td></tr>
-                </c:forEach>
-                </tbody>
-            </table>
-
+        <div class="payment-info">
+            <h2>Payments</h2>
+            <div class="over">
+                <table>
+                    <thead>
+                        <tr><th>Paid out</th><th>Method</th><th>Timestamp</th></tr>
+                    </thead>
+                    <tbody>
+                    <c:forEach items="${paymentList}" var="payment">
+                        <tr><td>${payment.getValue()}</td><td>${payment.getPaymentMethod()}</td><td>${payment.getPayTime()}</td></tr>
+                    </c:forEach>
+                    </tbody>
+                </table>
+            </div>
+            <div class="payment-result">
+                <div class="property">
+                    <span class="label">Paid out</span>
+                    <span class="data">$ ${paid}</span>
+                </div>
+                <div class="property">
+                    <span class="label">Remaining</span>
+                    <span class="data" id="transformButton">$ ${booking.getTotal() - paid}</span>
+                </div>
+                <div class="property">
+                    <button onclick="openModalPayment()" class="pay">Pay</button>
+                </div>
+            </div>
         </div>
-
-        <div class="property" style="grid-area: 3/1/3/2;">
-            <span class="label">Paid out</span>
-            <span class="data">${paid}</span>
-        </div>
-        <div class="property" id="remaining" onclick="openModalPayment()">
-            <span class="label">Remaining</span>
-            <span class="data" id="transformButton">${booking.getTotal() - paid}</span>
-            <button type="button">PAY</button>
-        </div>
-
     </div>
+
 
 
     <div class="checkin">
@@ -91,10 +94,7 @@
                 <span class="data">${checkin.getCheck()}</span>
             </div>
         </div>
-        <button id="do-checkin"
-                onclick="openModalCheck(true, ${booking.getId()}, ${booking.getRoom().getNumber()})">
-            Checkin
-        </button>
+        <button id="do-checkin" onclick="openModalCheck(true, ${booking.getId()}, ${booking.getRoom().getNumber()})">Checkin</button>
     </div>
     <div class="checkout">
         <div class="checkout-info">
@@ -104,12 +104,8 @@
                 <span class="data">${checkout.getCheck()}</span>
             </div>
         </div>
-        <button id="do-checkout"
-                onclick="openModalCheck(false, ${booking.getId()}, ${booking.getRoom().getNumber()})">
-            Checkout
-        </button>
+        <button id="do-checkout" onclick="openModalCheck(false, ${booking.getId()}, ${booking.getRoom().getNumber()})">Checkout</button>
     </div>
-
 </div>
 <div class="modal" id="modal-delete">
     <div class="modal-content">
@@ -120,7 +116,7 @@
         </div>
         <div class="modal-footer">
             <button onclick="cancel()" type="button">Cancel</button>
-            <button onclick="link(${booking.getId()})" class="cancel"> Delete</button>
+            <button onclick="link(${booking.getId()})" class="cancel"> Delete </button>
         </div>
     </div>
 </div>
@@ -139,8 +135,7 @@
                 <label for="room_number">Room</label>
                 <input type="text" name="room_number" id="room_number" readonly>
                 <input type="number" name="status" id="status" style="display: none">
-                <input type="number" style="display: none" name="id_staff" id="id_staff"
-                       value="${sessionStaff.getId()}">
+                <input type="number" style="display: none" name="id_staff" id="id_staff" value="${sessionStaff.getId()}">
                 <div class="modal-footer">
                     <button onclick="cancel()" type="button">Cancel</button>
                     <input type="submit" value="Submit" id="button">
@@ -150,18 +145,16 @@
     </div>
 </div>
 
-
 <div class="modal" id="modal-payment">
     <div class="modal-content">
         <div class="modal-header">
-            <h1>New Payment</h1>
+            <h1>Payment</h1>
         </div>
         <div class="modal-body">
             <form action="/payments" id="form" method="POST">
                 <label for="value">Value</label>
                 <input type="number" name="value" id="value" class="moneyInput" min="0" step="any"
                        autocomplete="off">
-
                 <label for="payment_method">Method</label>
                 <select name="payment_method" id="payment_method">
                     <option value="CASH">CASH</option>
@@ -179,6 +172,7 @@
         </div>
     </div>
 </div>
+
 </body>
 <script>
     let modalDelete = document.getElementById("modal-delete");
@@ -191,29 +185,27 @@
         document.getElementById("sure").innerHTML = "Delete booking " + booking + "?";
     }
 
-    function cancel() {
+    function cancel(){
         modalDelete.style.display = "none";
         modalCheck.style.display = "none";
         modalPayment.style.display = "none";
     }
 
     function link(id) {
-        let url = "/bookings/" + id;
+        let url = "/bookings/"+ id;
         fetch(url, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
             },
-        }).then(resp => {
-            window.location.href = "/bookings"
-        });
+        }).then(resp => {   window.location.href = "/bookings" });
     }
 
     function openModalCheck(test, booking, room) {
-        if (test) {
+        if(test){
             title.innerHTML = "Checkin";
             document.getElementById("status").value = 1;
-        } else {
+        }else{
             title.innerHTML = "Checkout";
             document.getElementById("status").value = 0;
         }
@@ -225,9 +217,11 @@
         document.getElementById("check").value = now.toISOString().substring(0, 16);
     }
 
-    window.onclick = function (event) {
-        if (event.target === modalCheck || event.target === modalDelete) {
+    window.onclick = function(event) {
+        if (event.target === modalCheck || event.target === modalDelete || event.target === modalPayment ) {
             modalCheck.style.display = "none";
+            modalPayment.style.display = "none";
+            modalDelete.style.display = "none";
         }
     };
 
@@ -238,23 +232,24 @@
         document.getElementById("pay_time").value = now.toISOString().substring(0, 16);
     }
 
-    function action(operation) {
+
+    function action(operation){
         let checkin_info = document.querySelector(".checkin-info");
         let do_checkin = document.querySelector("#do-checkin");
         let checkout_info = document.querySelector(".checkout-info");
         let do_checkout = document.querySelector("#do-checkout");
 
-        if (operation === "booked") {
+        if(operation === "booked"){
             checkin_info.style.display = "none";
             do_checkin.style.display = "block";
             do_checkout.style.display = "none";
             checkout_info.style.display = "none";
-        } else if (operation === "arrived") {
+        }else if(operation === "arrived"){
             checkin_info.style.display = "grid";
             do_checkin.style.display = "none";
             do_checkout.style.display = "block";
             checkout_info.style.display = "none";
-        } else if (operation === "departed") {
+        }else if(operation === "departed"){
             checkin_info.style.display = "grid";
             do_checkin.style.display = "none";
             do_checkout.style.display = "none";
@@ -270,12 +265,12 @@
         var classes = document.getElementsByClassName("data");
         console.log(classes);
 
-        for (let classe of classes) {
+        for(let classe of classes) {
             if (regex.test(classe.innerText)) {
                 classe.innerText = classe.innerText.replace("T", " ");
             }
         }
-    }
+    };
 
     beautifulTimestamp()
 

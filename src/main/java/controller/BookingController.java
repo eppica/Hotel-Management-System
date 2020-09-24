@@ -11,6 +11,7 @@ import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -32,7 +33,7 @@ public class BookingController extends HttpServlet {
                 req.setAttribute("booking", booking);
                 List<Check> checks = Check.findAll(booking.getId());
                 req.setAttribute("paymentList", Payment.findAll(booking.getId()));
-                req.setAttribute("paid", Payment.sumAll(booking.getId()));
+                req.setAttribute("paid", Payment.sumAll(booking.getId()).setScale(2, RoundingMode.CEILING));
                 if(checks!=null){
                     for(Check check : checks){
                         if(check.getStatus()){
