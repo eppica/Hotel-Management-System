@@ -28,6 +28,9 @@ public class Room {
     public Room(String[] data){
         for(String x : data){
             String[] add = x.split("=");
+            if(add.length == 1){
+                continue;
+            }
             if(add[0].equals("id_room_type")){
                 this.idRoomType = Integer.valueOf(add[1]);
             }

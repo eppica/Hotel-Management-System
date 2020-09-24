@@ -41,6 +41,9 @@ public class Booking {
     public Booking(String[] data){
         for(String x : data){
             String[] add = x.split("=");
+            if(add.length == 1){
+                continue;
+            }
             if(add[0].equals("id_room")){
                 this.idRoom = Integer.valueOf(add[1]);
             }

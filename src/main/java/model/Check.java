@@ -33,6 +33,9 @@ public class Check {
     public Check(String[] data){
         for(String x : data){
             String[] add = x.split("=");
+            if(add.length == 1){
+                continue;
+            }
             if(add[0].equals("check")){
                 this.check = LocalDateTime.parse(add[1]);
             }
