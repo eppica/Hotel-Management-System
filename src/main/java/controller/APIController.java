@@ -45,13 +45,11 @@ public class APIController extends HttpServlet {
             out.flush();
         }else if(operation == 2){
             String idRoomType = req.getParameter("room_type");
-            StringBuilder json = null;
+            StringBuilder json = new StringBuilder();
             if((idRoomType!= null)){
                 RoomType roomType = RoomType.find(Integer.valueOf(idRoomType));
                 if(roomType != null){
-                    json = new StringBuilder("[");
                     json.append(roomType.toJSON());
-                    json.append("]");
                 }
 
             }

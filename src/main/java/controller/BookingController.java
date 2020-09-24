@@ -36,6 +36,7 @@ public class BookingController extends HttpServlet {
                 List<Check> checks = Check.findAll(booking.getId());
                 req.setAttribute("paymentList", Payment.findAll(booking.getId()));
                 req.setAttribute("paid", Payment.sumAll(booking.getId()).setScale(2, RoundingMode.CEILING));
+                req.setAttribute("allowed", Servlet.isAllowed(req, AccessLevel.OWNER));
                 if(checks!=null){
                     for(Check check : checks){
                         if(check.getStatus()){

@@ -199,7 +199,6 @@ a{
 
 #error{
     flex-basis: 100%;
-    width: 100%;
     color:#cd5c5c;
     text-align: center;
     font-weight: 700;
@@ -210,4 +209,8 @@ a{
     border-radius: 3px;
     border-left: 7px solid rgba(205, 92, 92, 0.7);
     display: none;
+}
+
+#form-login input{
+    width: inherit;
 }

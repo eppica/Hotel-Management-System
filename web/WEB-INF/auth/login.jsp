@@ -15,7 +15,7 @@
     <title>Login</title>
 </head>
 <body>
-<form method="POST" action="/auth/login">
+<form method="POST" action="/auth/login" id="form-login">
     <h1>Login</h1>
     <span id="error">${errorMessage}</span>
     <label for="login">Login</label>
