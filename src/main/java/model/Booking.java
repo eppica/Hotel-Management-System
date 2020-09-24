@@ -321,7 +321,7 @@ public class Booking {
     }
 
     public static List<Booking> findAllArrival(){
-        return DAO.findAll("WHERE arrival = '" + LocalDate.now().toString() + "' AND booking.id NOT IN (SELECT booking_fk FROM `check`)");
+        return DAO.findAll("WHERE arrival <= '" + LocalDate.now().toString() + "' AND booking.id NOT IN (SELECT booking_fk FROM `check`)");
     }
 
     public static List<Booking> findAllDeparture(){
