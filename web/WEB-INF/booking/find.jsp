@@ -52,6 +52,40 @@
             <span class="data">$${booking.getTotal()}</span>
         </div>
     </div>
+
+    <div class="payment">
+        <div class="payment-info">
+            <h2>Payments</h2>
+            <div class="over">
+                <table>
+                    <thead>
+                        <tr><th>Paid out</th><th>Method</th><th>Timestamp</th></tr>
+                    </thead>
+                    <tbody>
+                    <c:forEach items="${paymentList}" var="payment">
+                        <tr><td>${payment.getValue()}</td><td>${payment.getPaymentMethod()}</td><td>${payment.getPayTime()}</td></tr>
+                    </c:forEach>
+                    </tbody>
+                </table>
+            </div>
+            <div class="payment-result">
+                <div class="property">
+                    <span class="label">Paid out</span>
+                    <span class="data">$ ${paid}</span>
+                </div>
+                <div class="property">
+                    <span class="label">Remaining</span>
+                    <span class="data" id="transformButton">$ ${booking.getTotal() - paid}</span>
+                </div>
+                <div class="property">
+                    <button onclick="openModalPayment()" class="pay">Pay</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
     <div class="checkin">
         <div class="checkin-info">
             <h2>Checkin</h2>
@@ -110,10 +144,40 @@
         </div>
     </div>
 </div>
+
+<div class="modal" id="modal-payment">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h1>Payment</h1>
+        </div>
+        <div class="modal-body">
+            <form action="/payments" id="form" method="POST">
+                <label for="value">Value</label>
+                <input type="number" name="value" id="value" class="moneyInput" min="0" step="any"
+                       autocomplete="off">
+                <label for="payment_method">Method</label>
+                <select name="payment_method" id="payment_method">
+                    <option value="CASH">CASH</option>
+                    <option value="CARD">CARD</option>
+                </select>
+                <input type="number" style="display: none" name="id_staff" id="id_staff"
+                       value="${sessionStaff.getId()}">
+                <input type="text" name="idbooking" id="idbooking" style="display: none" value="${booking.getId()}">
+                <input type="datetime-local" name="pay_time" id="pay_time" autocomplete="off" style="display: none">
+                <div class="modal-footer">
+                    <button onclick="cancel()" type="button">Cancel</button>
+                    <input type="submit" value="Receive" id="button">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 </body>
 <script>
     let modalDelete = document.getElementById("modal-delete");
     let modalCheck = document.getElementById("modal-check");
+    let modalPayment = document.getElementById("modal-payment");
     let title = document.getElementById("title");
 
     function openModalDelete(booking) {
@@ -124,6 +188,7 @@
     function cancel(){
         modalDelete.style.display = "none";
         modalCheck.style.display = "none";
+        modalPayment.style.display = "none";
     }
 
     function link(id) {
@@ -153,10 +218,20 @@
     }
 
     window.onclick = function(event) {
-        if (event.target === modalCheck || event.target === modalDelete) {
+        if (event.target === modalCheck || event.target === modalDelete || event.target === modalPayment ) {
             modalCheck.style.display = "none";
+            modalPayment.style.display = "none";
+            modalDelete.style.display = "none";
         }
     };
+
+    function openModalPayment() {
+        modalPayment.style.display = "flex";
+        let now = new Date();
+        now.setHours(now.getHours() - 3); //because of the timezone
+        document.getElementById("pay_time").value = now.toISOString().substring(0, 16);
+    }
+
 
     function action(operation){
         let checkin_info = document.querySelector(".checkin-info");

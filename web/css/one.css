@@ -81,6 +81,7 @@ nav a:hover{
     grid-template-columns: 3fr repeat(4, 1fr) .5fr repeat(4, 1fr) 3fr;
     grid-auto-rows:min-content;
     row-gap: 20px;
+    column-gap: 20px;
 }
 
 .content .model{
@@ -107,7 +108,7 @@ nav a:hover{
     align-items: center;
 }
 
-.edit button{
+.edit button, .pay{
     flex-basis: 40%;
     padding: 10px;
     text-transform: capitalize;
@@ -123,12 +124,12 @@ nav a:hover{
     background-color: #4e4e4e;
 }
 
-.edit button:hover{
+.edit button:hover, .pay:hover{
     background-color: #242323;
     cursor: pointer;
 }
 
-.about , .booking-info{
+.about , .booking-info, .payment-result{
     grid-area: 3/2/3/11;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
@@ -138,6 +139,12 @@ nav a:hover{
     border: 1px solid #ddd;
 }
 
+.payment-result{
+    border: none;
+    flex-basis: 100%;
+    padding: 0;
+    align-self: flex-end;
+}
 
 .bookings h2{
     margin: 0;
@@ -147,7 +154,7 @@ nav a:hover{
     flex-basis: 100%;
 }
 
-.about h2, .checkin h2, .checkout h2, .guest-bookings h2{
+.about h2, .checkin h2, .checkout h2, .guest-bookings h2, .payment h2{
     margin: 0;
     grid-area: 1/1/1/4;
     font-weight: normal;
@@ -212,6 +219,17 @@ table a:visited{
     color:white;
 }
 
+.payment-info{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    height: 100%;
+
+}
+
+.payment .over{
+    max-height: 20vh;
+}
 
 .checkin-info{
     display: none;
@@ -229,16 +247,24 @@ table a:visited{
     gap: 10px;
     padding: 20px;
 }
+
+.payment{
+    grid-area: 4 / 2 / span 2 / 9;
+    border: 1px solid #ddd;
+    align-content: stretch;
+    justify-content: stretch;
+    padding: 20px;
+}
 .checkin{
     height: 18vh;
-    grid-area: 4/2/4/6;
+    grid-area: 4/9/4/11;
     border: 1px solid #ddd;
     align-content: stretch;
     justify-content: stretch;
 }
 .checkout{
     height: 18vh;
-    grid-area: 4/7/4/11;
+    grid-area: 5/9/5/11;
     border: 1px solid #ddd;
     align-content: stretch;
     justify-content: stretch;
@@ -298,6 +324,10 @@ table a:visited{
 #modal-delete .modal-content {
     width: 30vw;
 }
+
+#modal-payment .modal-content {
+    width: 30vw;
+}
 .modal-content {
     background-color: whitesmoke;
     display: flex;
@@ -329,6 +359,10 @@ table a:visited{
 
 #modal-check .modal-footer{
     justify-content: flex-end;
+}
+
+#modal-payment .modal-footer{
+    padding-right: 0;
 }
 
 .modal-footer button {

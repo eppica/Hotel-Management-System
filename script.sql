@@ -1,6 +1,9 @@
-create database hms;
-use hms;
-create table if not exists booking
+
+drop database hml;
+create database hml;
+use hml;
+
+create table booking
 (
     id        int auto_increment
         primary key,
@@ -21,7 +24,7 @@ create index booking_room_id_fk
 create index booking_staff_id_fk
     on booking (staff_fk);
 
-create table if not exists `check`
+create table `check`
 (
     id         int auto_increment
         primary key,
@@ -37,7 +40,7 @@ create index check_booking_id_fk
 create index check_staff_id_fk
     on `check` (staff_fk);
 
-create table if not exists guest
+create table guest
 (
     id           int auto_increment
         primary key,
@@ -48,7 +51,24 @@ create table if not exists guest
     phone_number varchar(32)  null
 );
 
-create table if not exists room
+create table payment
+(
+    id         int auto_increment
+        primary key,
+    value      decimal(13, 4)        not null,
+    method     enum ('CASH', 'CARD') not null,
+    booking_fk int                   null,
+    pay_time   datetime              not null,
+    staff_fk   int                   null
+);
+
+create index payment_booking_fk
+    on payment (booking_fk);
+
+create index payment_staff_fk
+    on payment (staff_fk);
+
+create table room
 (
     id           int auto_increment
         primary key,
@@ -59,7 +79,7 @@ create table if not exists room
 create index room_room_type_id_fk
     on room (room_type_fk);
 
-create table if not exists room_type
+create table room_type
 (
     id          int auto_increment
         primary key,
@@ -68,7 +88,7 @@ create table if not exists room_type
     daily_price decimal(13, 4) null
 );
 
-create table if not exists staff
+create table staff
 (
     id           int auto_increment
         primary key,
