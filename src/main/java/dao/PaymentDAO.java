@@ -76,6 +76,11 @@ public class PaymentDAO implements DAO<Payment>{
         }finally {
             DB.closeConnection(connection, statement);
         }
+
+        if(value == null){
+            return BigDecimal.valueOf(0);
+        }
+        
         return value;
     }
 
