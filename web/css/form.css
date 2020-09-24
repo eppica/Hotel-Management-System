@@ -209,4 +209,5 @@ a{
     padding-bottom: 10px;
     border-radius: 3px;
     border-left: 7px solid rgba(205, 92, 92, 0.7);
+    display: none;
 }

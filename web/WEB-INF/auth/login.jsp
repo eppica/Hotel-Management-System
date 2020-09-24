@@ -26,5 +26,15 @@
         <input type="submit" value="Login">
     </div>
 </form>
+
+<script>
+
+    const error = document.getElementById("error");
+
+    if(error.innerHTML != ""){
+        error.style.display = "inline";
+    }
+</script>
+
 </body>
 </html>
