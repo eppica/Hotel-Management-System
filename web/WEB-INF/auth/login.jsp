@@ -17,7 +17,7 @@
 <body>
 <form method="POST" action="/auth/login">
     <h1>Login</h1>
-    ${errorMessage}
+    <span id="error">${errorMessage}</span>
     <label for="login">Login</label>
     <input type="text" name="login" id="login" autofocus>
     <label for="password">Password</label>
