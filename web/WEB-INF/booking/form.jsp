@@ -82,6 +82,7 @@
     let roomTypeValue = document.getElementById("room_type").value;
     let roomTypeContent = document.getElementById("room_type").innerHTML;
 
+    document.getElementById("arrival").addEventListener("change", prepareDepartureDate);
     document.getElementById("departure").addEventListener("focusout", validate);
 
     document.getElementById("departure").oninput = function () {
@@ -187,6 +188,15 @@
                 document.getElementById("result").innerHTML = total;
                 return total;
             });
+    }
+
+    function prepareDepartureDate(){
+        let arrivalDate = new Date(document.getElementById("arrival").value);
+        arrivalDate.setDate(arrivalDate.getDate() + 2);
+        const months = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
+        document.getElementById("departure").min = arrivalDate.getFullYear()+"-"+months[arrivalDate.getMonth()]+"-"+arrivalDate.getDate();
+
+
     }
 
 </script>
