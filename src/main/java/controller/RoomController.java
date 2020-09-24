@@ -49,55 +49,37 @@ public class RoomController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        if(!Servlet.isLogged(req)){
-            resp.sendRedirect("/auth/login");
-        }else if(!Servlet.isAllowed(req, AccessLevel.OWNER)){
-            resp.sendRedirect("/dashboard");
+        Integer operation = Servlet.getOperation(req);
+        if(operation == 1){
+            Room room = new Room(req);
+            room = room.save();
+            resp.sendRedirect("/rooms/"+room.getId());
         }else {
-            Integer operation = Servlet.getOperation(req);
-            if (operation == 1) {
-                Room room = new Room(req);
-                room = room.save();
-                resp.sendRedirect("/rooms/" + room.getId());
-            } else {
-                req.getRequestDispatcher("404.jsp").forward(req, resp);
-            }
+            req.getRequestDispatcher("404.jsp").forward(req, resp);
         }
     }
 
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        if(!Servlet.isLogged(req)){
-            resp.sendRedirect("/auth/login");
-        }else if(!Servlet.isAllowed(req, AccessLevel.OWNER)){
-            resp.sendRedirect("/dashboard");
+        Integer operation = Servlet.getOperation(req);
+        if(operation == 2){
+            BufferedReader br = new BufferedReader(new InputStreamReader(req.getInputStream()));
+            String data = br.readLine();
+            Room room = new Room(data.split("&"));
+            room.setId(Servlet.getId(req));
+            room.update();
         }else {
-            Integer operation = Servlet.getOperation(req);
-            if (operation == 2) {
-                BufferedReader br = new BufferedReader(new InputStreamReader(req.getInputStream()));
-                String data = br.readLine();
-                Room room = new Room(data.split("&"));
-                room.setId(Servlet.getId(req));
-                room.update();
-            } else {
-                req.getRequestDispatcher("404.jsp").forward(req, resp);
-            }
+            req.getRequestDispatcher("404.jsp").forward(req, resp);
         }
     }
 
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        if(!Servlet.isLogged(req)){
-            resp.sendRedirect("/auth/login");
-        }else if(!Servlet.isAllowed(req, AccessLevel.OWNER)){
-            resp.sendRedirect("/dashboard");
-        }else {
-            Integer operation = Servlet.getOperation(req);
-            if (operation == 2) {
-                Room.delete(Servlet.getId(req));
-            } else {
-                req.getRequestDispatcher("404.jsp").forward(req, resp);
-            }
+        Integer operation = Servlet.getOperation(req);
+        if(operation == 2){
+            Room.delete(Servlet.getId(req));
+        }else{
+            req.getRequestDispatcher("404.jsp").forward(req, resp);
         }
     }
 }

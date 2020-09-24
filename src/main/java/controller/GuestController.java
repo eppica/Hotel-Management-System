@@ -46,50 +46,38 @@ public class GuestController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        if(!Servlet.isLogged(req)){
-            resp.sendRedirect("/auth/login");
+        Integer operation = Servlet.getOperation(req);
+        if(operation == 1){
+            Guest guest = new Guest(req);
+            guest = guest.save();
+            resp.sendRedirect("/guests/" + guest.getId());
         }else {
-            Integer operation = Servlet.getOperation(req);
-            if (operation == 1) {
-                Guest guest = new Guest(req);
-                guest = guest.save();
-                resp.sendRedirect("/guests/" + guest.getId());
-            } else {
-                req.getRequestDispatcher("404.jsp").forward(req, resp);
-            }
+            req.getRequestDispatcher("404.jsp").forward(req, resp);
         }
     }
 
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        if(!Servlet.isLogged(req)){
-            resp.sendRedirect("/auth/login");
-        }else {
-            Integer operation = Servlet.getOperation(req);
-            if (operation == 2) {
-                BufferedReader br = new BufferedReader(new InputStreamReader(req.getInputStream()));
-                String data = br.readLine();
-                Guest guest = new Guest(data.split("&"));
-                guest.setId(Servlet.getId(req));
-                guest.update();
-            } else {
-                req.getRequestDispatcher("404.jsp").forward(req, resp);
-            }
+        Integer operation = Servlet.getOperation(req);
+        if(operation == 2){
+            BufferedReader br = new BufferedReader(new InputStreamReader(req.getInputStream()));
+            String data = br.readLine();
+            Guest guest = new Guest(data.split("&"));
+            guest.setId(Servlet.getId(req));
+            guest.update();
+        }else{
+            req.getRequestDispatcher("404.jsp").forward(req, resp);
         }
     }
 
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        if(!Servlet.isLogged(req)){
-            resp.sendRedirect("/auth/login");
+        Integer operation = Servlet.getOperation(req);
+        if (operation == 2) {
+            Guest.delete(Servlet.getId(req));
+            resp.sendRedirect("/guests/");
         }else {
-            Integer operation = Servlet.getOperation(req);
-            if (operation == 2) {
-                Guest.delete(Servlet.getId(req));
-                resp.sendRedirect("/guests/");
-            } else {
-                req.getRequestDispatcher("404.jsp").forward(req, resp);
-            }
+            req.getRequestDispatcher("404.jsp").forward(req, resp);
         }
     }
 }

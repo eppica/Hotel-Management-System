@@ -22,12 +22,9 @@
     </div>
 
     <div class="edit">
-        <c:if test="${sessionStaff.getAccessLevel() == 'OWNER'}">
-            <button class="delete" onclick="openModal('${roomType.getName()}')">Delete</button>
-            <button onclick="window.location.href='/bookings/${roomType.getId()}/edit';">Edit</button>
-        </c:if>
+        <button class="delete" onclick="openModal('${roomType.getName()}')">Delete</button>
+        <button onclick="window.location.href='/bookings/${roomType.getId()}/edit';">Edit</button>
     </div>
-
     <div class="about">
         <h2>About</h2>
         <div class="property">
@@ -58,40 +55,36 @@
         </div>
         <div class="modal-footer">
             <button onclick="cancel()" type="button">Cancel</button>
-            <button onclick="link(${roomType.getId()})" class="cancel"> Delete</button>
+            <button onclick="link(${roomType.getId()})" class="cancel"> Delete </button>
         </div>
     </div>
 </div>
 </body>
 <script>
     let modal = document.getElementById("modal-delete");
-
     function openModal(roomType) {
         modal.style.display = "flex";
         document.getElementById("sure").innerHTML = "Delete room type " + roomType + "?";
     }
-
-    window.onclick = function (event) {
+    window.onclick = function(event) {
         if (event.target === modal) {
             modal.style.display = "none";
         }
     };
 
-    function cancel() {
+    function cancel(){
         modal.style.display = "none";
     }
 
 
     function link(id) {
-        let url = "/roomTypes/" + id;
+        let url = "/roomTypes/"+ id;
         fetch(url, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
             },
-        }).then(resp => {
-            window.location.href = "/roomTypes"
-        });
+        }).then(resp => {   window.location.href = "/roomTypes" });
     }
 </script>
 </html>

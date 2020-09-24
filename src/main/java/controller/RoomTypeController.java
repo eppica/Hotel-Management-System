@@ -17,27 +17,27 @@ import java.util.List;
 public class RoomTypeController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        if (!Servlet.isLogged(req)) {
+        if(!Servlet.isLogged(req)){
             resp.sendRedirect("/auth/login");
-        } else {
+        }else{
 
             Integer operation = Servlet.getOperation(req);
-            if (operation == 1) {
+            if(operation == 1) {
                 List<RoomType> roomTypeList = RoomType.findAll();
                 req.setAttribute("roomTypeList", roomTypeList);
                 req.getRequestDispatcher("/WEB-INF/roomType/findAll.jsp").forward(req, resp);
-            } else if (operation == 2) {
+            }else if(operation == 2){
                 RoomType roomType = RoomType.find(Servlet.getId(req));
                 req.setAttribute("roomType", roomType);
                 req.getRequestDispatcher("/WEB-INF/roomType/find.jsp").forward(req, resp);
-            } else if (operation == 3) {
+            }else if(operation == 3){
                 Integer id = Servlet.getId(req);
                 RoomType roomType = RoomType.find(id);
                 req.setAttribute("roomType", roomType);
                 req.getRequestDispatcher("/WEB-INF/roomType/form.jsp").forward(req, resp);
-            } else if (operation == 4) {
+            }else if(operation == 4){
                 req.getRequestDispatcher("/WEB-INF/roomType/form.jsp").forward(req, resp);
-            } else {
+            }else {
                 req.getRequestDispatcher("404.jsp").forward(req, resp);
             }
         }
@@ -45,55 +45,37 @@ public class RoomTypeController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        if (!Servlet.isLogged(req)) {
-            resp.sendRedirect("/auth/login");
-        } else if (!Servlet.isAllowed(req, AccessLevel.OWNER)) {
-            resp.sendRedirect("/dashboard");
-        } else {
-            Integer operation = Servlet.getOperation(req);
-            if (operation == 1) {
-                RoomType roomType = new RoomType(req);
-                roomType = roomType.save();
-                resp.sendRedirect("/roomTypes/" + roomType.getId());
-            } else {
-                req.getRequestDispatcher("404.jsp").forward(req, resp);
-            }
+        Integer operation = Servlet.getOperation(req);
+        if(operation == 1 ){
+            RoomType roomType = new RoomType(req);
+            roomType = roomType.save();
+            resp.sendRedirect("/roomTypes/" + roomType.getId());
+        }else{
+            req.getRequestDispatcher("404.jsp").forward(req, resp);
         }
     }
 
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        if (!Servlet.isLogged(req)) {
-            resp.sendRedirect("/auth/login");
-        } else if (!Servlet.isAllowed(req, AccessLevel.OWNER)) {
-            resp.sendRedirect("/dashboard");
-        } else {
-            Integer operation = Servlet.getOperation(req);
-            if (operation == 2) {
-                BufferedReader br = new BufferedReader(new InputStreamReader(req.getInputStream()));
-                String data = br.readLine();
-                RoomType roomType = new RoomType(data.split("&"));
-                roomType.setId(Servlet.getId(req));
-                roomType.update();
-            } else {
-                req.getRequestDispatcher("404.jsp").forward(req, resp);
-            }
+        Integer operation = Servlet.getOperation(req);
+        if(operation == 2){
+            BufferedReader br = new BufferedReader(new InputStreamReader(req.getInputStream()));
+            String data = br.readLine();
+            RoomType roomType = new RoomType(data.split("&"));
+            roomType.setId(Servlet.getId(req));
+            roomType.update();
+        }else {
+            req.getRequestDispatcher("404.jsp").forward(req, resp);
         }
     }
 
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        if (!Servlet.isLogged(req)) {
-            resp.sendRedirect("/auth/login");
-        } else if (!Servlet.isAllowed(req, AccessLevel.OWNER)) {
-            resp.sendRedirect("/dashboard");
-        } else {
-            Integer operation = Servlet.getOperation(req);
-            if (operation == 2) {
-                RoomType.delete(Servlet.getId(req));
-            } else {
-                req.getRequestDispatcher("404.jsp").forward(req, resp);
-            }
+        Integer operation = Servlet.getOperation(req);
+        if(operation == 2){
+            RoomType.delete(Servlet.getId(req));
+        }else{
+            req.getRequestDispatcher("404.jsp").forward(req, resp);
         }
     }
 }
