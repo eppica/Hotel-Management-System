@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @WebServlet(name = "StaffController", urlPatterns = {"/staff/*"})
@@ -62,7 +64,7 @@ public class StaffController extends HttpServlet {
         if (operation == 2) {
             BufferedReader br = new BufferedReader(new InputStreamReader(req.getInputStream()));
             String data = br.readLine();
-            Staff staff = new Staff(data.split("&"));
+            Staff staff = new Staff(URLDecoder.decode(data,  StandardCharsets.UTF_8.toString()).split("&"));
             staff.setId(Servlet.getId(req));
             staff.update();
         }else {

@@ -32,21 +32,22 @@ public class Guest {
     }
 
     public Guest(String[] data){
-        Pattern pattern = Pattern.compile("(\\w+)(=)([\\w\\-\\+]*)");
         for(String x : data){
-            Matcher matcher = pattern.matcher(x);
-            if(matcher.matches()){
-                if(matcher.group(1).equals("name")){
-                    this.name = matcher.group(3).replace('+', ' ');
-                }else if(matcher.group(1).equals("document")){
-                    this.document = matcher.group(3).replace('+', ' ');
-                }else if(matcher.group(1).equals("birth_date")){
-                    this.birthDate = LocalDate.parse(matcher.group(3));
-                }else if(matcher.group(1).equals("email")){
-                    this.email = matcher.group(3).replace('+', ' ');
-                }else if(matcher.group(1).equals("phone_number")){
-                    this.phoneNumber = matcher.group(3).replace('+', ' ');
-                }
+            String[] add = x.split("=");
+            if(add[0].equals("name")){
+                this.name = add[1];
+            }
+            if(add[0].equals("document")){
+                this.document = add[1];
+            }
+            if(add[0].equals("birth_date")){
+                this.birthDate = LocalDate.parse(add[1]);
+            }
+            if(add[0].equals("email")){
+                this.email = add[1];
+            }
+            if(add[0].equals("phone_number")){
+                this.phoneNumber = add[1];
             }
         }
     }

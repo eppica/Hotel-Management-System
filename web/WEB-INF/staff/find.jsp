@@ -18,14 +18,14 @@
 <c:import url="/WEB-INF/header/main.jsp"/>
 <div class="content">
     <div class="model">
-        <button class="delete" onclick="openModal(${staff.getName()})">Delete</button>
+        <h1>${staff.getName()}</h1>
+        <h3>${staff.getAccessLevel()}</h3>
+    </div>
+    <div class="edit">
+        <button class="delete" onclick="openModal('${staff.getName()}')">Delete</button>
         <button onclick="window.location.href='/staff/${staff.getId()}/edit';">Edit</button>
     </div>
 
-    <div class="edit">
-        <button class="delete">Delete</button>
-        <button>Edit</button>
-    </div>
     <div class="about">
         <h2>About</h2>
         <div class="property">

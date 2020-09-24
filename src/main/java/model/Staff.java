@@ -67,19 +67,19 @@ public class Staff {
     }
 
     public Staff(String[] data){
-        Pattern pattern = Pattern.compile("(\\w+)(=)([\\w\\-\\+]*)");
         for(String x : data){
-            Matcher matcher = pattern.matcher(x);
-            if(matcher.matches()){
-                if(matcher.group(1).equals("name")){
-                    this.name = matcher.group(3).replace('+', ' ');
-                }else if(matcher.group(1).equals("access_level")){
-                    this.accessLevel = AccessLevel.valueOf(matcher.group(3));
-                }else if(matcher.group(1).equals("login")){
-                    this.login = matcher.group(3).replace('+', ' ');
-                }else if(matcher.group(1).equals("password")){
-                    this.password = matcher.group(3).replace('+', ' ');
-                }
+            String[] add = x.split("=");
+            if(add[0].equals("name")){
+                this.name = add[1];
+            }
+            if(add[0].equals("access_level")){
+                this.accessLevel = AccessLevel.valueOf(add[1]);
+            }
+            if(add[0].equals("login")){
+                this.login = add[1];
+            }
+            if(add[0].equals("password")){
+                this.password = add[1];
             }
         }
     }

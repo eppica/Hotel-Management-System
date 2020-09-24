@@ -203,4 +203,10 @@ a{
     color:#cd5c5c;
     text-align: center;
     font-weight: 700;
+    background-color:rgba(205, 92, 92, 0.3);
+    padding-left: 7px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-radius: 3px;
+    border-left: 7px solid rgba(205, 92, 92, 0.7);
 }

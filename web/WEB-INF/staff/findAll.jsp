@@ -21,7 +21,7 @@
     <div class="over">
         <table>
             <thead>
-                <tr><th>Name</th><th>Access Level</th><th>Login</th><th colspan="2">Action</th></tr>
+                <tr><th>Name</th><th>Access Level</th><th>Login</th></tr>
             </thead>
             <tbody>
             <c:forEach items="${staffList}" var="staff">

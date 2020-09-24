@@ -12,6 +12,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.math.RoundingMode;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -82,7 +84,7 @@ public class BookingController extends HttpServlet {
         if(operation == 2){
             BufferedReader br = new BufferedReader(new InputStreamReader(req.getInputStream()));
             String data = br.readLine();
-            Booking booking = new Booking(data.split("&"));
+            Booking booking = new Booking(URLDecoder.decode(data,  StandardCharsets.UTF_8.toString()).split("&"));
             booking.setId(Servlet.getId(req));
             booking.update();
         }else{
