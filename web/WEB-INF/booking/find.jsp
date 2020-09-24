@@ -13,6 +13,19 @@
     <title>Booking</title>
     <meta name="viewport" content="width=device-width, user-scalable=0">
 </head>
+<c:if test="${allowed == true}">
+    <style>
+        .payment tbody tr:hover, td:hover{
+            background-color: #f5f5f5;
+            cursor: pointer;
+        }
+
+        .checkin:hover, .checkout:hover{
+            background-color: #f5f5f5;
+            cursor: pointer;
+        }
+    </style>
+</c:if>
 <body onload="action('${booking.getStatus().toLowerCase()}')">
 <c:import url="/WEB-INF/header/main.jsp"/>
 <div class="content">
@@ -63,8 +76,11 @@
                     </thead>
                     <tbody>
                     <c:forEach items="${paymentList}" var="payment">
-                        <tr><td>${payment.getValue()}</td><td>${payment.getPaymentMethod()}</td><td>${payment.getPayTime()}</td></tr>
+                        <tr <c:if test="${allowed == true}">onclick="openModalPayment(${payment.getValue()}, '${payment.getPaymentMethod()}')" </c:if>> <td>${payment.getValue()}</td><td>${payment.getPaymentMethod()}</td><td>${payment.getPayTime()}</td></tr>
                     </c:forEach>
+                    <c:if test="${paymentList.size() == 0}">
+                        <tr><td>-</td><td>-</td><td>-</td></tr>
+                    </c:if>
                     </tbody>
                 </table>
             </div>
@@ -86,7 +102,7 @@
 
 
 
-    <div class="checkin">
+    <div class="checkin" <c:if test="${allowed == true}">onclick="openModalCheck(true, ${booking.getId()}, ${booking.getRoom().getNumber()})" </c:if>>
         <div class="checkin-info">
             <h2>Checkin</h2>
             <div class="property">
@@ -96,7 +112,7 @@
         </div>
         <button id="do-checkin" onclick="openModalCheck(true, ${booking.getId()}, ${booking.getRoom().getNumber()})">Checkin</button>
     </div>
-    <div class="checkout">
+    <div class="checkout" <c:if test="${allowed == true}">onclick="openModalCheck(false, ${booking.getId()}, ${booking.getRoom().getNumber()})" </c:if>>
         <div class="checkout-info">
             <h2>Checkout</h2>
             <div class="property">

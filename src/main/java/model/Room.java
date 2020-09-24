@@ -160,8 +160,7 @@ public class Room {
         return "{" +
                 "\"id\":\"" + id + "\""+
                 ", \"idRoomType\":\"" + idRoomType +"\""+
-                ", \"dailyPrice\":\"" + idRoomType +"\""+
                 ", \"number\":\"" + number + "\""+
-                '}';
+                "}";
     }
 }

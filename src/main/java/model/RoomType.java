@@ -161,6 +161,6 @@ public class RoomType {
                 ", \"name\":\"" + name +"\""+
                 ", \"description\":\"" + description +"\""+
                 ", \"dailyPrice\":\"" + dailyPrice + "\""+
-                '}';
+                "}";
     }
 }

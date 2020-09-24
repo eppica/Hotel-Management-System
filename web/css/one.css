@@ -215,8 +215,14 @@ tbody tr:hover, td:hover{
     background-color: #f5f5f5;
     cursor: pointer;
 }
+
 table a:visited{
     color:white;
+}
+
+.payment tbody tr:hover, td:hover{
+    cursor: default;
+    background-color: white;
 }
 
 .payment-info{
@@ -230,6 +236,7 @@ table a:visited{
 .payment .over{
     max-height: 20vh;
 }
+
 
 .checkin-info{
     display: none;

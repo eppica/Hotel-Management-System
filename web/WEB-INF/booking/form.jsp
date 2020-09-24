@@ -92,7 +92,7 @@
             reset(false);
 
         }
-        if(document.getElementById("arrival").value !== "" && document.getElementById("room_type").value !== ""){
+        if(document.getElementById("arrival").value !== ""){
             if(validate()){
                 calcPrice();
             }
@@ -106,7 +106,7 @@
             reset(false);
 
         }
-        if(document.getElementById("departure").value !== "" && document.getElementById("room_type").value !== ""){
+        if(document.getElementById("departure").value !== ""){
             if(validate()){
                 calcPrice();
             }
@@ -114,8 +114,8 @@
 
     };
     document.getElementById("room_type").onchange = function () {
-        calcPrice();
         if(roomContent !== ""){
+            calcPrice();
             if(document.getElementById("room_type").value === roomTypeValue){
                 document.getElementById("id_room").innerHTML = roomContent;
             }else{
@@ -168,6 +168,9 @@
             method: 'GET',
         }).then(resp => resp.json())
             .then(data => {
+                if(!data){
+                    return;
+                }
                 for (i = 0; i< data.length; i++) {
                     let opt = document.createElement("option");
                     opt.value = data[i].id;
@@ -178,16 +181,18 @@
     }
 
     function calcPrice(){
-        let url = "/api/roomtype?room_type=" + document.getElementById("room_type").value;
-        fetch(url, {
-            method: 'GET',
-        }).then(resp => resp.json())
-            .then(data => {
-                let dailyPrice = data[0].dailyPrice;
-                let total = dailyPrice * (document.getElementById("departure").valueAsNumber - document.getElementById("arrival").valueAsNumber) / (1000 * 3600 * 24);
-                document.getElementById("result").innerHTML = total;
-                return total;
-            });
+        if(document.getElementById("room_type").value !== ""){
+            let url = "/api/roomtype?room_type=" + document.getElementById("room_type").value;
+            fetch(url, {
+                method: 'GET',
+            }).then(resp => resp.json())
+                .then(data => {
+                    let dailyPrice = data.dailyPrice;
+                    let total = dailyPrice * (document.getElementById("departure").valueAsNumber - document.getElementById("arrival").valueAsNumber) / (1000 * 3600 * 24);
+                    document.getElementById("result").innerHTML = total;
+                    return total;
+                });
+        }
     }
 
     function prepareDepartureDate(){
