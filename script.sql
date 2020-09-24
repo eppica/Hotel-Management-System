@@ -1,7 +1,7 @@
 
-drop database hml;
-create database hml;
-use hml;
+drop database hms;
+create database hms;
+use hms;
 
 create table booking
 (
