@@ -106,11 +106,23 @@
         "July", "August", "September", "October", "November", "December"
     ];
 
+    let now = new Date();
+    let data = monthNames[now.getMonth()] +" " + now.getDate() + ", " + now.getFullYear();
+    today.innerText = data;
+
+    let hoursToMidnight = 24 - now.getHours();
+    let minutesToNextHour = 60 - now.getMinutes();
+    let secondsToNextMinute = 60 - now.getSeconds();
+
+    let minutesToMidnight = (hoursToMidnight*60) + minutesToNextHour;
+
+    let secondsToMidnight = (minutesToMidnight*60) + secondsToNextMinute;
+
+    let millisecondsToMidnight = secondsToMidnight*1000;
+
     setTimeout(function() {
-        let now = new Date();
-        let data = monthNames[now.getMonth()] +" " + now.getDate() + ", " + now.getFullYear();
-        today.innerText = data;
-    }, 1000)
+        window.location.reload();
+    }, millisecondsToMidnight)
 
 </script>
 </html>
