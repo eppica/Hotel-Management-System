@@ -366,6 +366,7 @@ table a:visited{
 
 #modal-check .modal-footer{
     justify-content: flex-end;
+    padding-right: 0;
 }
 
 #modal-payment .modal-footer{
@@ -476,3 +477,14 @@ form input[type=submit]:hover,form  button:hover{
     background-color: rgb(241, 239, 239);
 }
 
+.delPayment {
+    text-align: center;
+    width: 6vw;
+    background-color: crimson;
+    color: white;
+}
+
+.delPayment:hover{
+    background-color:rgb(100, 11, 28);
+    cursor: pointer;
+}

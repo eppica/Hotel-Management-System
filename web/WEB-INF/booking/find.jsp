@@ -76,7 +76,14 @@
                     </thead>
                     <tbody>
                     <c:forEach items="${paymentList}" var="payment">
-                        <tr <c:if test="${allowed == true}">onclick="openModalPayment(${payment.getValue()}, '${payment.getPaymentMethod()}')" </c:if>> <td>${payment.getValue()}</td><td>${payment.getPaymentMethod()}</td><td>${payment.getPayTime()}</td></tr>
+                        <tr>
+                            <td <c:if test="${allowed == true}">onclick="openModalPayment(${payment.getValue()}, '${payment.getPaymentMethod()}', ${booking.getTotal() - paid}, ${payment.getId()})" </c:if>>${payment.getValue()}</td>
+                            <td <c:if test="${allowed == true}">onclick="openModalPayment(${payment.getValue()}, '${payment.getPaymentMethod()}', ${booking.getTotal() - paid}, ${payment.getId()})" </c:if>>${payment.getPaymentMethod()}</td>
+                            <td <c:if test="${allowed == true}">onclick="openModalPayment(${payment.getValue()}, '${payment.getPaymentMethod()}', ${booking.getTotal() - paid}, ${payment.getId()})" </c:if>>${payment.getPayTime()}</td>
+                            <c:if test="${allowed == true}">
+                                <td class="delPayment">Delete</td>
+                            </c:if>
+                        </tr>
                     </c:forEach>
                     <c:if test="${paymentList.size() == 0}">
                         <tr><td>-</td><td>-</td><td>-</td></tr>
@@ -167,7 +174,7 @@
             <h1>Payment</h1>
         </div>
         <div class="modal-body">
-            <form action="/payments" id="form" method="POST">
+            <form action="/payments" id="pay-form" method="POST">
                 <label for="value">Value</label>
                 <input type="number" name="value" id="value" class="moneyInput" min="0" step="any"
                        autocomplete="off">
@@ -178,11 +185,12 @@
                 </select>
                 <input type="number" style="display: none" name="id_staff" id="id_staff"
                        value="${sessionStaff.getId()}">
+                <input type="number" style="display: none" name="id_payment" id="id_payment" readonly>
                 <input type="text" name="idbooking" id="idbooking" style="display: none" value="${booking.getId()}">
                 <input type="datetime-local" name="pay_time" id="pay_time" autocomplete="off" style="display: none">
                 <div class="modal-footer">
                     <button onclick="cancel()" type="button">Cancel</button>
-                    <input type="submit" value="Receive" id="button">
+                    <input type="submit" value="Receive" id="pay-button">
                 </div>
             </form>
         </div>
@@ -191,6 +199,31 @@
 
 </body>
 <script>
+
+    function send(e){
+
+        e.preventDefault();
+        let url = "/payments/" + document.querySelector("#pay-form #id_payment").value;
+
+        fetch(url, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: new URLSearchParams({
+                'value': document.getElementById("value").value,
+                'payment-method': document.getElementById("payment_method").value,
+                'id_booking': document.getElementById("id_booking").value,
+                'id_staff': ${sessionStaff.getId()},
+                'pay_time':document.getElementById("pay_time").value
+            }),
+        }).then(resp => {   window.location.href = url });
+    }
+
+    if(document.getElementById("pay-form").method === ""){
+        document.getElementById("pay-form").addEventListener("submit", send);
+    }
+
     let modalDelete = document.getElementById("modal-delete");
     let modalCheck = document.getElementById("modal-check");
     let modalPayment = document.getElementById("modal-payment");
@@ -241,8 +274,31 @@
         }
     };
 
-    function openModalPayment() {
+    function openModalPayment(value, method, remaining, id) {
         modalPayment.style.display = "flex";
+        if(value && method && remaining && id){
+            document.getElementById("value").value = value;
+            document.getElementById("value").max = value + remaining;
+            for(let opt of document.getElementById("payment_method").options){
+                if(opt.value === method){
+                    opt.selected = true;
+                }
+            }
+            document.querySelector("#pay-form #id_payment").value = id;
+            document.querySelector("#modal-payment h1").innerHTML = "Edit Payment";
+            document.getElementById("pay-form").method = "";
+            document.getElementById("pay-form").action = "";
+            payId = id;
+            document.getElementById("pay-button").value = "Edit";
+        }else{
+            document.querySelector("#pay-form #id_payment").value = 0;
+            document.getElementById("value").max =${booking.getTotal() - paid};
+            document.getElementById("value").value =${booking.getTotal() - paid};
+            document.getElementById("pay-form").method = "POST";
+            document.getElementById("pay-button").value = "Receive";
+            document.querySelector("#modal-payment h1").innerHTML = "Payment";
+            document.getElementById("pay-form").action = "/payments";
+        }
         let now = new Date();
         now.setHours(now.getHours() - 3); //because of the timezone
         document.getElementById("pay_time").value = now.toISOString().substring(0, 16);
