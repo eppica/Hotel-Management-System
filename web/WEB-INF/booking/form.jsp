@@ -69,7 +69,7 @@
                 'arrival': document.getElementById("arrival").value,
                 'departure': document.getElementById("departure").value,
                 'id_staff': ${sessionStaff.getId()},
-                'total': calcPrice()
+                'total': totalCalc
             }),
         }).then(resp => {   window.location.href = url });
     }
@@ -81,6 +81,7 @@
     let roomContent = document.getElementById("id_room").innerHTML;
     let roomTypeValue = document.getElementById("room_type").value;
     let roomTypeContent = document.getElementById("room_type").innerHTML;
+    let totalCalc;
 
     document.getElementById("arrival").addEventListener("change", prepareDepartureDate);
     document.getElementById("departure").addEventListener("focusout", validate);
@@ -189,8 +190,8 @@
                 .then(data => {
                     let dailyPrice = data.dailyPrice;
                     let total = dailyPrice * (document.getElementById("departure").valueAsNumber - document.getElementById("arrival").valueAsNumber) / (1000 * 3600 * 24);
+                    totalCalc = total;
                     document.getElementById("result").innerHTML = total;
-                    return total;
                 });
         }
     }
