@@ -1,6 +1,7 @@
 package controller;
 
 import model.Booking;
+import model.Payment;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -23,6 +24,7 @@ public class DashboardController extends HttpServlet {
             List<Booking> arrivalList = Booking.findAllArrival();
             req.setAttribute("arrivalList", arrivalList);
             List<Booking> departureList = Booking.findAllDeparture();
+            departureList.removeIf(b -> b.getTotal().equals(Payment.sumAll(b.getId())));
             req.setAttribute("departureList", departureList);
             req.getRequestDispatcher("/WEB-INF/dashboard.jsp").forward(req, resp);
         }

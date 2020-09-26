@@ -20,10 +20,6 @@
             cursor: pointer;
         }
 
-        .checkin:hover, .checkout:hover{
-            background-color: #f5f5f5;
-            cursor: pointer;
-        }
     </style>
 </c:if>
 <body onload="action('${booking.getStatus().toLowerCase()}')">
@@ -70,13 +66,20 @@
         <div class="payment-info">
             <h2>Payments</h2>
             <div class="over">
-                <table>
+                <table id="tablePayment">
                     <thead>
-                        <tr><th>Paid out</th><th>Method</th><th>Timestamp</th></tr>
+                        <tr><th>Paid out</th><th>Method</th><th>Timestamp</th><th class="delHide"></th></tr>
                     </thead>
                     <tbody>
                     <c:forEach items="${paymentList}" var="payment">
-                        <tr <c:if test="${allowed == true}">onclick="openModalPayment(${payment.getValue()}, '${payment.getPaymentMethod()}')" </c:if>> <td>${payment.getValue()}</td><td>${payment.getPaymentMethod()}</td><td>${payment.getPayTime()}</td></tr>
+                        <tr>
+                            <td <c:if test="${allowed == true}">onclick="openModalPayment(${payment.getValue()}, '${payment.getPaymentMethod()}', ${booking.getTotal() - paid}, ${payment.getId()},'${payment.getStaff().getName()}')" </c:if>>$${payment.getValue()}</td>
+                            <td <c:if test="${allowed == true}">onclick="openModalPayment(${payment.getValue()}, '${payment.getPaymentMethod()}', ${booking.getTotal() - paid}, ${payment.getId()},'${payment.getStaff().getName()}')" </c:if>>${payment.getPaymentMethod()}</td>
+                            <td <c:if test="${allowed == true}">onclick="openModalPayment(${payment.getValue()}, '${payment.getPaymentMethod()}', ${booking.getTotal() - paid}, ${payment.getId()},'${payment.getStaff().getName()}')" </c:if>>${payment.getPayTime()}</td>
+                            <c:if test="${allowed == true}">
+                                <td class="delPayment delHide" onclick="openModalDeletePayment(${payment.getId()}, ${payment.getValue()})">Delete</td>
+                            </c:if>
+                        </tr>
                     </c:forEach>
                     <c:if test="${paymentList.size() == 0}">
                         <tr><td>-</td><td>-</td><td>-</td></tr>
@@ -94,7 +97,7 @@
                     <span class="data" id="transformButton">$ ${booking.getTotal() - paid}</span>
                 </div>
                 <div class="property">
-                    <button onclick="openModalPayment()" class="pay">Pay</button>
+                    <button onclick="openModalPayment()" class="pay" id="p-button">Pay</button>
                 </div>
             </div>
         </div>
@@ -102,7 +105,7 @@
 
 
 
-    <div class="checkin" <c:if test="${allowed == true}">onclick="openModalCheck(true, ${booking.getId()}, ${booking.getRoom().getNumber()})" </c:if>>
+    <div class="checkin">
         <div class="checkin-info">
             <h2>Checkin</h2>
             <div class="property">
@@ -112,7 +115,7 @@
         </div>
         <button id="do-checkin" onclick="openModalCheck(true, ${booking.getId()}, ${booking.getRoom().getNumber()})">Checkin</button>
     </div>
-    <div class="checkout" <c:if test="${allowed == true}">onclick="openModalCheck(false, ${booking.getId()}, ${booking.getRoom().getNumber()})" </c:if>>
+    <div class="checkout">
         <div class="checkout-info">
             <h2>Checkout</h2>
             <div class="property">
@@ -136,6 +139,21 @@
         </div>
     </div>
 </div>
+
+<div class="modal delete" id="modal-delete-payment">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h1>Delete</h1>
+        </div>
+        <div class="modal-body" id="pay-sure">
+        </div>
+        <div class="modal-footer">
+            <button onclick="cancel()" type="button">Cancel</button>
+            <button onclick="linkPayment()" class="cancel"> Delete </button>
+        </div>
+    </div>
+</div>
+
 
 <div class="modal" id="modal-check">
     <div class="modal-content">
@@ -167,22 +185,24 @@
             <h1>Payment</h1>
         </div>
         <div class="modal-body">
-            <form action="/payments" id="form" method="POST">
+            <form action="/payments" id="pay-form" method="POST">
                 <label for="value">Value</label>
-                <input type="number" name="value" id="value" class="moneyInput" min="0" step="any"
+                <input type="number" name="value" id="value" class="moneyInput" min="0" step="0.01"
                        autocomplete="off">
                 <label for="payment_method">Method</label>
                 <select name="payment_method" id="payment_method">
                     <option value="CASH">CASH</option>
                     <option value="CARD">CARD</option>
                 </select>
-                <input type="number" style="display: none" name="id_staff" id="id_staff"
-                       value="${sessionStaff.getId()}">
-                <input type="text" name="idbooking" id="idbooking" style="display: none" value="${booking.getId()}">
+                <label for="id_staff_payment" style="display: none">Staff</label>
+                <input type="text" style="display: none" name="id_staff_payment" id="id_staff_payment"
+                       value="${sessionStaff.getName()}" readonly>
+                <input type="number" style="display: none" name="id_payment" id="id_payment" readonly>
+                <input type="text" name="id_pay_booking" id="id_pay_booking" style="display: none" value="${booking.getId()}">
                 <input type="datetime-local" name="pay_time" id="pay_time" autocomplete="off" style="display: none">
                 <div class="modal-footer">
                     <button onclick="cancel()" type="button">Cancel</button>
-                    <input type="submit" value="Receive" id="button">
+                    <input type="submit" value="Receive" id="pay-button">
                 </div>
             </form>
         </div>
@@ -191,10 +211,69 @@
 
 </body>
 <script>
+
+    function send(e){
+
+        e.preventDefault();
+        let url = "/payments/" + document.querySelector("#pay-form #id_payment").value;
+
+        fetch(url, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: new URLSearchParams({
+                'value': document.getElementById("value").value,
+                'payment_method': document.getElementById("payment_method").value,
+                'id_pay_booking': document.getElementById("id_pay_booking").value,
+                'id_staff': ${sessionStaff.getId()},
+                'pay_time':document.getElementById("pay_time").value
+            }),
+        }).then(resp => { location.reload() });
+    }
+
+    function sendPost(e){
+
+        e.preventDefault();
+        let url = "/payments";
+
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: new URLSearchParams({
+                'value': document.getElementById("value").value,
+                'payment_method': document.getElementById("payment_method").value,
+                'id_pay_booking': document.getElementById("id_pay_booking").value,
+                'id_staff': ${sessionStaff.getId()},
+                'pay_time':document.getElementById("pay_time").value
+            }),
+        }).then(resp => { location.reload() });
+    }
+
+    function changeMethod(){
+        if((document.getElementById("pay-form").method == "POST") || (document.getElementById("pay-form").method == "post")){
+            document.getElementById("pay-form").addEventListener("submit", sendPost);
+
+        }else{
+            document.getElementById("pay-form").addEventListener("submit", send);
+        }
+    }
+
     let modalDelete = document.getElementById("modal-delete");
     let modalCheck = document.getElementById("modal-check");
     let modalPayment = document.getElementById("modal-payment");
+    let modalDeletePayment = document.getElementById("modal-delete-payment");
     let title = document.getElementById("title");
+    let currentPayId;
+    let paid = ${booking.getTotal() - paid};
+
+    if(paid == 0){
+        document.getElementById("p-button").style.display="none";
+    }else{
+        document.getElementById("p-button").style.display="block";
+    }
 
     function openModalDelete(booking) {
         modalDelete.style.display = "flex";
@@ -205,6 +284,7 @@
         modalDelete.style.display = "none";
         modalCheck.style.display = "none";
         modalPayment.style.display = "none";
+        modalDeletePayment.style.display = "none";
     }
 
     function link(id) {
@@ -222,8 +302,9 @@
             title.innerHTML = "Checkin";
             document.getElementById("status").value = 1;
         }else{
-            title.innerHTML = "Checkout";
+           title.innerHTML = "Checkout";
             document.getElementById("status").value = 0;
+
         }
         modalCheck.style.display = "flex";
         document.getElementById("id_booking").value = booking;
@@ -241,11 +322,56 @@
         }
     };
 
-    function openModalPayment() {
+    function openModalPayment(value, method, remaining, id, staff) {
         modalPayment.style.display = "flex";
+        if((value !== null) && (method !== null) && (remaining != null) && (id != null)){
+            document.getElementById("value").value = value;
+            document.getElementById("value").max = value + remaining;
+            for(let opt of document.getElementById("payment_method").options){
+                if(opt.value === method){
+                    opt.selected = true;
+                }
+            }
+            document.querySelector("#pay-form #id_payment").value = id;
+            document.querySelector("#modal-payment h1").innerHTML = "Edit Payment";
+            document.getElementById("pay-form").method = "";
+            document.getElementById("pay-form").action = "";
+            changeMethod();
+            document.getElementById("pay-button").value = "Edit";
+            document.getElementById("id_staff_payment").style.display = "block";
+            document.querySelector("label[for='id_staff_payment']").style.display = "block";
+            document.getElementById("id_staff_payment").value = staff;
+        }else{
+            document.querySelector("#pay-form #id_payment").value = 0;
+            document.getElementById("value").max =${booking.getTotal() - paid};
+            document.getElementById("value").value =${booking.getTotal() - paid};
+            document.getElementById("pay-form").method = "POST";
+            document.getElementById("pay-button").value = "Receive";
+            document.querySelector("#modal-payment h1").innerHTML = "Payment";
+            document.getElementById("pay-form").action = "/payments";
+            document.getElementById("id_staff_payment").style.display = "none";
+            document.querySelector("label[for='id_staff_payment']").style.display = "none";
+            changeMethod();
+        }
         let now = new Date();
         now.setHours(now.getHours() - 3); //because of the timezone
         document.getElementById("pay_time").value = now.toISOString().substring(0, 16);
+    }
+
+    function openModalDeletePayment(id, value) {
+        modalDeletePayment.style.display = "flex";
+        document.getElementById("pay-sure").innerHTML = "Delete payment $" + value + "?";
+        currentPayId = id;
+    }
+
+    function linkPayment() {
+        let url = "/payments/"+ currentPayId;
+        fetch(url, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+        }).then(resp => { location.reload() });
     }
 
 
@@ -255,6 +381,7 @@
         let checkout_info = document.querySelector(".checkout-info");
         let do_checkout = document.querySelector("#do-checkout");
 
+
         if(operation === "booked"){
             checkin_info.style.display = "none";
             do_checkin.style.display = "block";
@@ -263,13 +390,22 @@
         }else if(operation === "arrived"){
             checkin_info.style.display = "grid";
             do_checkin.style.display = "none";
-            do_checkout.style.display = "block";
-            checkout_info.style.display = "none";
+            if(paid == 0){
+                do_checkout.style.display = "block";
+                checkout_info.style.display = "none";
+            }else{
+                do_checkout.style.display = "none";
+                checkout_info.style.display = "none";
+            }
         }else if(operation === "departed"){
             checkin_info.style.display = "grid";
             do_checkin.style.display = "none";
             do_checkout.style.display = "none";
             checkout_info.style.display = "grid";
+            for(let x of document.querySelector("#tablePayment").rows){
+                x.deleteCell(3);
+            }
+
         }
         beautifulTimestamp();
     }

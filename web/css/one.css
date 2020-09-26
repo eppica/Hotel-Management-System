@@ -328,7 +328,7 @@ table a:visited{
 #modal-check .modal-content{
     width: 40vw;
 }
-#modal-delete .modal-content {
+#modal-delete .modal-content, .delete .modal-content {
     width: 30vw;
 }
 
@@ -366,6 +366,7 @@ table a:visited{
 
 #modal-check .modal-footer{
     justify-content: flex-end;
+    padding-right: 0;
 }
 
 #modal-payment .modal-footer{
@@ -379,7 +380,7 @@ table a:visited{
 a{
     text-decoration: none;
 }
-#modal-delete .modal-footer button{
+#modal-delete .modal-footer button, .delete .modal-footer button{
     flex-basis: 40%;
     padding: 10px;
     text-transform: capitalize;
@@ -392,10 +393,10 @@ a{
     margin-left: 20px;
 }
 
-#modal-delete  .modal-footer .cancel{
+#modal-delete  .modal-footer .cancel, .delete .modal-footer .cancel{
     background-color: #4e4e4e;
 }
-#modal-delete  .modal-footer button:hover{
+#modal-delete  .modal-footer button:hover, .delete .modal-footer button:hover{
     background-color: #242323;
     cursor: pointer;
 }
@@ -476,3 +477,14 @@ form input[type=submit]:hover,form  button:hover{
     background-color: rgb(241, 239, 239);
 }
 
+.delPayment {
+    text-align: center;
+    width: 6vw;
+    background-color: crimson;
+    color: white;
+}
+
+.delPayment:hover{
+    background-color:rgb(100, 11, 28);
+    cursor: pointer;
+}

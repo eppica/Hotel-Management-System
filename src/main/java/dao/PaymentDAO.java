@@ -97,10 +97,10 @@ public class PaymentDAO implements DAO<Payment>{
                     "staff_fk = IFNULL(?, staff_fk) " +
                     "WHERE id = " + object.getId());
             statement.setObject(1, object.getValue());
-            statement.setObject(2, object.getPaymentMethod());
+            statement.setObject(2, object.getPaymentMethod().toString());
             statement.setObject(3, object.getIdBooking());
             statement.setObject(4, object.getPayTime());
-            statement.setObject(5, object.getPayTime());
+            statement.setObject(5, object.getIdStaff());
             statement.execute();
         } catch (SQLException e) {
             e.printStackTrace();
