@@ -225,6 +225,11 @@ table a:visited{
     background-color: white;
 }
 
+.guest-bookings tbody tr:hover, td:hover{
+    background-color: #f5f5f5;
+    cursor: pointer;
+}
+
 .payment-info{
     display: flex;
     flex-direction: row;
