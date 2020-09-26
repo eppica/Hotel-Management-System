@@ -92,7 +92,7 @@ public class Payment {
             if(add[0].equals("payment_method")){
                 this.paymentMethod = PaymentMethod.valueOf(add[1]);
             }
-            if(add[0].equals("id_booking")){
+            if(add[0].equals("id_pay_booking")){
                 this.idBooking = Integer.valueOf(add[1]);
             }
             if(add[0].equals("pay_time")){
@@ -158,6 +158,10 @@ public class Payment {
 
     public void setIdStaff(Integer idStaff) {
         this.idStaff = idStaff;
+    }
+
+    public Staff getStaff() {
+        return Staff.find(this.idStaff);
     }
 
     public Payment save(){

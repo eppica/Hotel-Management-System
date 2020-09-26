@@ -24,9 +24,10 @@ public class PaymentController extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Integer operation = Servlet.getOperation(req);
         if(operation == 1){
-            Payment payment = new Payment(req);
-            payment = payment.save();
-            resp.sendRedirect("/bookings/" + payment.getIdBooking());
+            BufferedReader br = new BufferedReader(new InputStreamReader(req.getInputStream()));
+            String data = br.readLine();
+            Payment payment = new Payment((URLDecoder.decode(data,  StandardCharsets.UTF_8.toString()).split("&")));
+            payment.save();
         }else {
             req.getRequestDispatcher("404.jsp").forward(req, resp);
         }
