@@ -105,7 +105,7 @@
 
 
 
-    <div class="checkin">
+    <div class="checkin" id="div-checkin">
         <div class="checkin-info">
             <h2>Checkin</h2>
             <div class="property">
@@ -114,8 +114,11 @@
             </div>
         </div>
         <button id="do-checkin" onclick="openModalCheck(true, ${booking.getId()}, ${booking.getRoom().getNumber()})">Checkin</button>
+        <button class="delete-check" onclick="openModalDeleteCheck(true, 10, 103)" style="display: none;">Delete</button>
     </div>
-    <div class="checkout">
+
+
+    <div class="checkout" id="div-checkout">
         <div class="checkout-info">
             <h2>Checkout</h2>
             <div class="property">
@@ -124,8 +127,11 @@
             </div>
         </div>
         <button id="do-checkout" onclick="openModalCheck(false, ${booking.getId()}, ${booking.getRoom().getNumber()})">Checkout</button>
+        <button class="delete-check" onclick="openModalDeleteCheck(false, 10, 103)" style="display: none;">Delete</button>
     </div>
 </div>
+
+
 <div class="modal" id="modal-delete">
     <div class="modal-content">
         <div class="modal-header">
@@ -150,6 +156,20 @@
         <div class="modal-footer">
             <button onclick="cancel()" type="button">Cancel</button>
             <button onclick="linkPayment()" class="cancel"> Delete </button>
+        </div>
+    </div>
+</div>
+
+<div class="modal delete" id="modal-delete-check">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h1>Delete</h1>
+        </div>
+        <div class="modal-body" id="sure-check">
+        </div>
+        <div class="modal-footer">
+            <button onclick="cancel()" type="button">Cancel</button>
+            <button onclick="linkCheck()" class="cancel"> Delete </button>
         </div>
     </div>
 </div>
@@ -212,6 +232,17 @@
 </body>
 <script>
 
+    function deleteCheckButton(t, test, info){
+        if(test == true){
+            document.querySelector("#" + t + " .delete-check").style.display = "block";
+            document.querySelector("." + info).style.display = "none";
+        }else{
+            document.querySelector("#" + t + " .delete-check").style.display = "none";
+            document.querySelector("." + info).style.display = "grid";
+        }
+
+    }
+
     function send(e){
 
         e.preventDefault();
@@ -265,9 +296,19 @@
     let modalCheck = document.getElementById("modal-check");
     let modalPayment = document.getElementById("modal-payment");
     let modalDeletePayment = document.getElementById("modal-delete-payment");
+    let modalDeleteCheck = document.getElementById("modal-delete-check");
     let title = document.getElementById("title");
     let currentPayId;
     let paid = ${booking.getTotal() - paid};
+    let delcheck;
+
+    <c:if test="${checkin != null}">
+        delcheck = ${checkin.getId()};
+    </c:if>
+
+    <c:if test="${checkout != null}">
+        delcheck = ${checkout.getId()};
+    </c:if>
 
     if(paid == 0){
         document.getElementById("p-button").style.display="none";
@@ -280,11 +321,33 @@
         document.getElementById("sure").innerHTML = "Delete booking " + booking + "?";
     }
 
+    function openModalDeleteCheck(test, booking, room){
+        modalDeleteCheck.style.display = "flex";
+        if(test == true){
+            document.getElementById("sure-check").innerHTML = 'Delete checkin from this booking?';
+        }else{
+            document.getElementById("sure-check").innerHTML = "Delete checkout from this booking?";
+        }
+
+    }
+
+    function linkCheck(){
+        let url = "/checks/"+ delcheck;
+        fetch(url, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+        }).then(resp => {   location.reload()  });
+    }
+
+
     function cancel(){
         modalDelete.style.display = "none";
         modalCheck.style.display = "none";
         modalPayment.style.display = "none";
         modalDeletePayment.style.display = "none";
+        modalDeleteCheck.style.display = "none";
     }
 
     function link(id) {
@@ -315,10 +378,12 @@
     }
 
     window.onclick = function(event) {
-        if (event.target === modalCheck || event.target === modalDelete || event.target === modalPayment ) {
+        if (event.target === modalCheck || event.target === modalDelete || event.target === modalPayment || event.target === modalDeleteCheck || event.target === modalDeletePayment) {
             modalCheck.style.display = "none";
             modalPayment.style.display = "none";
             modalDelete.style.display = "none";
+            modalDeleteCheck.style.display = "none";
+            modalDeletePayment.style.display = "none";
         }
     };
 
@@ -390,6 +455,10 @@
         }else if(operation === "arrived"){
             checkin_info.style.display = "grid";
             do_checkin.style.display = "none";
+            <c:if test="${allowed == true}">
+                document.getElementById("div-checkin").addEventListener("mouseover", () => { deleteCheckButton("div-checkin", true, "checkin-info"); });
+                document.getElementById("div-checkin").addEventListener("mouseout", () => { deleteCheckButton("div-checkin", false, "checkin-info"); });
+            </c:if>
             if(paid == 0){
                 do_checkout.style.display = "block";
                 checkout_info.style.display = "none";
@@ -402,6 +471,10 @@
             do_checkin.style.display = "none";
             do_checkout.style.display = "none";
             checkout_info.style.display = "grid";
+            <c:if test="${allowed == true}">
+                document.getElementById("div-checkout").addEventListener("mouseover", () => { deleteCheckButton("div-checkout", true, "checkout-info"); });
+                document.getElementById("div-checkout").addEventListener("mouseout", () => { deleteCheckButton("div-checkout", false, "checkout-info"); });
+            </c:if>
             for(let x of document.querySelector("#tablePayment").rows){
                 x.deleteCell(3);
             }
