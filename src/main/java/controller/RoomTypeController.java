@@ -27,18 +27,28 @@ public class RoomTypeController extends HttpServlet {
             if(operation == 1) {
                 List<RoomType> roomTypeList = RoomType.findAll();
                 req.setAttribute("roomTypeList", roomTypeList);
+                req.setAttribute("allowed", Servlet.isAllowed(req, AccessLevel.OWNER));
                 req.getRequestDispatcher("/WEB-INF/roomType/findAll.jsp").forward(req, resp);
             }else if(operation == 2){
                 RoomType roomType = RoomType.find(Servlet.getId(req));
                 req.setAttribute("roomType", roomType);
+                req.setAttribute("allowed", Servlet.isAllowed(req, AccessLevel.OWNER));
                 req.getRequestDispatcher("/WEB-INF/roomType/find.jsp").forward(req, resp);
             }else if(operation == 3){
-                Integer id = Servlet.getId(req);
-                RoomType roomType = RoomType.find(id);
-                req.setAttribute("roomType", roomType);
-                req.getRequestDispatcher("/WEB-INF/roomType/form.jsp").forward(req, resp);
+                if(Servlet.isAllowed(req, AccessLevel.OWNER)){
+                    Integer id = Servlet.getId(req);
+                    RoomType roomType = RoomType.find(id);
+                    req.setAttribute("roomType", roomType);
+                    req.getRequestDispatcher("/WEB-INF/roomType/form.jsp").forward(req, resp);
+                }else{
+                    req.getRequestDispatcher("/WEB-INF/dashboard.jsp").forward(req, resp);
+                }
             }else if(operation == 4){
-                req.getRequestDispatcher("/WEB-INF/roomType/form.jsp").forward(req, resp);
+                if(Servlet.isAllowed(req, AccessLevel.OWNER)){
+                    req.getRequestDispatcher("/WEB-INF/roomType/form.jsp").forward(req, resp);
+                }else{
+                    req.getRequestDispatcher("/WEB-INF/dashboard.jsp").forward(req, resp);
+                }
             }else {
                 req.getRequestDispatcher("404.jsp").forward(req, resp);
             }

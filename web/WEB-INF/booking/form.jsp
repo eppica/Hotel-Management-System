@@ -81,7 +81,7 @@
     let roomContent = document.getElementById("id_room").innerHTML;
     let roomTypeValue = document.getElementById("room_type").value;
     let roomTypeContent = document.getElementById("room_type").innerHTML;
-    let totalCalc;
+    let totalCalc = ${booking.getTotal()};
 
     document.getElementById("arrival").addEventListener("change", prepareDepartureDate);
     document.getElementById("departure").addEventListener("focusout", validate);

@@ -22,26 +22,29 @@ public class StaffController extends HttpServlet {
         if(!Servlet.isLogged(req)){
             resp.sendRedirect("/auth/login");
         }else{
-
             Integer operation = Servlet.getOperation(req);
-            if (operation == 1) {
-                List<Staff> staffList = Staff.findAll();
-                req.setAttribute("staffList", staffList);
-                req.getRequestDispatcher("/WEB-INF/staff/findAll.jsp").forward(req, resp);
-            }else if (operation == 2){
-                Staff staff = Staff.find(Servlet.getId(req));
-                req.setAttribute("staff", staff);
-                req.getRequestDispatcher("/WEB-INF/staff/find.jsp").forward(req, resp);
-            }else if (operation == 3){
-                Staff staff = Staff.find(Servlet.getId(req));
-                req.setAttribute("staff", staff);
-                req.setAttribute("accessLevelList", AccessLevel.values());
-                req.getRequestDispatcher("/WEB-INF/staff/form.jsp").forward(req, resp);
-            }else if(operation == 4){
-                req.setAttribute("accessLevelList", AccessLevel.values());
-                req.getRequestDispatcher("/WEB-INF/staff/form.jsp").forward(req, resp);
-            }else{
-                req.getRequestDispatcher("404.jsp").forward(req, resp);
+            if(Servlet.isAllowed(req, AccessLevel.OWNER)){
+                if (operation == 1) {
+                    List<Staff> staffList = Staff.findAll();
+                    req.setAttribute("staffList", staffList);
+                    req.getRequestDispatcher("/WEB-INF/staff/findAll.jsp").forward(req, resp);
+                }else if (operation == 2){
+                    Staff staff = Staff.find(Servlet.getId(req));
+                    req.setAttribute("staff", staff);
+                    req.getRequestDispatcher("/WEB-INF/staff/find.jsp").forward(req, resp);
+                }else if (operation == 3){
+                    Staff staff = Staff.find(Servlet.getId(req));
+                    req.setAttribute("staff", staff);
+                    req.setAttribute("accessLevelList", AccessLevel.values());
+                    req.getRequestDispatcher("/WEB-INF/staff/form.jsp").forward(req, resp);
+                }else if(operation == 4){
+                    req.setAttribute("accessLevelList", AccessLevel.values());
+                    req.getRequestDispatcher("/WEB-INF/staff/form.jsp").forward(req, resp);
+                }else{
+                    req.getRequestDispatcher("404.jsp").forward(req, resp);
+                }
+            }else {
+                req.getRequestDispatcher("/WEB-INF/dashboard.jsp").forward(req, resp);
             }
         }
     }

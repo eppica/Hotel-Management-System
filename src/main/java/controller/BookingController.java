@@ -24,7 +24,6 @@ public class BookingController extends HttpServlet {
         if(!Servlet.isLogged(req)){
             resp.sendRedirect("/auth/login");
         }else{
-
             Integer operation = Servlet.getOperation(req);
             if(operation == 1){
                 List<Booking> bookingList = Booking.findAll();
