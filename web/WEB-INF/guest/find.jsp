@@ -15,6 +15,14 @@
 </head>
 <body>
 <c:import url="/WEB-INF/header/main.jsp"/>
+
+<style>
+    .guest-bookings tbody tr:hover, td:hover{
+        background-color: #f5f5f5;
+        cursor: pointer;
+    }
+
+</style>
 <div class="content">
     <div class="model">
         <h1>${guest.getName()}</h1>
