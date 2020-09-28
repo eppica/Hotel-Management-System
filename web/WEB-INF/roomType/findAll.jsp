@@ -39,9 +39,11 @@
     </div>
 
     </table>
+    <c:if test="${allowed == true}">
     <div class="submit">
         <button onclick="window.location.href='/roomTypes/new';">New Room Type</button>
     </div>
+    </c:if>
 </div>
 
 </body>

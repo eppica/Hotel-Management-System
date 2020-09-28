@@ -21,11 +21,12 @@
         <h1>Room</h1>
         <h3>${room.getAvailability()}</h3>
     </div>
-
+    <c:if test="${allowed == true}">
     <div class="edit">
         <button class="delete" onclick="openModal(${room.getNumber()})">Delete</button>
         <button onclick="window.location.href='/rooms/${room.getId()}/edit';">Edit</button>
     </div>
+    </c:if>
     <div class="about">
         <h2>About</h2>
         <div class="property">
