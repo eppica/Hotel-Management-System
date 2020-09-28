@@ -37,7 +37,7 @@ public class RoomType {
                 this.name = add[1];
             }
             if(add[0].equals("description")){
-                this.description = add[1];
+                this.description = add[1].replaceAll("[\\n\\t ]", "");
             }
 
             if(add[0].equals("daily_price")){
@@ -50,7 +50,7 @@ public class RoomType {
         try {
             this.id = resultSet.getInt("id");
             this.name = resultSet.getString("name");
-            this.description = resultSet.getString("description");
+            this.description = resultSet.getString("description").replaceAll("[\\n\\t ]", "");
             this.dailyPrice = resultSet.getBigDecimal("daily_price");
         }catch (SQLException e){
             e.printStackTrace();
@@ -67,7 +67,7 @@ public class RoomType {
         if(request.getParameter("description").isEmpty()){
             this.name = null;
         }else{
-            this.description = request.getParameter("description");
+            this.description = request.getParameter("description").replaceAll("[\\n\\t ]", "");
         }
 
         if(request.getParameter("daily_price").isEmpty()){
