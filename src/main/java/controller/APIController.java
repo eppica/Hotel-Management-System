@@ -1,9 +1,6 @@
 package controller;
 
-import model.Booking;
-import model.Room;
-import model.RoomType;
-import model.Payment;
+import model.*;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -24,128 +21,136 @@ public class APIController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Integer operation = getOperation(req);
-        if (operation == 1) {
-            String arrival = req.getParameter("arrival");
-            String departure = req.getParameter("departure");
-            String roomType = req.getParameter("room_type");
+        if(Servlet.isLogged(req)){
+            if(Servlet.isAllowed(req, AccessLevel.OWNER)){
+                if (operation == 4) {
+                    StringBuilder json = new StringBuilder("{");
 
-            StringBuilder json = null;
-            if ((arrival != null) && (departure != null) && (roomType != null)) {
-                List<Room> roomList = Room.findAll("WHERE room_type_fk = " + roomType + " AND id NOT IN (SELECT room_fk FROM booking WHERE (arrival <= '" + departure + "' AND departure >= '" + arrival + "') AND booking.id NOT IN (SELECT booking_fk FROM `check` WHERE  status = 0));");
-                if (!roomList.isEmpty()) {
-                    json = new StringBuilder("[");
-                    for (Room room : roomList) {
-                        json.append(room.toJSON());
-                        json.append(",");
+                    LocalDate today = LocalDate.now();
+
+                    BigDecimal yearRevenues = new BigDecimal(0);
+                    yearRevenues = yearRevenues.add(Payment.sumAll(" year(pay_time) = " + today.getYear()));
+
+                    json.append("\"yearRevenues\": " + yearRevenues.toString() + ",");
+
+                    BigDecimal monthRevenues = Payment.sumAll(" month(pay_time) = " + today.getMonthValue());
+
+                    json.append("\"monthRevenues\": " + monthRevenues + ",");
+
+                    BigDecimal weekRevenues = Payment.sumAll(" date(pay_time) BETWEEN  '" + today.plusDays(-7) + "' and '" + today + "'");
+
+                    json.append("\"weekRevenues\": " + weekRevenues + ",");
+
+                    json.append("\"weekRevenuesDetailed\": {");
+                    LocalDate week = LocalDate.now();
+                    for (int i = 0; i < 7; i++) {
+
+                        BigDecimal dayRevenues = Payment.sumAll(" date(pay_time) = '" + week + "'");
+                        json.append("\"" + week.getMonthValue() + "-" + week.getDayOfMonth() + "\": " + dayRevenues + ",");
+                        week = week.plusDays(-1);
+
                     }
                     json = new StringBuilder(json.substring(0, json.length() - 1));
-                    json.append("]");
+                    json.append("},");
+
+
+                    List<Booking> arrivalList = Booking.findAllArrival();
+                    List<Booking> departureList = Booking.findAllDeparture();
+
+                    json.append("\"todayArrives\": " + arrivalList.size() + ",");
+                    json.append("\"todayDepartures\": " + departureList.size() + ",");
+
+
+                    List<Room> occupiedRooms = Room.findAll("WHERE id NOT IN (SELECT room_fk FROM booking WHERE (arrival <= '" + today + "' AND departure >= '\"+today+\"') AND booking.id NOT IN (SELECT booking_fk FROM `check` WHERE status = 0))");
+                    json.append("\"occupiedRooms\": " + occupiedRooms.size() + ",");
+
+                    List<Room> availableRooms = Room.findAll("WHERE id IN (SELECT room_fk FROM booking WHERE (arrival <= '" + today + "' AND departure >= '\"+today+\"') AND booking.id NOT IN (SELECT booking_fk FROM `check` WHERE status = 0))");
+                    json.append("\"availableRooms\": " + availableRooms.size() + ",");
+
+                    json.append("\"totalRooms\": " + (occupiedRooms.size() + availableRooms.size()) + ",");
+
+                    json.append(("\"trendingRooms\": {"));
+                    for (RoomType type : RoomType.findAll()) {
+                        List<Booking> total = Booking.findAll("WHERE room_fk IN (SELECT id FROM room WHERE room_type_fk = " + type.getId() + ")");
+                        json.append("\"" + type.getName() + "\": " + total.size() + ",");
+
+                    }
+                    json = new StringBuilder(json.substring(0, json.length() - 1));
+                    json.append("}}");
+
+                    PrintWriter out = resp.getWriter();
+                    resp.setContentType("application/json;charset=UTF-8");
+                    out.print(json);
+                    out.flush();
+
+
+                }
+            }else {
+                if (operation == 1) {
+                    String arrival = req.getParameter("arrival");
+                    String departure = req.getParameter("departure");
+                    String roomType = req.getParameter("room_type");
+
+                    StringBuilder json = null;
+                    if ((arrival != null) && (departure != null) && (roomType != null)) {
+                        List<Room> roomList = Room.findAll("WHERE room_type_fk = " + roomType + " AND id NOT IN (SELECT room_fk FROM booking WHERE (arrival <= '" + departure + "' AND departure >= '" + arrival + "') AND booking.id NOT IN (SELECT booking_fk FROM `check` WHERE  status = 0));");
+                        if (!roomList.isEmpty()) {
+                            json = new StringBuilder("[");
+                            for (Room room : roomList) {
+                                json.append(room.toJSON());
+                                json.append(",");
+                            }
+                            json = new StringBuilder(json.substring(0, json.length() - 1));
+                            json.append("]");
+                        }
+
+                    }
+                    PrintWriter out = resp.getWriter();
+                    resp.setContentType("application/json");
+                    resp.setCharacterEncoding("UTF-8");
+                    out.print(json);
+                    out.flush();
+                } else if (operation == 2) {
+                    String idRoomType = req.getParameter("room_type");
+                    StringBuilder json = new StringBuilder();
+                    if ((idRoomType != null)) {
+                        RoomType roomType = RoomType.find(Integer.valueOf(idRoomType));
+                        if (roomType != null) {
+                            json.append(roomType.toJSON());
+                        }
+
+                    }
+                    PrintWriter out = resp.getWriter();
+                    resp.setContentType("application/json");
+
+                    resp.setCharacterEncoding("UTF-8");
+                    out.print(json);
+                    out.flush();
+                } else if (operation == 3) {
+                    String arrival = req.getParameter("arrival");
+                    String departure = req.getParameter("departure");
+                    StringBuilder json = null;
+
+                    if ((arrival != null) && (departure != null)) {
+                        json = new StringBuilder("[");
+                        for (RoomType rT : RoomType.findAll()) {
+                            Integer count = Room.findAll("WHERE room_type_fk = " + rT.getId() + " AND id NOT IN (SELECT room_fk FROM booking WHERE (arrival <= '" + departure + "' AND departure >= '" + arrival + "') AND booking.id NOT IN (SELECT booking_fk FROM `check` WHERE  status = 0));").size();
+                            json.append("{\"id\":\"" + rT.getId() + "\"");
+                            json.append(", \"count\":\"" + count + "\"},");
+                        }
+                        json = new StringBuilder(json.substring(0, json.length() - 1));
+                        json.append("]");
+                    }
+                    PrintWriter out = resp.getWriter();
+                    resp.setContentType("application/json");
+                    resp.setCharacterEncoding("UTF-8");
+                    out.print(json);
+                    out.flush();
+
+
                 }
 
             }
-            PrintWriter out = resp.getWriter();
-            resp.setContentType("application/json");
-            resp.setCharacterEncoding("UTF-8");
-            out.print(json);
-            out.flush();
-        } else if (operation == 2) {
-            String idRoomType = req.getParameter("room_type");
-            StringBuilder json = new StringBuilder();
-            if ((idRoomType != null)) {
-                RoomType roomType = RoomType.find(Integer.valueOf(idRoomType));
-                if (roomType != null) {
-                    json.append(roomType.toJSON());
-                }
-
-            }
-            PrintWriter out = resp.getWriter();
-            resp.setContentType("application/json");
-
-            resp.setCharacterEncoding("UTF-8");
-            out.print(json);
-            out.flush();
-        } else if (operation == 3) {
-            String arrival = req.getParameter("arrival");
-            String departure = req.getParameter("departure");
-            StringBuilder json = null;
-
-            if ((arrival != null) && (departure != null)) {
-                json = new StringBuilder("[");
-                for (RoomType rT : RoomType.findAll()) {
-                    Integer count = Room.findAll("WHERE room_type_fk = " + rT.getId() + " AND id NOT IN (SELECT room_fk FROM booking WHERE (arrival <= '" + departure + "' AND departure >= '" + arrival + "') AND booking.id NOT IN (SELECT booking_fk FROM `check` WHERE  status = 0));").size();
-                    json.append("{\"id\":\"" + rT.getId() + "\"");
-                    json.append(", \"count\":\"" + count + "\"},");
-                }
-                json = new StringBuilder(json.substring(0, json.length() - 1));
-                json.append("]");
-            }
-            PrintWriter out = resp.getWriter();
-            resp.setContentType("application/json");
-            resp.setCharacterEncoding("UTF-8");
-            out.print(json);
-            out.flush();
-
-        } else if (operation == 4) {
-            StringBuilder json = new StringBuilder("{");
-
-            LocalDate today = LocalDate.now();
-
-            BigDecimal yearRevenues = new BigDecimal(0);
-            yearRevenues = yearRevenues.add(Payment.sumAll(" year(pay_time) = " + today.getYear()));
-
-            json.append("\"yearRevenues\": " + yearRevenues.toString() + ",");
-
-            BigDecimal monthRevenues = Payment.sumAll(" month(pay_time) = " + today.getMonthValue());
-
-            json.append("\"monthRevenues\": " + monthRevenues + ",");
-
-            BigDecimal weekRevenues = Payment.sumAll(" date(pay_time) BETWEEN  '" + today.plusDays(-7) + "' and '" + today + "'");
-
-            json.append("\"weekRevenues\": " + weekRevenues + ",");
-
-            json.append("\"weekRevenuesDetailed\": {");
-            LocalDate week = LocalDate.now();
-            for (int i = 0; i < 7; i++) {
-
-                BigDecimal dayRevenues = Payment.sumAll(" date(pay_time) = '" + week + "'");
-                json.append("\"" + week.getMonthValue() + "-" + week.getDayOfMonth() + "\": " + dayRevenues + ",");
-                week = week.plusDays(-1);
-
-            }
-            json = new StringBuilder(json.substring(0, json.length() - 1));
-            json.append("},");
-
-
-            List<Booking> arrivalList = Booking.findAllArrival();
-            List<Booking> departureList = Booking.findAllDeparture();
-
-            json.append("\"todayArrives\": " + arrivalList.size() + ",");
-            json.append("\"todayDepartures\": " + departureList.size() + ",");
-
-
-            List<Room> occupiedRooms = Room.findAll("WHERE id NOT IN (SELECT room_fk FROM booking WHERE (arrival <= '" + today + "' AND departure >= '\"+today+\"') AND booking.id NOT IN (SELECT booking_fk FROM `check` WHERE status = 0))");
-            json.append("\"occupiedRooms\": " + occupiedRooms.size() + ",");
-
-            List<Room> availableRooms = Room.findAll("WHERE id IN (SELECT room_fk FROM booking WHERE (arrival <= '" + today + "' AND departure >= '\"+today+\"') AND booking.id NOT IN (SELECT booking_fk FROM `check` WHERE status = 0))");
-            json.append("\"availableRooms\": " + availableRooms.size() + ",");
-
-            json.append("\"totalRooms\": " + (occupiedRooms.size() + availableRooms.size()) + ",");
-
-            json.append(("\"trendingRooms\": {"));
-            for (RoomType type : RoomType.findAll()) {
-                List<Booking> total = Booking.findAll("WHERE room_fk IN (SELECT id FROM room WHERE room_type_fk = " + type.getId() + ")");
-                json.append("\"" + type.getName() + "\": " + total.size() + ",");
-
-            }
-            json = new StringBuilder(json.substring(0, json.length() - 1));
-            json.append("}}");
-
-            PrintWriter out = resp.getWriter();
-            resp.setContentType("application/json;charset=UTF-8");
-            out.print(json);
-            out.flush();
-
-
         }
 
     }
