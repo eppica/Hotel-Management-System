@@ -80,7 +80,29 @@ public class PaymentDAO implements DAO<Payment>{
         if(value == null){
             return BigDecimal.valueOf(0);
         }
-        
+
+        return value;
+    }
+
+    public BigDecimal sumAll(String args) {
+        Connection connection = DB.getConnection();
+        Statement statement = null;
+        BigDecimal value = null;
+        try {
+            statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT SUM(value) FROM payment WHERE " + args);
+            resultSet.first();
+            value = resultSet.getBigDecimal(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }finally {
+            DB.closeConnection(connection, statement);
+        }
+
+        if(value == null){
+            return BigDecimal.valueOf(0);
+        }
+
         return value;
     }
 
