@@ -1,56 +1,25 @@
 # Hotel Management System
-## 1. System funcionalities
-- Cadastro de Hóspedes
-- Cadastro de Funcionários
-- Cadastro de Quartos
-- Cadastro de Tipos de Quarto
-- Gerenciamento de Serviços e a Solicitação dos Mesmos  
 
-## 2. System requirements
+## About
+Hotel Management System is a Web Application developed for the Programming Language class. The main idea of the program is to implement hotel functionalities, like book, check-in, check-out, control payments, maintain guests, room, room types and staff.
 
-**R01.** The system must allow the Owner to register the Officer, with the attributes: 
->id  
->Name  
->Access Level  
->Login  
->Password  
 
-**R02.** The system must allow the Owner to register the Room Types of the hotel, with the attributes:
->id  
->Name  
->Description  
->Daily  
+## Technologies
 
-**R03.** The system must allow the Owner to register the Rooms of the hotel, with the attributes:
->id  
->Room Type  
->Number  
->Capacity  
+- Java
+- Maven
+- MySQL
+- HTML
+- CSS
+- JSP
+- JavaScript
+- Maven
 
-**R04.** The system must allow the Owner to register the Rooms of the hotel, with the attributes:
->id  
->Room Type  
->Number  
->Capacity  
+## Documentation
+To read the entire documentation, go to [Wiki](https://github.com/LBeghini/Hotel-Management-System/wiki)
 
-**R05.** The system must allow the Officer to register the Client, with the attributes:
->id  
->Name  
->Document  
->Birth Date  
->E-mail  
->Phone number  
+## Setup 
 
-**R06.** The system must allow the Officer to make a Reservation to the Client, with the attributes:
->id  
->Room  
->Client  
->Check-in  
->Check-out  
->Price  
->Timestamp  
->Officer  
+## How to use
 
-## 3. Class Diagram
-
-![Class Diagram](/img/ClassDiagram.png "Class Diagram")
+## License
