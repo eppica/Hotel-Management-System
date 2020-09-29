@@ -58,6 +58,7 @@ public class Servlet extends HttpServlet {
 
     public static Boolean isAllowed(HttpServletRequest request, AccessLevel accessLevel){
         Staff sessionStaff = (Staff) request.getSession().getAttribute("sessionStaff");
+        Servlet.resetSessionTime(request);
         if(sessionStaff != null){
             if(sessionStaff.getAccessLevel().equals(accessLevel) || sessionStaff.getAccessLevel().equals(AccessLevel.OWNER)){
                 return true;
@@ -69,6 +70,15 @@ public class Servlet extends HttpServlet {
     public static Boolean isLogged(HttpServletRequest request){
         Staff sessionStaff = (Staff) request.getSession().getAttribute("sessionStaff");
         return sessionStaff != null;
+    }
+
+    public static void resetSessionTime(HttpServletRequest request){
+        Staff staff = (Staff) request.getSession().getAttribute("sessionStaff");
+        if(staff.getAccessLevel() == AccessLevel.OWNER){
+            request.getSession().setMaxInactiveInterval(1800);
+        }else{
+            request.getSession().setMaxInactiveInterval(86400);
+        }
     }
 
     @Override

@@ -37,6 +37,7 @@ public class AuthController extends HttpServlet {
         Integer operation = getOperation(req);
         if(operation == 1){
             if(Staff.authenticate(req)){
+                Servlet.resetSessionTime(req);
                 resp.sendRedirect("/dashboard");
             }else {
                 String message = "Invalid username or password";
