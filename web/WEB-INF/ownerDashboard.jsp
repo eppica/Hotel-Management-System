@@ -175,7 +175,7 @@
                     },
                     title: {
                         display: true,
-                        text: 'Trending Room Types',
+                        text: 'Most Popular Room Types',
                         fontSize: 19,
                         fontStyle: 'normal',
                         fontFamily: 'Arial, Helvetica, sans-serif'
@@ -188,7 +188,9 @@
             };
 
             let labelsRevenue = Object.keys(data.weekRevenuesDetailed);
-            let valuesRevenus = Object.values(data.weekRevenuesDetailed);
+            labelsRevenue.reverse();
+            let valuesRevenues = Object.values(data.weekRevenuesDetailed);
+            valuesRevenues.reverse();
 
             const configRevenues = {
                 type: 'bar',
@@ -199,7 +201,7 @@
                         backgroundColor: 'rgb(54, 162, 235)',
                         borderColor: 'rgb(54, 162, 235)',
                         borderWidth: 1,
-                        data: valuesRevenus
+                        data: valuesRevenues
                     }]
                 },
                 options: {
