@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -60,14 +59,23 @@ public class APIController extends HttpServlet {
                     json.append("\"todayArrives\": " + arrivalList.size() + ",");
                     json.append("\"todayDepartures\": " + departureList.size() + ",");
 
+                    List<Room> roomList = Room.findAll();
 
-                    List<Room> occupiedRooms = Room.findAll("WHERE id NOT IN (SELECT room_fk FROM booking WHERE (arrival <= '" + today + "' AND departure >= '\"+today+\"') AND booking.id NOT IN (SELECT booking_fk FROM `check` WHERE status = 0))");
-                    json.append("\"occupiedRooms\": " + occupiedRooms.size() + ",");
+                    int occupiedRooms = 0;
+                    int availableRooms = 0;
+                    for(Room room:roomList){
+                        if(room.getAvailability() == "Occupied"){
+                            occupiedRooms++;
+                        }else{
+                            availableRooms++;
+                        }
+                    }
 
-                    List<Room> availableRooms = Room.findAll("WHERE id IN (SELECT room_fk FROM booking WHERE (arrival <= '" + today + "' AND departure >= '\"+today+\"') AND booking.id NOT IN (SELECT booking_fk FROM `check` WHERE status = 0))");
-                    json.append("\"availableRooms\": " + availableRooms.size() + ",");
+                    json.append("\"occupiedRooms\": " + occupiedRooms + ",");
 
-                    json.append("\"totalRooms\": " + (occupiedRooms.size() + availableRooms.size()) + ",");
+                    json.append("\"availableRooms\": " + availableRooms + ",");
+
+                    json.append("\"totalRooms\": " + (occupiedRooms + availableRooms) + ",");
 
                     json.append(("\"trendingRooms\": {"));
                     for (RoomType type : RoomType.findAll()) {
