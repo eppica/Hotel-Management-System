@@ -41,7 +41,7 @@
 
     </div>
     <div id="rooms">
-        <h2>Rooms</h2>
+        <h2>Hotel Current Situation</h2>
         <div class="property" style="grid-area: 2/1/3/2;">
             <span class="label">Occupied</span>
             <span class="data"><span id="occupiedRooms"></span></span>
