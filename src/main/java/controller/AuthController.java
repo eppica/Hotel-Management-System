@@ -21,7 +21,6 @@ public class AuthController extends HttpServlet {
                 resp.sendRedirect("/dashboard");
             }else{
                 req.getRequestDispatcher("/WEB-INF/auth/login.jsp").forward(req, resp);
-                resp.sendRedirect("/dashboard");
             }
 
         }else if(operation ==2){
