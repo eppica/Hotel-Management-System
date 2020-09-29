@@ -1,0 +1,192 @@
+body{
+    margin: 0;
+    height: 100vh;
+    font-family: Arial, Helvetica, sans-serif;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+}
+
+*{
+    border: none;
+}
+header{
+    align-self: flex-start;
+    flex-basis: 100%;
+    background-color: #242323;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    white-space: nowrap;
+    max-height: 10vh;
+}
+.user h2{
+    color: white;
+    margin: 0;
+    font-size: 20px;
+}
+nav{
+    flex-grow: 2;
+}
+.user{
+    display: flex;
+    flex-direction: column;
+}
+.user a{
+    align-self: flex-end;
+    color: white;
+    display: block;
+}
+nav a{
+    display: inline-block;
+    text-align: center;
+    padding: 2.5vh;
+    color: whitesmoke;
+    white-space: nowrap;
+}
+nav a:hover{
+    background-color: #313131 ;
+    cursor: pointer;
+}
+.logo{
+    display: inline-block;
+    height: min-content;
+    display: flex;
+    align-items: center;
+    width: 20vw;
+}
+.logo h1{
+    color: whitesmoke;
+    display: inline-block;
+    margin: 0 0 0 10px;
+}
+.logo .ball{
+    background-color: lemonchiffon;
+    border: 3px solid black;
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.logo:hover{
+    cursor:pointer;
+}
+
+.content{
+    flex-basis: 100%;
+    height: 90vh;
+    display: grid;
+    grid-template-columns: repeat(12,1fr);
+    grid-template-rows: .3fr 1fr 4fr 4fr 1fr;
+    gap: 10px;
+}
+#today{
+    grid-area: 2/2/2/4;
+    width: min-content;
+    white-space: nowrap;
+    margin: 0;
+    color: #242323;
+    font-size: 20px;
+}
+
+.over{
+    display: flex;
+    overflow-y: auto;
+    justify-content: space-between;
+}
+
+#revenues{
+    grid-area: 3/2/4/9;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: .5fr 1fr 1fr;
+    gap: 10px;
+    padding: 20px;
+    border: 1px solid #ddd;
+}
+
+#checks{
+    grid-area: 3/9/4/12;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: .1fr 1fr;
+    gap: 10px;
+    padding: 20px;
+    border: 1px solid #ddd;
+}
+
+#rooms{
+    grid-area: 4/2/5/9;
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    grid-template-rows: .5fr 1fr;
+    gap: 10px;
+    padding: 20px;
+    border: 1px solid #ddd;
+}
+
+#trending{
+    grid-area: 4/9/5/12;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+    gap: 10px;
+    padding: 20px;
+    border: 1px solid #ddd;
+}
+
+#revenues h2, #rooms h2{
+    margin: 0;
+    grid-area: 1/1/1/2;
+    font-weight: normal;
+    font-size: 19px;
+    height: min-content;
+}
+
+#checks h2{
+    margin: 0;
+    grid-area: 1/1/2/3;
+    font-weight: normal;
+    font-size: 19px;
+    height: min-content;
+    text-align: center;
+}
+
+.property{
+    height: min-content;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#revenues .label{
+    font-size: 16px;
+}
+
+#revenues .data{
+    font-size: 30px;
+}
+
+#checks .label{
+    font-size: 16px;
+}
+
+#checks .data{
+    font-size: 70px;
+    margin-top:30px;
+}
+
+#rooms .label{
+    font-size: 16px;
+}
+
+#rooms .data{
+    font-size: 60px;
+    margin-top: 20px;
+}
+
+a{
+    text-decoration: none;
+}

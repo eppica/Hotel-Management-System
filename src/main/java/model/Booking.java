@@ -250,6 +250,10 @@ public class Booking {
         return DAO.findAll();
     }
 
+    public static List<Booking> findAll(String args){
+        return DAO.findAll(args);
+    }
+
     public static Booking findBookedRoom(Integer id){
         return DAO.findBookedRoom(id);
     }

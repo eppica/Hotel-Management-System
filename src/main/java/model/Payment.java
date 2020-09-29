@@ -189,7 +189,11 @@ public class Payment {
     }
 
     public static BigDecimal sumAll(Integer id){
-        return DAO.sumAll(id);
+        return DAO.sumAll(id).setScale(2, RoundingMode.CEILING);
+    }
+
+    public static BigDecimal sumAll(String args){
+        return DAO.sumAll(args).setScale(2, RoundingMode.CEILING);
     }
 
     public static void update(Payment payment){
