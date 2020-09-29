@@ -139,7 +139,7 @@ nav a:hover{
 
 #revenues h2, #rooms h2{
     margin: 0;
-    grid-area: 1/1/1/2;
+    grid-area: 1/1/2/3;
     font-weight: normal;
     font-size: 19px;
     height: min-content;
