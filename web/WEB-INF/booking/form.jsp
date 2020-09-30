@@ -203,7 +203,12 @@
         let arrivalDate = new Date(document.getElementById("arrival").value);
         arrivalDate.setDate(arrivalDate.getDate() + 2);
         const months = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
-        document.getElementById("departure").min = arrivalDate.getFullYear()+"-"+months[arrivalDate.getMonth()]+"-"+arrivalDate.getDate();
+        if(arrivalDate.getDate()<10){
+            document.getElementById("departure").min = arrivalDate.getFullYear()+"-"+months[arrivalDate.getMonth()]+"-0"+arrivalDate.getDate();
+        }else{
+            document.getElementById("departure").min = arrivalDate.getFullYear()+"-"+months[arrivalDate.getMonth()]+"-"+arrivalDate.getDate();
+        }
+
 
 
     }
