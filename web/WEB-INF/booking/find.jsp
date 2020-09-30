@@ -22,6 +22,23 @@
 
     </style>
 </c:if>
+
+<c:if test="${paymentList.size() == 0}">
+    <style>
+        .payment tbody tr:hover, td:hover{
+            background-color: white;
+            cursor: default;
+        }
+
+    </style>
+</c:if>
+<c:if test="${allowed == false}">
+    <style>
+        .edit {
+            justify-content: end;
+        }
+    </style>
+</c:if>
 <body onload="action('${booking.getStatus().toLowerCase()}')">
 <c:import url="/WEB-INF/header/main.jsp"/>
 <div class="content">
@@ -31,7 +48,9 @@
     </div>
 
     <div class="edit">
+<c:if test="${allowed == true}">
         <button class="delete" onclick="openModalDelete(${booking.getId()})">Delete</button>
+</c:if>
         <button onclick="window.location.href='/bookings/${booking.getId()}/edit';">Edit</button>
     </div>
     <div class="about">
@@ -323,10 +342,10 @@
 
     function openModalDeleteCheck(test, booking, room){
         modalDeleteCheck.style.display = "flex";
-        if(test == true){
-            document.getElementById("sure-check").innerHTML = 'Delete checkin from this booking?';
+        if(test === true){
+            document.getElementById("sure-check").innerHTML = "Delete this booking checkin?";
         }else{
-            document.getElementById("sure-check").innerHTML = "Delete checkout from this booking?";
+            document.getElementById("sure-check").innerHTML = "Delete this booking checkout";
         }
 
     }

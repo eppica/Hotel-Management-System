@@ -60,7 +60,7 @@ public class RoomDAO implements DAO<Room> {
         try {
             statement = connection.prepareStatement("UPDATE room SET " +
                     "room_type_fk = IFNULL(?, room_type_fk), " +
-                    "number = IFNULL(?, number), " +
+                    "number = IFNULL(?, number) " +
                     "WHERE id = " + object.getId());
             statement.setObject(1, object.getIdRoomType());
             statement.setObject(2, object.getNumber());

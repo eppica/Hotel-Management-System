@@ -16,13 +16,24 @@
 </head>
 <body>
 <c:import url="/WEB-INF/header/main.jsp"/>
+
+<c:if test="${sessionStaff.getId() == staff.getId()}">
+    <style>
+        .edit {
+            justify-content: end;
+        }
+    </style>
+</c:if>
+
 <div class="content">
     <div class="model">
         <h1>${staff.getName()}</h1>
         <h3>${staff.getAccessLevel()}</h3>
     </div>
     <div class="edit">
-        <button class="delete" onclick="openModal('${staff.getName()}')">Delete</button>
+        <c:if test="${sessionStaff.getId() != staff.getId()}">
+            <button class="delete" onclick="openModal('${staff.getName()}')">Delete</button>
+        </c:if>
         <button onclick="window.location.href='/staff/${staff.getId()}/edit';">Edit</button>
     </div>
 

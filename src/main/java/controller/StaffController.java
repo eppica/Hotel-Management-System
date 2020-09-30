@@ -31,6 +31,7 @@ public class StaffController extends HttpServlet {
                 }else if (operation == 2){
                     Staff staff = Staff.find(Servlet.getId(req));
                     req.setAttribute("staff", staff);
+                    req.setAttribute("sessionStaff",(Staff) req.getSession().getAttribute("sessionStaff"));
                     req.getRequestDispatcher("/WEB-INF/staff/find.jsp").forward(req, resp);
                 }else if (operation == 3){
                     Staff staff = Staff.find(Servlet.getId(req));
