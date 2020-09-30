@@ -1,30 +1,23 @@
 # Hotel Management System
 
 ## About
-Hotel Management System is a program that implements functionalities, like:
-- book 
-- guest check-in
-- guest check-out
-- control payments 
-- maintain guests 
-- manintain rooms
-- maintain room types
-- mantain staff
 
-It is a Web Application developed for the Programming Language class.
+
+Hotel Management System is a web application developed to Programming Language class in order to supply the basics necessities of a real hotel while we improve our knowledge
+
 
 ## Technologies
 
 - Java
 - Maven
 - MySQL
+- JSP
 - HTML
 - CSS
-- JSP
 - JavaScript
-- Maven
 
 ## Documentation
+
 To read the entire documentation, go to [Wiki](https://github.com/LBeghini/Hotel-Management-System/wiki)
 
 ## Setup 
@@ -32,3 +25,5 @@ To read the entire documentation, go to [Wiki](https://github.com/LBeghini/Hotel
 ## How to use
 
 ## License
+
+GPL-2.0 License
