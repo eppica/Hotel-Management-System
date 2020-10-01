@@ -193,8 +193,8 @@
                 .then(data => {
                     let dailyPrice = data.dailyPrice;
                     let total = dailyPrice * (document.getElementById("departure").valueAsNumber - document.getElementById("arrival").valueAsNumber) / (1000 * 3600 * 24);
-                    totalCalc = total;
-                    document.getElementById("result").innerHTML = total;
+                    totalCalc = total+0.00;
+                    document.getElementById("result").innerHTML = total.toFixed(2);
                 });
         }
     }
