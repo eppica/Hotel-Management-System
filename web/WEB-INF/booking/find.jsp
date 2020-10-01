@@ -465,6 +465,8 @@
         let checkout_info = document.querySelector(".checkout-info");
         let do_checkout = document.querySelector("#do-checkout");
 
+        beautifulTimestamp();
+
 
         if(operation === "booked"){
             checkin_info.style.display = "none";
@@ -506,17 +508,18 @@
 
         const regex = new RegExp('[0-9]{1,4}-[0-9]{1,2}-[0-9]{1,2}T[0-9]{1,2}:[0-9]{1,2}', 'g');
 
-        var classes = document.getElementsByClassName("data");
-        console.log(classes);
+        let datas = Array.from(document.getElementsByClassName("data"));
+        let tds = Array.from(document.getElementsByTagName("td"));
+        let classes = datas.concat(tds);
 
         for(let classe of classes) {
             if (regex.test(classe.innerText)) {
                 classe.innerText = classe.innerText.replace("T", " ");
             }
         }
-    };
+    }
 
-    beautifulTimestamp()
+    beautifulTimestamp();
 
 </script>
 </html>
