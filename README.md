@@ -21,7 +21,7 @@ Hotel Management System is a web application developed to Programming Language c
 - Apache Server 2.4.41 (provided by WAMPP)
 - MySQL Server 5.7.28 (provided by WAMPP)
 - TomCat 8.5.58
-- OpenJDK 14
+- OpenJDK 15
 - JSTL 1.2 (provided by Maven)
 - MySQL Connector Java 5.1.38 (provided by Maven)
 
@@ -45,11 +45,11 @@ Each release of this project implements a semester of the Programming Language c
 ## Requirements
 
 To run and edit this project locally, it's required that you have installed the following programs:
->This tutorial will be based on ItelliJ Idea configs
+>This tutorial will be based on IntelliJ Idea configs
 - IntelliJ 
 - WAMPP
 - Tomcat
-- JDK 14
+- OpenJDK 15
 
 After that, you'll need to clone this repo:
 ```
@@ -62,7 +62,7 @@ git clone https://github.com/LBeghini/Hotel-Management-System.git
 - Open the project on IntelliJ
 - Install Maven dependencies
 - Set Run/Debug configurations to Tomcat Server
-- Config Project SDK to JDK 14
+- Config Project SDK to OpenJDK 15
 
 ### Database
 - Run WAMPP
