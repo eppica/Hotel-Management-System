@@ -67,6 +67,24 @@ public class ReportsController extends HttpServlet{
                     DB.closeConnection(connection);
                 }
             }else if (operation == 3){
+                //payments
+                String reportName = "PaymentsReport.pdf";
+                HashMap params = new HashMap();
+                params.put("initial", req.getParameter("initial") );
+                params.put("final", req.getParameter("final") );
+
+                String reportPath = getServletContext().getRealPath("/WEB-INF/reports/payments.jasper");
+                try {
+                    connection = DB.getConnection();
+                    JasperPrint jp = JasperFillManager.fillReport(reportPath, params, connection);
+                    byte[] report = JasperExportManager.exportReportToPdf(jp);
+                    resp.setHeader("Content-Disposition", "attachment;filename=" + reportName);
+                    resp.getOutputStream().write(report);
+                } catch (JRException e) {
+                    e.printStackTrace();
+                }finally {
+                    DB.closeConnection(connection);
+                }
 
             }else if (operation == 4){
                 String reportName = "RoomTypesReport.pdf";
@@ -87,14 +105,61 @@ public class ReportsController extends HttpServlet{
                     DB.closeConnection(connection);
                 }
             }else if (operation == 5){
+                //bookings
+                String reportName = "BookingsReport.pdf";
+                HashMap params = new HashMap();
+                String reportPath = getServletContext().getRealPath("/WEB-INF/reports/bookings.jasper");
+                try {
+                    connection = DB.getConnection();
+                    JasperPrint jp = JasperFillManager.fillReport(reportPath, params, connection);
+                    byte[] report = JasperExportManager.exportReportToPdf(jp);
+                    resp.setHeader("Content-Disposition", "attachment;filename=" + reportName);
+                    resp.getOutputStream().write(report);
+                } catch (JRException e) {
+                    e.printStackTrace();
+                }finally {
+                    DB.closeConnection(connection);
+                }
 
             }else if (operation == 6){
+                //guests
+                String reportName = "GuestsReport.pdf";
+                HashMap params = new HashMap();
+                String reportPath = getServletContext().getRealPath("/WEB-INF/reports/guests.jasper");
+                try {
+                    connection = DB.getConnection();
+                    JasperPrint jp = JasperFillManager.fillReport(reportPath, params, connection);
+                    byte[] report = JasperExportManager.exportReportToPdf(jp);
+                    resp.setHeader("Content-Disposition", "attachment;filename=" + reportName);
+                    resp.getOutputStream().write(report);
+                } catch (JRException e) {
+                    e.printStackTrace();
+                }finally {
+                    DB.closeConnection(connection);
+                }
 
             }else if (operation == 7){
                 String reportName = "StaffReport.pdf";
                 HashMap params = new HashMap();
                 params.put("accessLevel", req.getParameter("access_level").toLowerCase());
                 String reportPath = getServletContext().getRealPath("/WEB-INF/reports/staff.jasper");
+                try {
+                    connection = DB.getConnection();
+                    JasperPrint jp = JasperFillManager.fillReport(reportPath, params, connection);
+                    byte[] report = JasperExportManager.exportReportToPdf(jp);
+                    resp.setHeader("Content-Disposition", "attachment;filename=" + reportName);
+                    resp.getOutputStream().write(report);
+                } catch (JRException e) {
+                    e.printStackTrace();
+                }finally {
+                    DB.closeConnection(connection);
+                }
+            }else if (operation == 8){
+                String reportName = "ArrivalsDeparturesReport.pdf";
+                HashMap params = new HashMap();
+                params.put("arrival", req.getParameter("arrival") );
+                params.put("departure", req.getParameter("departure") );
+                String reportPath = getServletContext().getRealPath("/WEB-INF/reports/arrivalsDepartures.jasper");
                 try {
                     connection = DB.getConnection();
                     JasperPrint jp = JasperFillManager.fillReport(reportPath, params, connection);
@@ -115,7 +180,7 @@ public class ReportsController extends HttpServlet{
         if (url == null) {
             url = "/";
         }
-        Pattern pattern = Pattern.compile("(\\/)$|(\\/rooms$)|(\\/payments)|(\\/roomtypes)|(\\/bookings)|(\\/guests)|(\\/staff)");
+        Pattern pattern = Pattern.compile("(\\/)$|(\\/rooms$)|(\\/payments)|(\\/roomtypes)|(\\/bookings)|(\\/guests)|(\\/staff)|(\\/arrivaldeparture)");
         Matcher matcher = pattern.matcher(url);
 
         /*
@@ -127,6 +192,7 @@ public class ReportsController extends HttpServlet{
             5 = /reports/bookings
             6 = /reports/guests
             7 = /reports/staff
+            8 = /reports/arrivaldeparture
          */
 
         if (matcher.find()) {
@@ -144,6 +210,8 @@ public class ReportsController extends HttpServlet{
                 return 6;
             }else if (matcher.group(7) != null) {
                 return 7;
+            }else if (matcher.group(8) != null) {
+                return 8;
             }
         }
         return -1;

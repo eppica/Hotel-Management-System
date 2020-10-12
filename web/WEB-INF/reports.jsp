@@ -22,10 +22,10 @@
     </div>
     <div class="list">
         <ul>
-            <li>
+            <li onclick="openModalPayment()">
                 <span>Payment Report</span>
             </li>
-            <li>
+            <li  onclick="openModalGuest()">
                 <span>Guests Report</span>
             </li>
             <li onclick="openModalRoom()">
@@ -37,8 +37,11 @@
             <li onclick="openModalRoomType()">
                 <span>Room Types Report</span>
             </li>
-            <li>
+            <li  onclick="openModalBooking()">
                 <span>Bookings Report</span>
+            </li>
+            <li  onclick="openModalArrivalDeparture()">
+                <span>Arrivals and Departures Report</span>
             </li>
         </ul>
     </div>
@@ -110,6 +113,82 @@
     </div>
 </div>
 
+<div class="modal" id="modal-booking">
+    <div class="modal-content params">
+        <div class="modal-header">
+            <h1>Booking Report</h1>
+        </div>
+        <div class="modal-body">
+            <form action="/reports/booking" method="POST">
+
+                <div class="modal-footer">
+                    <button onclick="cancel()" type="button">Cancel</button>
+                    <input type="submit" value="Submit">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="modal-guest">
+    <div class="modal-content params">
+        <div class="modal-header">
+            <h1>Guests Report</h1>
+        </div>
+        <div class="modal-body">
+            <form action="/reports/guest" method="POST">
+
+
+                <div class="modal-footer">
+                    <button onclick="cancel()" type="button">Cancel</button>
+                    <input type="submit" value="Submit">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="modal-payment">
+    <div class="modal-content params">
+        <div class="modal-header">
+            <h1>Payments Report</h1>
+        </div>
+        <div class="modal-body">
+            <form action="/reports/payment" method="POST">
+                <label for="initial">Initial</label>
+                <input type="date" name="initial" id="initial" autocomplete="off" >
+                <label for="final">Final</label>
+                <input type="date" name="final" id="final" autocomplete="off" >
+
+                <div class="modal-footer">
+                    <button onclick="cancel()" type="button">Cancel</button>
+                    <input type="submit" value="Submit">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="modal-arrival-departure">
+    <div class="modal-content params">
+        <div class="modal-header">
+            <h1>Arrivals and Departures Report</h1>
+        </div>
+        <div class="modal-body">
+            <form action="/reports/arrivaldeparture" method="POST">
+                <label for="arrival">Arrival</label>
+                <input type="date" name="arrival" id="arrival" autocomplete="off" >
+                <label for="departure">Departure</label>
+                <input type="date" name="departure" id="departure" autocomplete="off" >
+                <div class="modal-footer">
+                    <button onclick="cancel()" type="button">Cancel</button>
+                    <input type="submit" value="Submit">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 
 
 </body>
@@ -117,6 +196,10 @@
     let modalRoom = document.getElementById("modal-room");
     let modalStaff = document.getElementById("modal-staff");
     let modalRoomType = document.getElementById("modal-room-type");
+    let modalBooking = document.getElementById("modal-booking");
+    let modalGuest = document.getElementById("modal-guest");
+    let modalPayment = document.getElementById("modal-payment");
+    let modalArrivalDeparture = document.getElementById("modal-arrival-departure");
 
     function openModalRoom() {
         modalRoom.style.display = "flex";
@@ -129,11 +212,36 @@
     function openModalRoomType() {
         modalRoomType.style.display = "flex";
     }
+    function openModalBooking() {
+        modalBooking.style.display = "flex";
+    }
+    function openModalGuest() {
+        modalGuest.style.display = "flex";
+    }
+
+    function openModalPayment() {
+        modalPayment.style.display = "flex";
+    }
+
+    function openModalArrivalDeparture() {
+        modalArrivalDeparture.style.display = "flex";
+    }
 
     window.onclick = function(event) {
-        if (event.target === modalRoom || event.target === modalStaff || event.target === modalRoomType ) {
+        if (event.target === modalRoom
+            || event.target === modalStaff
+            || event.target === modalRoomType
+            || event.target === modalBooking
+            || event.target === modalGuest
+            || event.target === modalPayment
+            || event.target === modalArrivalDeparture) {
             modalRoom.style.display = "none";
             modalStaff.style.display = "none";
+            modalRoomType.style.display = "none";
+            modalBooking.style.display = "none";
+            modalGuest.style.display = "none";
+            modalPayment.style.display = "none";
+            modalArrivalDeparture.style.display = "none";
         }
     };
 
@@ -141,6 +249,10 @@
         modalRoom.style.display = "none";
         modalStaff.style.display = "none";
         modalRoomType.style.display = "none";
+        modalBooking.style.display = "none";
+        modalGuest.style.display = "none";
+        modalPayment.style.display = "none";
+        modalArrivalDeparture.style.display = "none";
     }
 </script>
 </body>
