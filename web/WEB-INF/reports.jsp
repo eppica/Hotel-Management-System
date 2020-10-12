@@ -21,15 +21,13 @@
         <h1>Reports</h1>
     </div>
     <div class="list">
+        <h2 class="title">Filtered Reports</h2>
         <ul>
             <li onclick="openModalPayment()">
                 <span>Payment Report</span>
             </li>
-            <li  onclick="openModalGuest()">
-                <span>Guests Report</span>
-            </li>
             <li onclick="openModalRoom()">
-                <span >Rooms Report</span>
+                <span>Rooms Report</span>
             </li>
             <li onclick="openModalStaff()">
                 <span>Staff Report</span>
@@ -37,15 +35,23 @@
             <li onclick="openModalRoomType()">
                 <span>Room Types Report</span>
             </li>
-            <li  onclick="openModalBooking()">
+            <li onclick="openModalArrivalDeparture()">
+                <span>Arrivals and Departures Report</span>
+            </li>
+        </ul>
+        <h2 class="title">Full Reports</h2>
+        <ul>
+            <li onclick="bookingReport()">
                 <span>Bookings Report</span>
             </li>
-            <li  onclick="openModalArrivalDeparture()">
-                <span>Arrivals and Departures Report</span>
+
+            <li onclick="guestReport()">
+                <span>Guests Report</span>
             </li>
         </ul>
     </div>
 </div>
+
 
 <div class="modal" id="modal-room">
     <div class="modal-content params">
@@ -113,40 +119,6 @@
     </div>
 </div>
 
-<div class="modal" id="modal-booking">
-    <div class="modal-content params">
-        <div class="modal-header">
-            <h1>Booking Report</h1>
-        </div>
-        <div class="modal-body">
-            <form action="/reports/booking" method="POST">
-
-                <div class="modal-footer">
-                    <button onclick="cancel()" type="button">Cancel</button>
-                    <input type="submit" value="Submit">
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<div class="modal" id="modal-guest">
-    <div class="modal-content params">
-        <div class="modal-header">
-            <h1>Guests Report</h1>
-        </div>
-        <div class="modal-body">
-            <form action="/reports/guest" method="POST">
-
-
-                <div class="modal-footer">
-                    <button onclick="cancel()" type="button">Cancel</button>
-                    <input type="submit" value="Submit">
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
 
 <div class="modal" id="modal-payment">
     <div class="modal-content params">
@@ -196,8 +168,6 @@
     let modalRoom = document.getElementById("modal-room");
     let modalStaff = document.getElementById("modal-staff");
     let modalRoomType = document.getElementById("modal-room-type");
-    let modalBooking = document.getElementById("modal-booking");
-    let modalGuest = document.getElementById("modal-guest");
     let modalPayment = document.getElementById("modal-payment");
     let modalArrivalDeparture = document.getElementById("modal-arrival-departure");
 
@@ -212,12 +182,6 @@
     function openModalRoomType() {
         modalRoomType.style.display = "flex";
     }
-    function openModalBooking() {
-        modalBooking.style.display = "flex";
-    }
-    function openModalGuest() {
-        modalGuest.style.display = "flex";
-    }
 
     function openModalPayment() {
         modalPayment.style.display = "flex";
@@ -231,15 +195,11 @@
         if (event.target === modalRoom
             || event.target === modalStaff
             || event.target === modalRoomType
-            || event.target === modalBooking
-            || event.target === modalGuest
             || event.target === modalPayment
             || event.target === modalArrivalDeparture) {
             modalRoom.style.display = "none";
             modalStaff.style.display = "none";
             modalRoomType.style.display = "none";
-            modalBooking.style.display = "none";
-            modalGuest.style.display = "none";
             modalPayment.style.display = "none";
             modalArrivalDeparture.style.display = "none";
         }
@@ -249,10 +209,22 @@
         modalRoom.style.display = "none";
         modalStaff.style.display = "none";
         modalRoomType.style.display = "none";
-        modalBooking.style.display = "none";
-        modalGuest.style.display = "none";
         modalPayment.style.display = "none";
         modalArrivalDeparture.style.display = "none";
+    }
+
+    function guestReport(id) {
+        let url = "/reports/guests";
+        fetch(url, {
+            method: 'GET'
+        });
+    }
+
+    function bookingReport(id) {
+        let url = "/reports/bookings";
+        fetch(url, {
+            method: 'GET'
+        });
     }
 </script>
 </body>

@@ -38,6 +38,43 @@ public class ReportsController extends HttpServlet{
                 req.setAttribute("roomTypeList", RoomType.findAll());
                 req.setAttribute("accessLevelList", AccessLevel.values());
                 req.getRequestDispatcher("/WEB-INF/reports.jsp").forward(req, resp);
+            }else{
+                Connection connection = null;
+                if (operation == 5){
+                    //bookings
+                    String reportName = "BookingsReport.pdf";
+                    HashMap params = new HashMap();
+                    String reportPath = getServletContext().getRealPath("/WEB-INF/reports/bookings.jasper");
+                    try {
+                        connection = DB.getConnection();
+                        JasperPrint jp = JasperFillManager.fillReport(reportPath, params, connection);
+                        byte[] report = JasperExportManager.exportReportToPdf(jp);
+                        resp.setHeader("Content-Disposition", "attachment;filename=" + reportName);
+                        resp.getOutputStream().write(report);
+                    } catch (JRException e) {
+                        e.printStackTrace();
+                    }finally {
+                        DB.closeConnection(connection);
+                    }
+
+                }else if (operation == 6){
+                    //guests
+                    String reportName = "GuestsReport.pdf";
+                    HashMap params = new HashMap();
+                    String reportPath = getServletContext().getRealPath("/WEB-INF/reports/guests.jasper");
+                    try {
+                        connection = DB.getConnection();
+                        JasperPrint jp = JasperFillManager.fillReport(reportPath, params, connection);
+                        byte[] report = JasperExportManager.exportReportToPdf(jp);
+                        resp.setHeader("Content-Disposition", "attachment;filename=" + reportName);
+                        resp.getOutputStream().write(report);
+                    } catch (JRException e) {
+                        e.printStackTrace();
+                    }finally {
+                        DB.closeConnection(connection);
+                    }
+
+                }
             }
         }
     }
@@ -104,40 +141,6 @@ public class ReportsController extends HttpServlet{
                 }finally {
                     DB.closeConnection(connection);
                 }
-            }else if (operation == 5){
-                //bookings
-                String reportName = "BookingsReport.pdf";
-                HashMap params = new HashMap();
-                String reportPath = getServletContext().getRealPath("/WEB-INF/reports/bookings.jasper");
-                try {
-                    connection = DB.getConnection();
-                    JasperPrint jp = JasperFillManager.fillReport(reportPath, params, connection);
-                    byte[] report = JasperExportManager.exportReportToPdf(jp);
-                    resp.setHeader("Content-Disposition", "attachment;filename=" + reportName);
-                    resp.getOutputStream().write(report);
-                } catch (JRException e) {
-                    e.printStackTrace();
-                }finally {
-                    DB.closeConnection(connection);
-                }
-
-            }else if (operation == 6){
-                //guests
-                String reportName = "GuestsReport.pdf";
-                HashMap params = new HashMap();
-                String reportPath = getServletContext().getRealPath("/WEB-INF/reports/guests.jasper");
-                try {
-                    connection = DB.getConnection();
-                    JasperPrint jp = JasperFillManager.fillReport(reportPath, params, connection);
-                    byte[] report = JasperExportManager.exportReportToPdf(jp);
-                    resp.setHeader("Content-Disposition", "attachment;filename=" + reportName);
-                    resp.getOutputStream().write(report);
-                } catch (JRException e) {
-                    e.printStackTrace();
-                }finally {
-                    DB.closeConnection(connection);
-                }
-
             }else if (operation == 7){
                 String reportName = "StaffReport.pdf";
                 HashMap params = new HashMap();

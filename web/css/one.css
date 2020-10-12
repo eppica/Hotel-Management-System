@@ -498,7 +498,7 @@ ul {
 }
 
 li {
-    height: 60px;
+    height: 50px;
     border-bottom: 1px solid#ddd;
     display: flex;
     align-items: center;
@@ -519,4 +519,8 @@ li span {
 
 .params {
     width: 35vw;
+}
+
+.title {
+    font-size: 20px;
 }
