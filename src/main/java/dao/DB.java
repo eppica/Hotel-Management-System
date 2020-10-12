@@ -8,7 +8,7 @@ public abstract class DB {
         Connection connection = null;
         try {
             DriverManager.registerDriver(new com.mysql.jdbc.Driver());
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/hms", "root", "");
+            connection = DriverManager.getConnection("jdbc:mysql://us-cdbr-east-02.cleardb.com:3306/heroku_7260b9556bd461a", "bb824514187ae4", "7038baa8");
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -22,6 +22,17 @@ public abstract class DB {
             if(statement != null){
                 statement.close();
             }
+            if (connection != null){
+                connection.close();
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
+
+
+    public static void closeConnection(Connection connection){
+        try {
             if (connection != null){
                 connection.close();
             }
