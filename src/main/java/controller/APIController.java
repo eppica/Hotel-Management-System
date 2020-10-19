@@ -115,7 +115,6 @@ public class APIController extends HttpServlet {
                 }
                 PrintWriter out = resp.getWriter();
                 resp.setContentType("application/json");
-                resp.setCharacterEncoding("UTF-8");
                 out.print(json);
                 out.flush();
             } else if (operation == 2) {
@@ -131,7 +130,6 @@ public class APIController extends HttpServlet {
                 PrintWriter out = resp.getWriter();
                 resp.setContentType("application/json");
 
-                resp.setCharacterEncoding("UTF-8");
                 out.print(json);
                 out.flush();
             } else if (operation == 3) {
@@ -151,7 +149,6 @@ public class APIController extends HttpServlet {
                 }
                 PrintWriter out = resp.getWriter();
                 resp.setContentType("application/json");
-                resp.setCharacterEncoding("UTF-8");
                 out.print(json);
                 out.flush();
 
