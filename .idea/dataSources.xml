@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="@localhost" uuid="527567d1-4f96-4691-8e08-7c042cb69782">
+    <data-source source="LOCAL" name="@localhost" uuid="0da62047-dcc1-4fc8-9993-35e4c2071c77">
       <driver-ref>mysql.8</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
@@ -9,12 +9,6 @@
       <driver-properties>
         <property name="serverTimezone" value="UTC" />
       </driver-properties>
-    </data-source>
-    <data-source source="LOCAL" name="heroku" uuid="9572ec36-0e3c-4927-bb5d-9370e8a49e0a">
-      <driver-ref>mysql.8</driver-ref>
-      <synchronize>true</synchronize>
-      <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
-      <jdbc-url>jdbc:mysql://us-cdbr-east-02.cleardb.com:3306/heroku_7260b9556bd461a</jdbc-url>
     </data-source>
   </component>
 </project>

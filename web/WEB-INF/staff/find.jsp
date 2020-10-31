@@ -20,7 +20,7 @@
 <c:if test="${sessionStaff.getId() == staff.getId()}">
     <style>
         .edit {
-            justify-content: end;
+            justify-content: flex-end;
         }
     </style>
 </c:if>
