@@ -20,6 +20,9 @@ import java.math.BigDecimal;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -42,7 +45,8 @@ public class ReportsController extends HttpServlet{
                 Connection connection = null;
                 if (operation == 5){
                     //bookings
-                    String reportName = "BookingsReport.pdf";
+                    LocalDateTime now = LocalDateTime.now().withNano(0);
+                    String reportName = ("BookingsReport"+now+".pdf").trim().replaceAll("-","").replaceAll(":","").replaceAll("T","");
                     HashMap params = new HashMap();
                     String reportPath = getServletContext().getRealPath("/WEB-INF/reports/bookings.jasper");
                     try {
@@ -59,7 +63,8 @@ public class ReportsController extends HttpServlet{
 
                 }else if (operation == 6){
                     //guests
-                    String reportName = "GuestsReport.pdf";
+                    LocalDateTime now = LocalDateTime.now().withNano(0);
+                    String reportName = ("GuestsReport"+now+".pdf").trim().replaceAll("-","").replaceAll(":","").replaceAll("T","");
                     HashMap params = new HashMap();
                     String reportPath = getServletContext().getRealPath("/WEB-INF/reports/guests.jasper");
                     try {
@@ -87,9 +92,10 @@ public class ReportsController extends HttpServlet{
             Integer operation = getOperation(req);
             Connection connection = null;
             if (operation == 2){
-                String reportName = "RoomsReport.pdf";
+                LocalDateTime now = LocalDateTime.now().withNano(0);
+                String reportName = ("RoomsReport"+now+".pdf").trim().replaceAll("-","").replaceAll(":","").replaceAll("T","");
                 HashMap params = new HashMap();
-                params.put("roomType", Integer.valueOf(req.getParameter("id_room_type")) );
+                params.put("RoomType", Integer.valueOf(req.getParameter("id_room_type")) );
 
                 String reportPath = getServletContext().getRealPath("/WEB-INF/reports/rooms.jasper");
                 try {
@@ -105,10 +111,13 @@ public class ReportsController extends HttpServlet{
                 }
             }else if (operation == 3){
                 //payments
-                String reportName = "PaymentsReport.pdf";
+                LocalDateTime now = LocalDateTime.now().withNano(0);
+                String reportName = ("PaymentsReport"+now+".pdf").trim().replaceAll("-","").replaceAll(":","").replaceAll("T","");
                 HashMap params = new HashMap();
-                params.put("initial", req.getParameter("initial") );
-                params.put("final", req.getParameter("final") );
+                Date initialDate = (req.getParameter("initial") != "") ? Date.valueOf(req.getParameter("initial")) : null;
+                Date finalDate = (req.getParameter("final") != "") ? Date.valueOf(req.getParameter("final")) : null;
+                params.put("initial", initialDate );
+                params.put("final", finalDate);
 
                 String reportPath = getServletContext().getRealPath("/WEB-INF/reports/payments.jasper");
                 try {
@@ -124,10 +133,14 @@ public class ReportsController extends HttpServlet{
                 }
 
             }else if (operation == 4){
-                String reportName = "RoomTypesReport.pdf";
+                LocalDateTime now = LocalDateTime.now().withNano(0);
+                String reportName = ("RoomTypesReport"+now+".pdf").trim().replaceAll("-","").replaceAll(":","").replaceAll("T","");
                 HashMap params = new HashMap();
-                params.put("minDailyPrice", new BigDecimal(req.getParameter("min_daily_price") ));
-                params.put("maxDailyPrice", new BigDecimal(req.getParameter("max_daily_price") ));
+
+                BigDecimal min = (req.getParameter("min_daily_price")!=null) ? new BigDecimal(req.getParameter("min_daily_price")) : null;
+                BigDecimal max = (req.getParameter("max_daily_price")!=null) ? new BigDecimal(req.getParameter("max_daily_price")) : null;
+                params.put("minDailyPrice", min);
+                params.put("maxDailyPrice", max);
 
                 String reportPath = getServletContext().getRealPath("/WEB-INF/reports/roomTypes.jasper");
                 try {
@@ -142,7 +155,8 @@ public class ReportsController extends HttpServlet{
                     DB.closeConnection(connection);
                 }
             }else if (operation == 7){
-                String reportName = "StaffReport.pdf";
+                LocalDateTime now = LocalDateTime.now().withNano(0);
+                String reportName = ("StaffReport"+now+".pdf").trim().replaceAll("-","").replaceAll(":","").replaceAll("T","");
                 HashMap params = new HashMap();
                 params.put("accessLevel", req.getParameter("access_level").toLowerCase());
                 String reportPath = getServletContext().getRealPath("/WEB-INF/reports/staff.jasper");
@@ -158,10 +172,14 @@ public class ReportsController extends HttpServlet{
                     DB.closeConnection(connection);
                 }
             }else if (operation == 8){
-                String reportName = "ArrivalsDeparturesReport.pdf";
+                LocalDateTime now = LocalDateTime.now().withNano(0);
+                String reportName = ("ArrivalsDeparturesReport"+now+".pdf").trim().replaceAll("-","").replaceAll(":","").replaceAll("T","");
                 HashMap params = new HashMap();
-                params.put("arrival", req.getParameter("arrival") );
-                params.put("departure", req.getParameter("departure") );
+                Date initialDate = (req.getParameter("initial") != "") ? Date.valueOf(req.getParameter("initial")) : null;
+                Date finalDate = (req.getParameter("final") != "") ? Date.valueOf(req.getParameter("final")) : null;
+                params.put("initial", initialDate );
+                params.put("final", finalDate);
+
                 String reportPath = getServletContext().getRealPath("/WEB-INF/reports/arrivalsDepartures.jasper");
                 try {
                     connection = DB.getConnection();
