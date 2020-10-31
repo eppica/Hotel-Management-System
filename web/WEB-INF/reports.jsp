@@ -14,7 +14,7 @@
     <title>Reports</title>
     <meta name="viewport" content="width=device-width, user-scalable=0">
 </head>
-<body>
+<body id="body">
 <c:import url="/WEB-INF/header/main.jsp"/>
 <div class="content">
     <div class="model">
@@ -126,7 +126,7 @@
             <h1>Payments Report</h1>
         </div>
         <div class="modal-body">
-            <form action="/reports/payment" method="POST">
+            <form action="/reports/payments" method="POST">
                 <label for="initial">Initial</label>
                 <input type="date" name="initial" id="initial" autocomplete="off" >
                 <label for="final">Final</label>
@@ -148,10 +148,10 @@
         </div>
         <div class="modal-body">
             <form action="/reports/arrivaldeparture" method="POST">
-                <label for="arrival">Arrival</label>
-                <input type="date" name="arrival" id="arrival" autocomplete="off" >
-                <label for="departure">Departure</label>
-                <input type="date" name="departure" id="departure" autocomplete="off" >
+                <label for="initial2">Initial</label>
+                <input type="date" name="initial" id="initial2" autocomplete="off" >
+                <label for="final2">Final</label>
+                <input type="date" name="final" id="final2" autocomplete="off" >
                 <div class="modal-footer">
                     <button onclick="cancel()" type="button">Cancel</button>
                     <input type="submit" value="Submit">
@@ -191,19 +191,13 @@
         modalArrivalDeparture.style.display = "flex";
     }
 
-    window.onclick = function(event) {
-        if (event.target === modalRoom
-            || event.target === modalStaff
-            || event.target === modalRoomType
-            || event.target === modalPayment
-            || event.target === modalArrivalDeparture) {
-            modalRoom.style.display = "none";
-            modalStaff.style.display = "none";
-            modalRoomType.style.display = "none";
-            modalPayment.style.display = "none";
-            modalArrivalDeparture.style.display = "none";
-        }
-    };
+    document.getElementById("body").addEventListener("submit", () => {
+        modalRoom.style.display = "none";
+        modalStaff.style.display = "none";
+        modalRoomType.style.display = "none";
+        modalPayment.style.display = "none";
+        modalArrivalDeparture.style.display = "none";
+    });
 
     function cancel(){
         modalRoom.style.display = "none";
@@ -213,18 +207,12 @@
         modalArrivalDeparture.style.display = "none";
     }
 
-    function guestReport(id) {
-        let url = "/reports/guests";
-        fetch(url, {
-            method: 'GET'
-        });
+    function guestReport() {
+        window.location = "/reports/guests";
     }
 
-    function bookingReport(id) {
-        let url = "/reports/bookings";
-        fetch(url, {
-            method: 'GET'
-        });
+    function bookingReport() {
+        window.location = "/reports/bookings";
     }
 </script>
 </body>
