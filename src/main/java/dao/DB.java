@@ -29,4 +29,15 @@ public abstract class DB {
             e.printStackTrace();
         }
     }
+
+
+    public static void closeConnection(Connection connection){
+        try {
+            if (connection != null){
+                connection.close();
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
 }

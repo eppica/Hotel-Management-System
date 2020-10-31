@@ -491,3 +491,36 @@ form input[type=submit]:hover,form  button:hover{
 .delete-check:hover{
     cursor: pointer;
 }
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    height: 50px;
+    border-bottom: 1px solid#ddd;
+    display: flex;
+    align-items: center;
+}
+
+li:hover {
+    background-color: #ddd;
+    cursor: pointer;
+}
+
+li span {
+    margin-left: 30px;
+}
+
+.list {
+    grid-area: 3/2/3/10;
+}
+
+.params {
+    width: 35vw;
+}
+
+.title {
+    font-size: 20px;
+}
