@@ -8,7 +8,7 @@ public abstract class DB {
         Connection connection = null;
         try {
             DriverManager.registerDriver(new com.mysql.jdbc.Driver());
-            connection = DriverManager.getConnection("jdbc:mysql://hmsystem.ddns.net/hms", "hms", "Eppica1234#");
+            connection = DriverManager.getConnection("jdbc:mysql://localhost/hms", "root", "");
 
         } catch (SQLException e) {
             e.printStackTrace();
