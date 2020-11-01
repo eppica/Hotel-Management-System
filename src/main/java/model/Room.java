@@ -2,17 +2,20 @@ package model;
 
 import dao.RoomDAO;
 
+
+import javax.persistence.*;
 import javax.servlet.http.HttpServletRequest;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
+@Entity
 public class Room {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private Integer idRoomType;
+    @ManyToOne
     private RoomType roomType;
     private Integer number;
     private static RoomDAO DAO = new RoomDAO();

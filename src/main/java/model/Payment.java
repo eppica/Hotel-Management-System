@@ -2,6 +2,7 @@ package model;
 
 import dao.PaymentDAO;
 
+import javax.persistence.*;
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -9,17 +10,21 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
+@Entity
 public class Payment {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private BigDecimal value;
+    @Enumerated(EnumType.STRING)
     private PaymentMethod paymentMethod;
     private Integer idBooking;
+    @OneToOne
     private Booking booking;
     private LocalDateTime payTime;
     private Integer idStaff;
+    @ManyToOne
     private Staff staff;
     private static PaymentDAO DAO = new PaymentDAO();
 

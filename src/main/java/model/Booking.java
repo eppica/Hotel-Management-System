@@ -2,6 +2,7 @@ package model;
 
 import dao.BookingDAO;
 
+import javax.persistence.*;
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -10,19 +11,23 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
+@Entity
 public class Booking {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private Integer idRoom;
+    @ManyToOne
     private Room room;
     private Integer idGuest;
+    @ManyToOne
     private Guest guest;
     private LocalDate arrival;
     private LocalDate departure;
     private BigDecimal total;
     private Integer idStaff;
+    @ManyToOne
     private Staff staff;
     private static BookingDAO DAO = new BookingDAO();
 

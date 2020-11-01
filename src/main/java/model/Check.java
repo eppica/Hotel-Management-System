@@ -2,20 +2,24 @@ package model;
 
 import dao.CheckDAO;
 
+import javax.persistence.*;
 import javax.servlet.http.HttpServletRequest;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
+@Entity
 public class Check {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private LocalDateTime check;
     private Integer idStaff;
+    @ManyToOne
     private Staff staff;
     private Integer idBooking;
+    @ManyToOne
     private Booking booking;
     private Boolean status;
     private static CheckDAO DAO = new CheckDAO();

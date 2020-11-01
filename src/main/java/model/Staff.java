@@ -2,17 +2,19 @@ package model;
 
 import dao.StaffDAO;
 
+import javax.persistence.*;
 import javax.servlet.http.HttpServletRequest;
-import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
+@Entity
 public class Staff {
+    @Id
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Integer id;
     private String name;
+    @Enumerated(EnumType.STRING)
     private AccessLevel accessLevel;
     private String login;
     private String password;
