@@ -1,6 +1,6 @@
 package model;
 
-import dao.PaymentDAO;
+import dao.GenericDAO;
 
 import javax.persistence.*;
 import javax.servlet.http.HttpServletRequest;
@@ -9,10 +9,14 @@ import java.math.RoundingMode;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 
 @Entity
-public class Payment {
+@NamedNativeQueries({
+@NamedNativeQuery(name = "sumAllId", query = "SELECT SUM(value) FROM payment WHERE booking_fk = :bookingId"),
+@NamedNativeQuery(name = "sumAllArgs", query = "SELECT SUM(value) FROM payment WHERE :args")})
+public class Payment{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -26,7 +30,7 @@ public class Payment {
     private Integer idStaff;
     @ManyToOne
     private Staff staff;
-    private static PaymentDAO DAO = new PaymentDAO();
+    private static GenericDAO DAO = new GenericDAO(Payment.class);
 
     public Payment(Integer id, BigDecimal value, PaymentMethod paymentMethod, Integer idBooking,LocalDateTime payTime, Integer idStaff) {
         this.id = id;
@@ -170,7 +174,7 @@ public class Payment {
     }
 
     public Payment save(){
-        return DAO.save(this);
+        return (Payment) DAO.save(this);
     }
 
     public void update(){
@@ -178,11 +182,11 @@ public class Payment {
     }
 
     public static Payment save(Payment payment){
-        return DAO.save(payment);
+        return (Payment) DAO.save(payment);
     }
 
     public static Payment find(Integer id){
-        return DAO.find(id);
+        return (Payment) DAO.find(id);
     }
 
     public static List<Payment> findAll(){
@@ -194,11 +198,20 @@ public class Payment {
     }
 
     public static BigDecimal sumAll(Integer id){
-        return DAO.sumAll(id).setScale(2, RoundingMode.CEILING);
+
+        HashMap<String, Object> params = new HashMap<>();
+        params.put("bookingId", id);
+
+        return ((BigDecimal) DAO.executeNamedQuery("sumAllId",params)).setScale(2, RoundingMode.CEILING);
+
     }
 
     public static BigDecimal sumAll(String args){
-        return DAO.sumAll(args).setScale(2, RoundingMode.CEILING);
+
+        HashMap<String, Object> params = new HashMap<>();
+        params.put("args", args);
+
+        return ((BigDecimal) DAO.executeNamedQuery("sumAllArgs",params)).setScale(2, RoundingMode.CEILING);
     }
 
     public static void update(Payment payment){

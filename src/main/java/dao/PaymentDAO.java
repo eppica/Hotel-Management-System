@@ -1,5 +1,5 @@
 package dao;
-
+/*
 import model.Payment;
 
 import java.math.BigDecimal;
@@ -166,3 +166,4 @@ public class PaymentDAO implements DAO<Payment>{
 
 
 }
+*/

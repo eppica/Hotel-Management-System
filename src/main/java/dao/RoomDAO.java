@@ -1,5 +1,5 @@
 package dao;
-
+/*
 import model.Room;
 
 import java.sql.*;
@@ -124,3 +124,4 @@ public class RoomDAO implements DAO<Room> {
 
 
 }
+*/

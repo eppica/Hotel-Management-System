@@ -1,5 +1,5 @@
 package dao;
-
+/*
 import model.Staff;
 
 import java.sql.*;
@@ -130,3 +130,4 @@ public class StaffDAO implements DAO<Staff>{
         return staffList;
     }
 }
+*/

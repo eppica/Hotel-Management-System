@@ -1,5 +1,5 @@
 package dao;
-
+/*
 import model.Room;
 import model.RoomType;
 
@@ -114,3 +114,4 @@ public class RoomTypeDAO implements DAO<RoomType> {
         return roomTypeList;
     }
 }
+*/

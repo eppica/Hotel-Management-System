@@ -1,6 +1,6 @@
 package model;
 
-import dao.GuestDAO;
+import dao.GenericDAO;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,7 +13,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Entity
-public class Guest {
+public class Guest{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -22,7 +22,7 @@ public class Guest {
     private LocalDate birthDate;
     private String email;
     private String phoneNumber;
-    private static GuestDAO DAO = new GuestDAO();
+    private static GenericDAO DAO = new GenericDAO(Guest.class);
 
     public Guest(String name, String document, LocalDate birthDate, String email, String phoneNumber) {
         this.name = name;
@@ -159,11 +159,11 @@ public class Guest {
     }
 
     public static Guest save(Guest guest){
-        return DAO.save(guest);
+        return (Guest) DAO.save(guest);
     }
 
     public static Guest find(Integer id){
-        return DAO.find(id);
+        return (Guest) DAO.find(id);
     }
 
     public static List<Guest> findAll(){
@@ -179,7 +179,7 @@ public class Guest {
     }
 
     public Guest save(){
-        return DAO.save(this);
+        return (Guest) DAO.save(this);
     }
 
     public void update(){

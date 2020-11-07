@@ -1,6 +1,6 @@
 package model;
 
-import dao.CheckDAO;
+import dao.GenericDAO;
 
 import javax.persistence.*;
 import javax.servlet.http.HttpServletRequest;
@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-public class Check {
+public class Check{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -22,7 +22,7 @@ public class Check {
     @ManyToOne
     private Booking booking;
     private Boolean status;
-    private static CheckDAO DAO = new CheckDAO();
+    private static GenericDAO DAO = new GenericDAO(Check.class);
 
     public Check(LocalDateTime check, Integer idStaff, Integer idBooking, Boolean status) {
         this.check = check;
@@ -171,11 +171,11 @@ public class Check {
     }
 
     public static Check save(Check check){
-        return DAO.save(check);
+        return (Check) DAO.save(check);
     }
 
     public static Check find(Integer id){
-        return DAO.find(id);
+        return (Check) DAO.find(id);
     }
 
     public static List<Check> findAll(){
@@ -195,7 +195,7 @@ public class Check {
     }
 
     public Check save(){
-        return DAO.save(this);
+        return (Check) DAO.save(this);
     }
 
     public void update(){

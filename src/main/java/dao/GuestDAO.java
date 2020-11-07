@@ -1,5 +1,5 @@
 package dao;
-
+/*
 import model.Guest;
 
 import java.sql.*;
@@ -118,3 +118,4 @@ public class GuestDAO implements DAO<Guest>{
         return guestList;
     }
 }
+*/

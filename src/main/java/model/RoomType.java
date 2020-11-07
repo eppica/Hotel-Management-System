@@ -1,6 +1,6 @@
 package model;
 
-import dao.RoomTypeDAO;
+import dao.GenericDAO;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -21,7 +21,7 @@ public class RoomType {
     private String name;
     private String description;
     private BigDecimal dailyPrice;
-    private static RoomTypeDAO DAO = new RoomTypeDAO();
+    private static GenericDAO DAO = new GenericDAO(RoomType.class);
 
     public RoomType(String name, String description, BigDecimal dailyPrice) {
         this.name = name;
@@ -119,11 +119,11 @@ public class RoomType {
     }
 
     public static RoomType save(RoomType roomType){
-        return DAO.save(roomType);
+        return (RoomType) DAO.save(roomType);
     }
 
     public static RoomType find(Integer id){
-        return DAO.find(id);
+        return (RoomType) DAO.find(id);
     }
 
     public static List<RoomType> findAll(){
@@ -143,7 +143,7 @@ public class RoomType {
     }
 
     public RoomType save(){
-        return DAO.save(this);
+        return (RoomType) DAO.save(this);
     }
 
     public void update(){

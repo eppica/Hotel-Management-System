@@ -1,41 +1,16 @@
 package dao;
-
+/*
 import model.Booking;
 
 import java.sql.*;
 import java.util.*;
 
-public class BookingDAO implements DAO<Booking> {
+public class BookingDAO extends GenericDAO {
     @Override
     public Booking save(Booking object) {
-        Connection connection = DB.getConnection();
-        PreparedStatement statement = null;
-        try {
-            statement = connection.prepareStatement("INSERT INTO booking SET " +
-                    "room_fk = ?, " +
-                    "guest_fk = ?, " +
-                    "arrival = ?, " +
-                    "departure = ?, " +
-                    "total = ?, " +
-                    "staff_fk = ?", Statement.RETURN_GENERATED_KEYS);
-            statement.setObject(1, object.getIdRoom());
-            statement.setObject(2, object.getIdGuest());
-            statement.setObject(3,object.getArrival().toString());
-            statement.setObject(4, object.getDeparture().toString());
-            statement.setObject(5, object.getTotal());
-            statement.setObject(6, object.getIdStaff());
-            statement.execute();
-            try (ResultSet getGeneratedKeys = statement.getGeneratedKeys()) {
-                getGeneratedKeys.first();
-                object.setId(getGeneratedKeys.getInt(1));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }finally {
-            DB.closeConnection(connection, statement);
-        }
+       
 
-        return object;
+
     }
 
     @Override
@@ -141,3 +116,4 @@ public class BookingDAO implements DAO<Booking> {
         return booking;
     }
 }
+*/

@@ -5,7 +5,7 @@ import model.Check;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-
+/*
 public class CheckDAO implements DAO<Check> {
     @Override
     public Check save(Check object) {
@@ -114,3 +114,5 @@ public class CheckDAO implements DAO<Check> {
         return checkList;
     }
 }
+
+ */

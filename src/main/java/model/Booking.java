@@ -1,6 +1,6 @@
 package model;
 
-import dao.BookingDAO;
+import dao.GenericDAO;
 
 import javax.persistence.*;
 import javax.servlet.http.HttpServletRequest;
@@ -10,10 +10,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.HashMap;
 import java.util.List;
 
 @Entity
-public class Booking {
+@NamedNativeQuery(name = "findBookedRoom", query = "SELECT * FROM booking WHERE room_fk = :id AND :id NOT IN (SELECT booking_fk FROM 'check' WHERE status = 0)")
+public class Booking{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -29,7 +31,7 @@ public class Booking {
     private Integer idStaff;
     @ManyToOne
     private Staff staff;
-    private static BookingDAO DAO = new BookingDAO();
+    private static GenericDAO DAO = new GenericDAO(Booking.class);
 
     public Booking(Integer idRoom, Integer idGuest, LocalDate arrival, LocalDate departure, BigDecimal total, Integer idStaff) {
         this.idRoom = idRoom;
@@ -237,7 +239,7 @@ public class Booking {
     public static Booking save(Booking booking){
         try {
             if (booking.validate()) {
-                return DAO.save(booking);
+                return (Booking) DAO.save(booking);
             } else {
                 throw new RuntimeException("Arrival date is bigger than Departure date");
             }
@@ -248,7 +250,7 @@ public class Booking {
     }
 
     public static Booking find(Integer id){
-        return DAO.find(id);
+        return (Booking) DAO.find(id);
     }
 
     public static List<Booking> findAll(){
@@ -260,7 +262,12 @@ public class Booking {
     }
 
     public static Booking findBookedRoom(Integer id){
-        return DAO.findBookedRoom(id);
+
+        HashMap<String, Object> params = new HashMap<>();
+        params.put("id", id);
+
+        return (Booking) DAO.executeNamedQuery("findBookedRoom",params);
+
     }
 
     public static void update(Booking booking){
@@ -283,7 +290,7 @@ public class Booking {
     public Booking save(){
         try {
             if (validate()) {
-                return DAO.save(this);
+                return (Booking) DAO.save(this);
             } else {
                 throw new RuntimeException("Arrival date is bigger than Departure date");
             }

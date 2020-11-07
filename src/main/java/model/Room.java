@@ -1,15 +1,16 @@
 package model;
 
-import dao.RoomDAO;
-
+import dao.GenericDAO;
 
 import javax.persistence.*;
 import javax.servlet.http.HttpServletRequest;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
 
 @Entity
+@NamedNativeQuery(name = "countAll", query = "SELECT COUNT(id) FROM room :args")
 public class Room {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,7 +19,7 @@ public class Room {
     @ManyToOne
     private RoomType roomType;
     private Integer number;
-    private static RoomDAO DAO = new RoomDAO();
+    private static GenericDAO DAO = new GenericDAO(Room.class);
 
     public Room(Integer idRoomType, Integer number) {
         this.idRoomType = idRoomType;
@@ -116,18 +117,21 @@ public class Room {
     }
 
     public static Room save(Room room){
-        return DAO.save(room);
+        return (Room) DAO.save(room);
     }
 
     public static Room find(Integer id){
-        return DAO.find(id);
+        return (Room) DAO.find(id);
     }
 
     public static List<Room> findAll(){
         return DAO.findAll();
     }
     public static Integer countAll(String args){
-        return DAO.countAll(args);
+        HashMap<String, Object> params = new HashMap<>();
+        params.put("args", args);
+
+        return (Integer) DAO.executeNamedQuery("countAll",params);
     }
     public static List<Room> findAll(String args){
         return DAO.findAll(args);
@@ -142,7 +146,7 @@ public class Room {
     }
 
     public Room save(){
-        return DAO.save(this);
+        return (Room) DAO.save(this);
     }
 
     public void update(){
