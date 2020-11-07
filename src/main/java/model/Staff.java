@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 
 @Entity
-@NamedNativeQuery(name = "authenticate", query = "SELECT * FROM staff WHERE login = :login AND password = :password")
+@NamedNativeQuery(name = "authenticate", query = "SELECT * FROM Staff WHERE login = :login AND password = :password")
 public class Staff{
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
