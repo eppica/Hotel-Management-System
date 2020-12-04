@@ -1,10 +1,4 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: Lavinia
-  Date: 10/12/2020
-  Time: 12:02 AM
-  To change this template use File | Settings | File Templates.
---%>
+
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
@@ -64,7 +58,7 @@
                 <select name="id_room_type" id="id_room_type" required>
                     <option disabled selected value></option>
                     <c:forEach items="${roomTypeList}" var="roomType">
-                        <option value="${roomType.getId()}" <c:if test="${roomType.getId() == room.getIdRoomType()}"> selected </c:if>>${roomType.getName()}</option>
+                        <option value="${roomType.getId()}" <c:if test="${roomType.getId() == room.getRoomType().getId()}"> selected </c:if>>${roomType.getName()}</option>
                     </c:forEach>
                 </select>
                 <div class="modal-footer">

@@ -7,8 +7,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.servlet.http.HttpServletRequest;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -88,19 +86,6 @@ public class Guest{
             this.phoneNumber = null;
         }else{
             this.phoneNumber = request.getParameter("phone_number");
-        }
-    }
-
-    public Guest(ResultSet resultSet){
-        try {
-            this.id = resultSet.getInt("id");
-            this.name = resultSet.getString("name");
-            this.document = resultSet.getString("document");
-            this.birthDate = resultSet.getDate("birth_date").toLocalDate();
-            this.email = resultSet.getString("email");
-            this.phoneNumber = resultSet.getString("phone_number");
-        }catch (SQLException e){
-            e.printStackTrace();
         }
     }
 

@@ -1,10 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: Lavinha
-  Date: 5/3/2020
-  Time: 12:52 PM
-  To change this template use File | Settings | File Templates.
---%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
@@ -28,18 +21,18 @@
             <select name="room_type" id="room_type"<c:if test="${booking == null}">disabled </c:if>>
                 <c:if test="${booking == null}"><option disabled selected value></option></c:if>
                 <c:forEach items="${roomTypeList}" var="roomType">
-                    <option value="${roomType.getId()}" <c:if test="${booking.getRoom().getIdRoomType() == roomType.getId()}">selected</c:if>>${roomType.getName()}</option>
+                    <option value="${roomType.getId()}" <c:if test="${booking.getRoom().getRoomType().getId() == roomType.getId()}">selected</c:if>>${roomType.getName()}</option>
                 </c:forEach>
             </select>
             <select name="id_room" id="id_room" <c:if test="${booking == null}">disabled </c:if>>
-                <c:if test="${booking != null}"><option value="${booking.getIdRoom()}">${booking.getRoom().getNumber()}</option> </c:if>
+                <c:if test="${booking != null}"><option value="${booking.getRoom().getId()}">${booking.getRoom().getNumber()}</option> </c:if>
             </select>
         </div>
         <label for="id_guest">Guest</label>
         <select name="id_guest" id="id_guest">
             <option disabled selected value></option>
             <c:forEach items="${guestList}" var="guest">
-                <option value="${guest.getId()}" <c:if test="${guest.getId() == booking.getIdGuest()}"> selected </c:if>>${guest.getName()}</option>
+                <option value="${guest.getId()}" <c:if test="${guest.getId() == booking.getGuest().getId()}"> selected </c:if>>${guest.getName()}</option>
             </c:forEach>
         </select>
         <input type="text" value="${sessionStaff.getId()}" style="display: none" id="id_staff" name="id_staff">

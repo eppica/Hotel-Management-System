@@ -7,7 +7,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -32,12 +31,12 @@ public class BookingController extends HttpServlet {
             }else if(operation == 2){
                 Booking booking = Booking.find(Servlet.getId(req));
                 req.setAttribute("booking", booking);
-                List<Check> checks = Check.findAll(booking.getId());
+                List<Checks> checks = Checks.findAll(booking.getId());
                 req.setAttribute("paymentList", Payment.findAll(booking.getId()));
-                req.setAttribute("paid", Payment.sumAll(booking.getId()).setScale(2, RoundingMode.CEILING));
+                req.setAttribute("paid", Payment.sumAll(booking.getId()));
                 req.setAttribute("allowed", Servlet.isAllowed(req, AccessLevel.OWNER));
                 if(checks!=null){
-                    for(Check check : checks){
+                    for(Checks check : checks){
                         if(check.getStatus()){
                             req.setAttribute("checkin", check);
                         }else{
@@ -61,7 +60,7 @@ public class BookingController extends HttpServlet {
                 req.setAttribute("minDateArrival", today.toString());
                 req.getRequestDispatcher("/WEB-INF/booking/form.jsp").forward(req, resp);
             }else{
-                req.getRequestDispatcher("404.jsp").forward(req, resp);
+                req.getRequestDispatcher("/WEB-INF/404.jsp").forward(req, resp);
             }
         }
     }
@@ -74,7 +73,7 @@ public class BookingController extends HttpServlet {
             booking.save();
             resp.sendRedirect("/bookings/" + booking.getId());
         }else{
-            req.getRequestDispatcher("404.jsp").forward(req, resp);
+            req.getRequestDispatcher("/WEB-INF/404.jsp").forward(req, resp);
         }
     }
 
@@ -88,7 +87,7 @@ public class BookingController extends HttpServlet {
             booking.setId(Servlet.getId(req));
             booking.update();
         }else{
-            req.getRequestDispatcher("404.jsp").forward(req, resp);
+            req.getRequestDispatcher("/WEB-INF/404.jsp").forward(req, resp);
         }
     }
 
@@ -97,9 +96,8 @@ public class BookingController extends HttpServlet {
         Integer operation = Servlet.getOperation(req);
         if (operation == 2) {
             Booking.delete(Servlet.getId(req));
-            resp.sendRedirect("/bookings/");
         }else{
-            req.getRequestDispatcher("404.jsp").forward(req, resp);
+            req.getRequestDispatcher("/WEB-INF/404.jsp").forward(req, resp);
         }
     }
 }

@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 
 @Entity
-@NamedNativeQuery(name = "authenticate", query = "SELECT * FROM Staff WHERE login = :login AND password = :password")
+@NamedNativeQuery(name = "authenticate", query = "SELECT * FROM Staff WHERE login = :login AND password = :password", resultClass = Staff.class)
 public class Staff{
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
@@ -55,18 +55,6 @@ public class Staff{
             this.password = null;
         }else{
             this.password = request.getParameter("password");
-        }
-    }
-
-    public Staff(ResultSet resultSet){
-        try{
-            this.id = resultSet.getInt("id");
-            this.name = resultSet.getString("name");
-            this.accessLevel = AccessLevel.valueOf(resultSet.getString("access_level"));
-            this.login = resultSet.getString("login");
-            this.password = resultSet.getString("password");
-        }catch (SQLException e){
-            e.printStackTrace();
         }
     }
 

@@ -9,8 +9,6 @@ import javax.persistence.Id;
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
 
 @Entity
@@ -48,17 +46,6 @@ public class RoomType {
             if(add[0].equals("daily_price")){
                 this.dailyPrice = new BigDecimal(add[1]);
             }
-        }
-    }
-
-    public RoomType(ResultSet resultSet){
-        try {
-            this.id = resultSet.getInt("id");
-            this.name = resultSet.getString("name");
-            this.description = resultSet.getString("description").replaceAll("[\\n\\t]", "");
-            this.dailyPrice = resultSet.getBigDecimal("daily_price");
-        }catch (SQLException e){
-            e.printStackTrace();
         }
     }
 

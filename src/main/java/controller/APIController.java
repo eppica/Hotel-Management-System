@@ -28,15 +28,15 @@ public class APIController extends HttpServlet {
                     LocalDate today = LocalDate.now();
 
                     BigDecimal yearRevenues = new BigDecimal(0);
-                    yearRevenues = yearRevenues.add(Payment.sumAll(" year(pay_time) = " + today.getYear()));
+                    yearRevenues = yearRevenues.add(Payment.sumAll(" WHERE year(payTime) = " + today.getYear()));
 
                     json.append("\"yearRevenues\": " + yearRevenues.toString() + ",");
 
-                    BigDecimal monthRevenues = Payment.sumAll(" month(pay_time) = " + today.getMonthValue());
+                    BigDecimal monthRevenues = Payment.sumAll(" WHERE month(payTime) = " + today.getMonthValue());
 
                     json.append("\"monthRevenues\": " + monthRevenues + ",");
 
-                    BigDecimal weekRevenues = Payment.sumAll(" date(pay_time) BETWEEN  '" + today.plusDays(-7) + "' and '" + today + "'");
+                    BigDecimal weekRevenues = Payment.sumAll(" WHERE date(payTime) BETWEEN  '" + today.plusDays(-7) + "' AND '" + today + "'");
 
                     json.append("\"weekRevenues\": " + weekRevenues + ",");
 
@@ -44,7 +44,7 @@ public class APIController extends HttpServlet {
                     LocalDate week = LocalDate.now();
                     for (int i = 0; i < 7; i++) {
 
-                        BigDecimal dayRevenues = Payment.sumAll(" date(pay_time) = '" + week + "'");
+                        BigDecimal dayRevenues = Payment.sumAll(" WHERE date(payTime) = '" + week + "'");
                         json.append("\"" + week.getMonthValue() + "-" + week.getDayOfMonth() + "\": " + dayRevenues + ",");
                         week = week.plusDays(-1);
 
@@ -56,8 +56,8 @@ public class APIController extends HttpServlet {
                     List<Booking> arrivalList = Booking.findAllArrival();
                     List<Booking> departureList = Booking.findAllDeparture();
 
-                    json.append("\"todayArrives\": " + arrivalList.size() + ",");
-                    json.append("\"todayDepartures\": " + departureList.size() + ",");
+                    json.append("\"todayArrives\": " + ((arrivalList!=null)?arrivalList.size():"0") + ",");
+                    json.append("\"todayDepartures\": " + ((departureList!=null)?departureList.size():"0") + ",");
 
                     List<Room> roomList = Room.findAll();
 
@@ -79,9 +79,12 @@ public class APIController extends HttpServlet {
 
                     json.append(("\"trendingRooms\": {"));
                     for (RoomType type : RoomType.findAll()) {
-                        List<Booking> total = Booking.findAll("WHERE room_fk IN (SELECT id FROM room WHERE room_type_fk = " + type.getId() + ")");
-                        json.append("\"" + type.getName() + "\": " + total.size() + ",");
+                        List<Booking> total = Booking.findAll("WHERE room IN (SELECT id FROM Room WHERE roomType = " + type.getId() + ")");
+                        json.append("\"" + type.getName() + "\": " + ((total!=null)?total.size():"0") + ",");
 
+                    }
+                    if(RoomType.findAll()==null || RoomType.findAll().size()==0){
+                        json.append("\"No rooms registered\":\" \"  ");
                     }
                     json = new StringBuilder(json.substring(0, json.length() - 1));
                     json.append("}}");
@@ -101,15 +104,17 @@ public class APIController extends HttpServlet {
 
                 StringBuilder json = null;
                 if ((arrival != null) && (departure != null) && (roomType != null)) {
-                    List<Room> roomList = Room.findAll("WHERE room_type_fk = " + roomType + " AND id NOT IN (SELECT room_fk FROM booking WHERE (arrival <= '" + departure + "' AND departure >= '" + arrival + "') AND booking.id NOT IN (SELECT booking_fk FROM `check` WHERE  status = 0));");
-                    if (!roomList.isEmpty()) {
-                        json = new StringBuilder("[");
-                        for (Room room : roomList) {
-                            json.append(room.toJSON());
-                            json.append(",");
+                    List<Room> roomList = Room.findAll("WHERE id = " + roomType + " AND id NOT IN (SELECT room FROM Booking WHERE (arrival <= '" + departure + "' AND departure >= '" + arrival + "') AND id NOT IN (SELECT booking FROM Checks WHERE  status = 0))");
+                    if(roomList!=null) {
+                        if (!roomList.isEmpty()) {
+                            json = new StringBuilder("[");
+                            for (Room room : roomList) {
+                                json.append(room.toJSON());
+                                json.append(",");
+                            }
+                            json = new StringBuilder(json.substring(0, json.length() - 1));
+                            json.append("]");
                         }
-                        json = new StringBuilder(json.substring(0, json.length() - 1));
-                        json.append("]");
                     }
 
                 }
@@ -140,7 +145,7 @@ public class APIController extends HttpServlet {
                 if ((arrival != null) && (departure != null)) {
                     json = new StringBuilder("[");
                     for (RoomType rT : RoomType.findAll()) {
-                        Integer count = Room.findAll("WHERE room_type_fk = " + rT.getId() + " AND id NOT IN (SELECT room_fk FROM booking WHERE (arrival <= '" + departure + "' AND departure >= '" + arrival + "') AND booking.id NOT IN (SELECT booking_fk FROM `check` WHERE  status = 0));").size();
+                        Integer count = Room.findAll("WHERE roomType = " + rT.getId() + " AND id NOT IN (SELECT room FROM Booking WHERE (arrival <= '" + departure + "' AND departure >= '" + arrival + "') AND id NOT IN (SELECT booking FROM Checks  WHERE status = 0))").size();
                         json.append("{\"id\":\"" + rT.getId() + "\"");
                         json.append(", \"count\":\"" + count + "\"},");
                     }

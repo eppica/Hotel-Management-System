@@ -6,16 +6,11 @@ import javax.persistence.*;
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 
 @Entity
-@NamedNativeQueries({
-@NamedNativeQuery(name = "sumAllId", query = "SELECT SUM(value) FROM payment WHERE booking_fk = :bookingId"),
-@NamedNativeQuery(name = "sumAllArgs", query = "SELECT SUM(value) FROM payment WHERE :args")})
 public class Payment{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,38 +18,23 @@ public class Payment{
     private BigDecimal value;
     @Enumerated(EnumType.STRING)
     private PaymentMethod paymentMethod;
-    private Integer idBooking;
     @OneToOne
     private Booking booking;
     private LocalDateTime payTime;
-    private Integer idStaff;
     @ManyToOne
     private Staff staff;
     private static GenericDAO DAO = new GenericDAO(Payment.class);
 
-    public Payment(Integer id, BigDecimal value, PaymentMethod paymentMethod, Integer idBooking,LocalDateTime payTime, Integer idStaff) {
+    public Payment(Integer id, BigDecimal value, PaymentMethod paymentMethod, Booking booking,LocalDateTime payTime, Staff staff) {
         this.id = id;
         this.value = value;
         this.paymentMethod = paymentMethod;
-        this.idBooking = idBooking;
+        this.booking = booking;
         this.payTime = payTime;
-        this.idStaff = idStaff;
+        this.staff = staff;
     }
 
     public Payment() {
-    }
-
-    public Payment(ResultSet resultSet) {
-        try{
-            this.id = resultSet.getInt("id");
-            this.value = resultSet.getBigDecimal("value");
-            this.paymentMethod = PaymentMethod.valueOf(resultSet.getString("method"));
-            this.idBooking = resultSet.getInt("booking_fk");
-            this.payTime = resultSet.getTimestamp("pay_time").toLocalDateTime();
-            this.idStaff = resultSet.getInt("staff_fk");
-        }catch (SQLException e){
-            e.printStackTrace();
-        }
     }
 
     public Payment(HttpServletRequest request){
@@ -70,10 +50,10 @@ public class Payment{
             this.paymentMethod = PaymentMethod.valueOf(request.getParameter("payment_method"));
         }
 
-        if(request.getParameter("idbooking").isEmpty()){
-            this.idBooking = null;
+        if(request.getParameter("id_booking").isEmpty()){
+            this.booking = null;
         }else{
-            this.idBooking = Integer.valueOf(request.getParameter("idbooking"));
+            this.booking = Booking.find(Integer.valueOf(request.getParameter("id_booking")));
         }
 
         if(request.getParameter("pay_time").isEmpty()){
@@ -83,9 +63,9 @@ public class Payment{
         }
 
         if(request.getParameter("id_staff").isEmpty()){
-            this.idStaff = null;
+            this.staff = null;
         }else{
-            this.idStaff = Integer.valueOf(request.getParameter("id_staff"));
+            this.staff = Staff.find(Integer.valueOf(request.getParameter("id_staff")));
         }
     }
 
@@ -101,14 +81,14 @@ public class Payment{
             if(add[0].equals("payment_method")){
                 this.paymentMethod = PaymentMethod.valueOf(add[1]);
             }
-            if(add[0].equals("id_pay_booking")){
-                this.idBooking = Integer.valueOf(add[1]);
+            if(add[0].equals("id_booking")){
+                this.booking = Booking.find(Integer.valueOf(add[1]));
             }
             if(add[0].equals("pay_time")){
                 this.payTime = LocalDateTime.parse(add[1]);
             }
             if(add[0].equals("id_staff")){
-                this.idStaff = Integer.valueOf(add[1]);
+                this.staff = Staff.find(Integer.valueOf(add[1]));
             }
         }
     }
@@ -137,14 +117,6 @@ public class Payment{
         this.paymentMethod = paymentMethod;
     }
 
-    public Integer getIdBooking() {
-        return idBooking;
-    }
-
-    public void setIdBooking(Integer idBooking) {
-        this.idBooking = idBooking;
-    }
-
     public Booking getBooking() {
         return booking;
     }
@@ -161,16 +133,8 @@ public class Payment{
         this.payTime = payTime;
     }
 
-    public Integer getIdStaff() {
-        return idStaff;
-    }
-
-    public void setIdStaff(Integer idStaff) {
-        this.idStaff = idStaff;
-    }
-
     public Staff getStaff() {
-        return Staff.find(this.idStaff);
+        return staff;
     }
 
     public Payment save(){
@@ -194,24 +158,17 @@ public class Payment{
     }
 
     public static List<Payment> findAll(Integer id){
-        return DAO.findAll("WHERE booking_fk = " + id);
+        return DAO.findAll("WHERE booking_id = " + id);
     }
 
     public static BigDecimal sumAll(Integer id){
-
-        HashMap<String, Object> params = new HashMap<>();
-        params.put("bookingId", id);
-
-        return ((BigDecimal) DAO.executeNamedQuery("sumAllId",params)).setScale(2, RoundingMode.CEILING);
-
+        BigDecimal sum =  DAO.sumAll("value","WHERE booking_id = "+id);
+        return sum != null ? sum.setScale(2, RoundingMode.CEILING) : new BigDecimal(0);
     }
 
     public static BigDecimal sumAll(String args){
-
-        HashMap<String, Object> params = new HashMap<>();
-        params.put("args", args);
-
-        return ((BigDecimal) DAO.executeNamedQuery("sumAllArgs",params)).setScale(2, RoundingMode.CEILING);
+        BigDecimal sum = DAO.sumAll("value", args);
+        return sum != null ? sum.setScale(2, RoundingMode.CEILING) : new BigDecimal(0);
     }
 
     public static void update(Payment payment){
@@ -228,7 +185,6 @@ public class Payment{
                 "id=" + id +
                 ", value=" + value +
                 ", paymentMethod=" + paymentMethod +
-                ", idBooking=" + idBooking +
                 ", booking=" + booking +
                 '}';
     }

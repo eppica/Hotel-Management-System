@@ -1,10 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: Lavinha
-  Date: 5/3/2020
-  Time: 12:16 PM
-  To change this template use File | Settings | File Templates.
---%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
@@ -20,7 +13,7 @@
         <table>
             <tr><th>Guest</th><th>Time</th><th>Status</th><th colspan="2">Action</th></tr>
             <c:forEach items="${checkList}" var="check">
-                <tr><td>${check.getBooking().getGuest().getName()}</td><td>${check.getCheck()}</td><c:choose><c:when test="${check.getStatus()==true}"><td class="checkin">Check-in</td></c:when><c:otherwise><td class="checkout">Check-out</td></c:otherwise></c:choose><td class="link"><a href="/checks/${check.getId()}/edit">Update</a></td><td class="link"><a onclick="link(${check.getId()})">Delete</a></td></tr>
+                <tr><td>${check.getBooking().getGuest().getName()}</td><td>${check.getCheckTime()}</td><c:choose><c:when test="${check.getStatus()==true}"><td class="checkin">Check-in</td></c:when><c:otherwise><td class="checkout">Check-out</td></c:otherwise></c:choose><td class="link"><a href="/checks/${check.getId()}/edit">Update</a></td><td class="link"><a onclick="link(${check.getId()})">Delete</a></td></tr>
             </c:forEach>
 
         </table>

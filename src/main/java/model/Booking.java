@@ -6,40 +6,35 @@ import javax.persistence.*;
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.HashMap;
 import java.util.List;
 
 @Entity
-@NamedNativeQuery(name = "findBookedRoom", query = "SELECT * FROM booking WHERE room_fk = :id AND :id NOT IN (SELECT booking_fk FROM 'check' WHERE status = 0)")
+@NamedNativeQuery(name = "findBookedRoom", query = "SELECT * FROM Booking B WHERE B.room_id = :id AND :id NOT IN (SELECT C.booking_id FROM Checks C WHERE status = 0)")
 public class Booking{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private Integer idRoom;
     @ManyToOne
     private Room room;
-    private Integer idGuest;
     @ManyToOne
     private Guest guest;
     private LocalDate arrival;
     private LocalDate departure;
     private BigDecimal total;
-    private Integer idStaff;
     @ManyToOne
     private Staff staff;
     private static GenericDAO DAO = new GenericDAO(Booking.class);
 
-    public Booking(Integer idRoom, Integer idGuest, LocalDate arrival, LocalDate departure, BigDecimal total, Integer idStaff) {
-        this.idRoom = idRoom;
-        this.idGuest = idGuest;
+    public Booking(Room room, Guest guest, LocalDate arrival, LocalDate departure, BigDecimal total, Staff staff) {
+        this.room = room;
+        this.guest = guest;
         this.arrival = arrival;
         this.departure = departure;
         this.total = total;
-        this.idStaff = idStaff;
+        this.staff = staff;
     }
 
     public Booking() {
@@ -52,10 +47,10 @@ public class Booking{
                 continue;
             }
             if(add[0].equals("id_room")){
-                this.idRoom = Integer.valueOf(add[1]);
+                this.room = Room.find(Integer.valueOf(add[1]));
             }
             if(add[0].equals("id_guest")){
-                this.idGuest = Integer.valueOf(add[1]);
+                this.guest = Guest.find(Integer.valueOf(add[1]));
             }
             if(add[0].equals("arrival")){
                 this.arrival = LocalDate.parse(add[1]);
@@ -67,36 +62,22 @@ public class Booking{
                 this.total = new BigDecimal(add[1]);
             }
             if(add[0].equals("id_staff")){
-                this.idStaff = Integer.valueOf(add[1]);
+                this.staff = Staff.find(Integer.valueOf(add[1]));
             }
-        }
-    }
-
-    public Booking(ResultSet resultSet){
-        try{
-            this.id = resultSet.getInt("id");
-            this.idRoom = resultSet.getInt("room_fk");
-            this.idGuest = resultSet.getInt("guest_fk");
-            this.arrival = resultSet.getDate("arrival").toLocalDate();
-            this.departure = resultSet.getDate("departure").toLocalDate();
-            this.total = resultSet.getBigDecimal("total");
-            this.idStaff = resultSet.getInt("staff_fk");
-        }catch (SQLException e){
-            e.printStackTrace();
         }
     }
 
     public Booking(HttpServletRequest request) {
         if(request.getParameter("id_room").isEmpty()){
-            this.idRoom = null;
+            this.room = null;
         }else{
-            this.idRoom = Integer.valueOf(request.getParameter("id_room"));
+            this.room = Room.find(Integer.valueOf(request.getParameter("id_room")));
         }
 
         if(request.getParameter("id_guest").isEmpty()){
-            this.idGuest = null;
+            this.guest = null;
         }else{
-            this.idGuest = Integer.valueOf(request.getParameter("id_guest"));
+            this.guest = Guest.find(Integer.valueOf(request.getParameter("id_guest")));
         }
 
         if(request.getParameter("arrival").isEmpty()){
@@ -111,13 +92,12 @@ public class Booking{
             this.departure = LocalDate.parse(request.getParameter("departure"));
         }
 
-
         this.total = this.getRoom().getRoomType().getDailyPrice().multiply(new BigDecimal(Period.between(this.getArrival(), this.getDeparture()).getDays()));
 
         if(request.getParameter("id_staff").isEmpty()){
-            this.idStaff = null;
+            this.staff = null;
         }else{
-            this.idStaff = Integer.valueOf(request.getParameter("id_staff"));
+            this.staff = Staff.find(Integer.valueOf(request.getParameter("id_staff")));
         }
     }
 
@@ -130,19 +110,7 @@ public class Booking{
         return this;
     }
 
-    public Integer getIdRoom() {
-        return idRoom;
-    }
-
-    public Booking setIdRoom(Integer idRoom) {
-        this.idRoom = idRoom;
-        return this;
-    }
-
     public Room getRoom() {
-        if(room == null){
-            room = Room.find(idRoom);
-        }
         return room;
     }
 
@@ -151,19 +119,7 @@ public class Booking{
         return this;
     }
 
-    public Integer getIdGuest() {
-        return idGuest;
-    }
-
-    public Booking setIdGuest(Integer idGuest) {
-        this.idGuest = idGuest;
-        return this;
-    }
-
     public Guest getGuest() {
-        if(guest == null){
-            guest = Guest.find(idGuest);
-        }
         return guest;
     }
 
@@ -199,19 +155,7 @@ public class Booking{
         return this;
     }
 
-    public Integer getIdStaff() {
-        return idStaff;
-    }
-
-    public Booking setIdStaff(Integer idStaff) {
-        this.idStaff = idStaff;
-        return this;
-    }
-
     public Staff getStaff() {
-        if(staff == null){
-            staff = Staff.find(idStaff);
-        }
         return staff;
     }
 
@@ -221,7 +165,7 @@ public class Booking{
     }
 
     public String getStatus() {
-        List<Check> checkList = Check.findAll(this.getId());
+        List<Checks> checkList = Checks.findAll(this.getId());
         if(checkList.size() == 1){
             if(checkList.get(0).getStatus()){
                 return "Arrived";
@@ -232,9 +176,7 @@ public class Booking{
             }
         }
         return "Booked";
-
     }
-
 
     public static Booking save(Booking booking){
         try {
@@ -273,7 +215,7 @@ public class Booking{
     public static void update(Booking booking){
         try {
             if (booking.validate()) {
-                DAO.update(booking);;
+                DAO.update(booking);
             } else {
                 throw new RuntimeException("Arrival date is bigger than Departure date");
             }
@@ -318,38 +260,32 @@ public class Booking{
     public String toString() {
         return "Booking{" +
                 "id=" + id +
-                ", idRoom=" + idRoom +
                 ", room=" + room +
-                ", idGuest=" + idGuest +
                 ", guest=" + guest +
                 ", arrival=" + arrival +
                 ", departure=" + departure +
                 ", total=" + total +
-                ", idStaff=" + idStaff +
                 ", staff=" + staff +
                 '}';
     }
 
     private Boolean validate(){
         if(this.arrival.isAfter(this.departure) || this.arrival.isEqual(this.departure)){
-            if(this.arrival.isBefore(LocalDate.now())){
-                return false;
-            }
+            return !this.arrival.isBefore(LocalDate.now());
         }
         return true;
     }
 
     public static List<Booking> findAllArrival(){
-        return DAO.findAll("WHERE arrival <= '" + LocalDate.now().toString() + "' AND booking.id NOT IN (SELECT booking_fk FROM `check`)");
+        return DAO.findAll("WHERE arrival <= '" + LocalDate.now().toString() + "' AND id NOT IN (SELECT booking FROM Checks)");
     }
 
     public static List<Booking> findAllDeparture(){
-        return DAO.findAll("WHERE departure = '" + LocalDate.now().toString() + "' AND booking.id IN (SELECT booking_fk FROM `check` WHERE status = 1) AND booking.id NOT IN (SELECT booking_fk FROM `check` WHERE status = 0)");
+        return DAO.findAll("WHERE departure = '" + LocalDate.now().toString() + "' AND id IN (SELECT booking FROM Checks WHERE status = 1) AND id NOT IN (SELECT booking FROM Checks WHERE status = 0)");
     }
 
     public static List<Booking> findAllGuest(Integer id){
-        return DAO.findAll("WHERE booking.guest_fk = " + id );
+        return DAO.findAll("WHERE guest_id = " + id );
     }
-
 
 }

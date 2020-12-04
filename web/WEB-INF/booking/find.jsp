@@ -1,10 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: Lavinha
-  Date: 5/3/2020
-  Time: 12:52 PM
-  To change this template use File | Settings | File Templates.
---%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
@@ -67,11 +60,11 @@
             <span class="label">Departure</span>
             <span class="data">${booking.getDeparture()}</span>
         </div>
-        <div class="property link" onclick="window.location.href='/guests/${booking.getIdGuest()}';">
+        <div class="property link" onclick="window.location.href='/guests/${booking.getGuest().getId()}';">
             <span class="label">Guest</span>
             <span class="data">${booking.getGuest().getName()}</span>
         </div>
-        <div class="property link" onclick="window.location.href='/rooms/${booking.getIdRoom()}';">
+        <div class="property link" onclick="window.location.href='/rooms/${booking.getRoom().getId()}';">
             <span class="label">Room Number</span>
             <span class="data">${booking.getRoom().getNumber()}</span>
         </div>
@@ -129,7 +122,7 @@
             <h2>Checkin</h2>
             <div class="property">
                 <span class="label">Timestamp</span>
-                <span class="data">${checkin.getCheck()}</span>
+                <span class="data">${checkin.getCheckTime()}</span>
             </div>
         </div>
         <button id="do-checkin" onclick="openModalCheck(true, ${booking.getId()}, ${booking.getRoom().getNumber()})">Checkin</button>
@@ -142,7 +135,7 @@
             <h2>Checkout</h2>
             <div class="property">
                 <span class="label">Timestamp</span>
-                <span class="data">${checkout.getCheck()}</span>
+                <span class="data">${checkout.getCheckTime()}</span>
             </div>
         </div>
         <button id="do-checkout" onclick="openModalCheck(false, ${booking.getId()}, ${booking.getRoom().getNumber()})">Checkout</button>
@@ -275,7 +268,7 @@
             body: new URLSearchParams({
                 'value': document.getElementById("value").value,
                 'payment_method': document.getElementById("payment_method").value,
-                'id_pay_booking': document.getElementById("id_pay_booking").value,
+                'id_booking': document.getElementById("id_pay_booking").value,
                 'id_staff': ${sessionStaff.getId()},
                 'pay_time':document.getElementById("pay_time").value
             }),
@@ -295,7 +288,7 @@
             body: new URLSearchParams({
                 'value': document.getElementById("value").value,
                 'payment_method': document.getElementById("payment_method").value,
-                'id_pay_booking': document.getElementById("id_pay_booking").value,
+                'id_booking': document.getElementById("id_pay_booking").value,
                 'id_staff': ${sessionStaff.getId()},
                 'pay_time':document.getElementById("pay_time").value
             }),

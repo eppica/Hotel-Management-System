@@ -75,8 +75,8 @@
     ];
 
     let now = new Date();
-    let data = monthNames[now.getMonth()] + " " + now.getDate() + ", " + now.getFullYear();
-    today.innerText = data;
+    let dateNow = monthNames[now.getMonth()] + " " + now.getDate() + ", " + now.getFullYear();
+    today.innerText = dateNow;
 
     let hoursToMidnight = 24 - now.getHours();
     let minutesToNextHour = 60 - now.getMinutes();
