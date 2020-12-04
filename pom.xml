@@ -7,6 +7,9 @@
     <groupId>HMS</groupId>
     <artifactId>HMS</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
     <build>
         <pluginManagement>
             <plugins>
