@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-public class Check{
+public class Checks{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -22,19 +22,19 @@ public class Check{
     @ManyToOne
     private Booking booking;
     private Boolean status;
-    private static GenericDAO DAO = new GenericDAO(Check.class);
+    private static GenericDAO DAO = new GenericDAO(Checks.class);
 
-    public Check(LocalDateTime check, Integer idStaff, Integer idBooking, Boolean status) {
+    public Checks(LocalDateTime check, Integer idStaff, Integer idBooking, Boolean status) {
         this.check = check;
         this.idStaff = idStaff;
         this.idBooking = idBooking;
         this.status = status;
     }
 
-    public Check() {
+    public Checks() {
     }
 
-    public Check(String[] data){
+    public Checks(String[] data){
         for(String x : data){
             String[] add = x.split("=");
             if(add.length == 1){
@@ -55,7 +55,7 @@ public class Check{
         }
     }
 
-    public Check(ResultSet resultSet){
+    public Checks(ResultSet resultSet){
         try{
             this.id = resultSet.getInt("id");
             this.check = resultSet.getTimestamp("check").toLocalDateTime();
@@ -71,7 +71,7 @@ public class Check{
         }
     }
 
-    public Check(HttpServletRequest request) {
+    public Checks(HttpServletRequest request) {
         if(request.getParameter("check").isEmpty()){
             this.check = null;
         }else{
@@ -105,7 +105,7 @@ public class Check{
         return id;
     }
 
-    public Check setId(Integer id) {
+    public Checks setId(Integer id) {
         this.id = id;
         return this;
     }
@@ -114,7 +114,7 @@ public class Check{
         return check;
     }
 
-    public Check setCheck(LocalDateTime check) {
+    public Checks setCheck(LocalDateTime check) {
         this.check = check;
         return this;
     }
@@ -123,7 +123,7 @@ public class Check{
         return idStaff;
     }
 
-    public Check setIdStaff(Integer idStaff) {
+    public Checks setIdStaff(Integer idStaff) {
         this.idStaff = idStaff;
         return this;
     }
@@ -135,7 +135,7 @@ public class Check{
         return staff;
     }
 
-    public Check setStaff(Staff staff) {
+    public Checks setStaff(Staff staff) {
         this.staff = staff;
         return this;
     }
@@ -144,7 +144,7 @@ public class Check{
         return idBooking;
     }
 
-    public Check setIdBooking(Integer idBooking) {
+    public Checks setIdBooking(Integer idBooking) {
         this.idBooking = idBooking;
         return this;
     }
@@ -156,7 +156,7 @@ public class Check{
         return booking;
     }
 
-    public Check setBooking(Booking booking) {
+    public Checks setBooking(Booking booking) {
         this.booking = booking;
         return this;
     }
@@ -165,28 +165,28 @@ public class Check{
         return status;
     }
 
-    public Check setStatus(Boolean status) {
+    public Checks setStatus(Boolean status) {
         this.status = status;
         return this;
     }
 
-    public static Check save(Check check){
-        return (Check) DAO.save(check);
+    public static Checks save(Checks check){
+        return (Checks) DAO.save(check);
     }
 
-    public static Check find(Integer id){
-        return (Check) DAO.find(id);
+    public static Checks find(Integer id){
+        return (Checks) DAO.find(id);
     }
 
-    public static List<Check> findAll(){
+    public static List<Checks> findAll(){
         return DAO.findAll();
     }
 
-    public static List<Check> findAll(Integer id){
+    public static List<Checks> findAll(Integer id){
         return DAO.findAll("WHERE booking_fk = " + id);
     }
 
-    public static void update(Check check){
+    public static void update(Checks check){
         DAO.update(check);
     }
 
@@ -194,8 +194,8 @@ public class Check{
         DAO.delete(id);
     }
 
-    public Check save(){
-        return (Check) DAO.save(this);
+    public Checks save(){
+        return (Checks) DAO.save(this);
     }
 
     public void update(){
