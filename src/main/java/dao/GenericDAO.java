@@ -3,6 +3,7 @@ package dao;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 
@@ -38,6 +39,8 @@ public class GenericDAO<E> {
         try {
             em.getTransaction().begin();
             em.persist(entity);
+            em.flush();
+            em.refresh(entity);
             em.getTransaction().commit();
         } catch (Exception e) {
             em.getTransaction().rollback();
@@ -66,7 +69,7 @@ public class GenericDAO<E> {
         EntityManager em = DB.getConnection();
         List<E> entities = null;
         try {
-            Query query = em.createQuery("from " + persistedClass.getName());
+            Query query = em.createQuery("from " + persistedClass.getSimpleName());
             entities = (List<E>) query.getResultList();
         } catch (Exception e) {
             System.err.println(e);
@@ -110,7 +113,8 @@ public class GenericDAO<E> {
         EntityManager em = DB.getConnection();
         List<E> entities = null;
         try {
-            Query query = em.createQuery("from " + this.persistedClass.getName() + " " + args);
+            String sql = String.format("FROM %s %s", this.persistedClass.getSimpleName(), args);
+            Query query = em.createQuery(sql);
             entities = (List<E>) query.getResultList();
         } catch (Exception e) {
             System.err.println(e);
@@ -119,4 +123,43 @@ public class GenericDAO<E> {
         }
         return entities;
     }
+
+    public BigDecimal sumAll(String column) {
+        return this.sumAll(column, "");
+    }
+
+    public BigDecimal sumAll(String column, String args) {
+        EntityManager em = DB.getConnection();
+        BigDecimal value = null;
+        try {
+            String sql = String.format("SELECT SUM(%s) FROM %s %s",column, this.persistedClass.getSimpleName(), args);
+            Query query = em.createQuery(sql);
+            value = (BigDecimal) query.getSingleResult();
+        } catch (Exception e) {
+            System.err.println(e);
+        } finally {
+            em.close();
+        }
+        return value;
+    }
+
+    public Integer countAll(String column) {
+        return this.countAll(column, "");
+    }
+
+    public Integer countAll(String column, String args) {
+        EntityManager em = DB.getConnection();
+        Integer value = null;
+        try {
+            String sql = String.format("SELECT COUNT(%s)FROM %s %s",column, this.persistedClass.getSimpleName(), args);
+            Query query = em.createQuery(sql);
+            value = (Integer) query.getSingleResult();
+        } catch (Exception e) {
+            System.err.println(e);
+        } finally {
+            em.close();
+        }
+        return value;
+    }
+
 }
