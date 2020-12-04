@@ -50,7 +50,7 @@ public class RoomTypeController extends HttpServlet {
                     req.getRequestDispatcher("/WEB-INF/dashboard.jsp").forward(req, resp);
                 }
             }else {
-                req.getRequestDispatcher("404.jsp").forward(req, resp);
+                req.getRequestDispatcher("/WEB-INF/404.jsp").forward(req, resp);
             }
         }
     }
@@ -63,7 +63,7 @@ public class RoomTypeController extends HttpServlet {
             roomType = roomType.save();
             resp.sendRedirect("/roomTypes/" + roomType.getId());
         }else{
-            req.getRequestDispatcher("404.jsp").forward(req, resp);
+            req.getRequestDispatcher("/WEB-INF/404.jsp").forward(req, resp);
         }
     }
 
@@ -77,7 +77,7 @@ public class RoomTypeController extends HttpServlet {
             roomType.setId(Servlet.getId(req));
             roomType.update();
         }else {
-            req.getRequestDispatcher("404.jsp").forward(req, resp);
+            req.getRequestDispatcher("/WEB-INF/404.jsp").forward(req, resp);
         }
     }
 
@@ -87,7 +87,7 @@ public class RoomTypeController extends HttpServlet {
         if(operation == 2){
             RoomType.delete(Servlet.getId(req));
         }else{
-            req.getRequestDispatcher("404.jsp").forward(req, resp);
+            req.getRequestDispatcher("/WEB-INF/404.jsp").forward(req, resp);
         }
     }
 }

@@ -41,7 +41,7 @@ public class GuestController extends HttpServlet {
             }else if(operation == 4){
                 req.getRequestDispatcher("/WEB-INF/guest/form.jsp").forward(req, resp);
             }else {
-                req.getRequestDispatcher("404.jsp").forward(req, resp);
+                req.getRequestDispatcher("/WEB-INF/404.jsp").forward(req, resp);
             }
         }
     }
@@ -54,7 +54,7 @@ public class GuestController extends HttpServlet {
             guest = guest.save();
             resp.sendRedirect("/guests/" + guest.getId());
         }else {
-            req.getRequestDispatcher("404.jsp").forward(req, resp);
+            req.getRequestDispatcher("/WEB-INF/404.jsp").forward(req, resp);
         }
     }
 
@@ -68,7 +68,7 @@ public class GuestController extends HttpServlet {
             guest.setId(Servlet.getId(req));
             guest.update();
         }else{
-            req.getRequestDispatcher("404.jsp").forward(req, resp);
+            req.getRequestDispatcher("/WEB-INF/404.jsp").forward(req, resp);
         }
     }
 
@@ -79,7 +79,7 @@ public class GuestController extends HttpServlet {
             Guest.delete(Servlet.getId(req));
             resp.sendRedirect("/guests/");
         }else {
-            req.getRequestDispatcher("404.jsp").forward(req, resp);
+            req.getRequestDispatcher("/WEB-INF/404.jsp").forward(req, resp);
         }
     }
 }

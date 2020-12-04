@@ -42,7 +42,7 @@ public class StaffController extends HttpServlet {
                     req.setAttribute("accessLevelList", AccessLevel.values());
                     req.getRequestDispatcher("/WEB-INF/staff/form.jsp").forward(req, resp);
                 }else{
-                    req.getRequestDispatcher("404.jsp").forward(req, resp);
+                    req.getRequestDispatcher("/WEB-INF/404.jsp").forward(req, resp);
                 }
             }else {
                 req.getRequestDispatcher("/WEB-INF/dashboard.jsp").forward(req, resp);
@@ -58,7 +58,7 @@ public class StaffController extends HttpServlet {
             staff.save();
             resp.sendRedirect("/staff/" + staff.getId());
         }else{
-            req.getRequestDispatcher("404.jsp").forward(req, resp);
+            req.getRequestDispatcher("/WEB-INF/404.jsp").forward(req, resp);
         }
     }
 
@@ -72,7 +72,7 @@ public class StaffController extends HttpServlet {
             staff.setId(Servlet.getId(req));
             staff.update();
         }else {
-            req.getRequestDispatcher("404.jsp").forward(req, resp);
+            req.getRequestDispatcher("/WEB-INF/404.jsp").forward(req, resp);
         }
     }
 
@@ -82,7 +82,7 @@ public class StaffController extends HttpServlet {
         if (operation == 2) {
             Staff.delete(Servlet.getId(req));
         }else {
-            req.getRequestDispatcher("404.jsp").forward(req, resp);
+            req.getRequestDispatcher("/WEB-INF/404.jsp").forward(req, resp);
         }
     }
 }

@@ -24,7 +24,22 @@
             </thead>
             <tbody>
             <c:forEach items="${departureList}" var="departure">
-            <tr><td onclick="window.location.href='/bookings/${departure.getId()}';"> <span class="booking">${departure.getId()}</span><br><span class="guest">${departure.getGuest().getName()}</span> </td><td class="room" onclick="window.location.href='/bookings/${departure.getId()}';">${departure.getRoom().getNumber()}</td><td class="check" onclick="openModal(false, ${departure.getId()}, ${departure.getRoom().getNumber()})">Checkout</td>
+            <tr><td onclick="window.location.href='/bookings/${departure.getId()}';"> <span class="booking">${departure.getId()}</span><br><span class="guest">${departure.getGuest().getName()}</span> </td><td class="room" onclick="window.location.href='/bookings/${departure.getId()}';">${departure.getRoom().getNumber()}</td>
+
+
+                    <c:if test="condition"><c:out value="${variableName}"/></c:if>
+
+
+
+
+                <td class="check" onclick="openModal(false, ${departure.getId()}, ${departure.getRoom().getNumber()})">Checkout</td>
+
+
+
+
+
+
+
                 </c:forEach>
             </tbody>
         </table>
