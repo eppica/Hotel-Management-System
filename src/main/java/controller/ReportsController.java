@@ -95,7 +95,7 @@ public class ReportsController extends HttpServlet{
             Connection connection = null;
             if (operation == 2){
                 LocalDateTime now = LocalDateTime.now().withNano(0);
-                String reportName = ("RoomsReport"+now+".pdf").trim().replaceAll("-","").replaceAll(":","").replaceAll("T","");
+                String reportName = ("RoomsReport_"+now+".pdf").trim().replaceAll(":","-").replaceAll("T","_");
                 HashMap params = new HashMap();
                 params.put("RoomType", Integer.valueOf(req.getParameter("id_room_type")) );
 
@@ -114,7 +114,7 @@ public class ReportsController extends HttpServlet{
             }else if (operation == 3){
                 //payments
                 LocalDateTime now = LocalDateTime.now().withNano(0);
-                String reportName = ("PaymentsReport"+now+".pdf").trim().replaceAll("-","").replaceAll(":","").replaceAll("T","");
+                String reportName = ("PaymentsReport_"+now+".pdf").trim().replaceAll(":","-").replaceAll("T","_");
                 HashMap params = new HashMap();
                 Date initialDate = (req.getParameter("initial") != "") ? Date.valueOf(req.getParameter("initial")) : null;
                 Date finalDate = (req.getParameter("final") != "") ? Date.valueOf(req.getParameter("final")) : null;
@@ -136,7 +136,7 @@ public class ReportsController extends HttpServlet{
 
             }else if (operation == 4){
                 LocalDateTime now = LocalDateTime.now().withNano(0);
-                String reportName = ("RoomTypesReport"+now+".pdf").trim().replaceAll("-","").replaceAll(":","").replaceAll("T","");
+                String reportName = ("RoomTypesReport_"+now+".pdf").trim().replaceAll(":","-").replaceAll("T","_");
                 HashMap params = new HashMap();
 
                 BigDecimal min = (req.getParameter("min_daily_price")!=null) ? new BigDecimal(req.getParameter("min_daily_price")) : null;
@@ -158,7 +158,7 @@ public class ReportsController extends HttpServlet{
                 }
             }else if (operation == 7){
                 LocalDateTime now = LocalDateTime.now().withNano(0);
-                String reportName = ("StaffReport"+now+".pdf").trim().replaceAll("-","").replaceAll(":","").replaceAll("T","");
+                String reportName = ("StaffReport_"+now+".pdf").trim().replaceAll(":","-").replaceAll("T","_");
                 HashMap params = new HashMap();
                 params.put("accessLevel", req.getParameter("access_level").toLowerCase());
                 String reportPath = getServletContext().getRealPath("/WEB-INF/reports/staff.jasper");
@@ -175,7 +175,7 @@ public class ReportsController extends HttpServlet{
                 }
             }else if (operation == 8){
                 LocalDateTime now = LocalDateTime.now().withNano(0);
-                String reportName = ("ArrivalsDeparturesReport"+now+".pdf").trim().replaceAll("-","").replaceAll(":","").replaceAll("T","");
+                String reportName = ("ArrivalsDeparturesReport_"+now+".pdf").trim().replaceAll(":","-").replaceAll("T","_");
                 HashMap params = new HashMap();
                 Date initialDate = (req.getParameter("initial") != "") ? Date.valueOf(req.getParameter("initial")) : null;
                 Date finalDate = (req.getParameter("final") != "") ? Date.valueOf(req.getParameter("final")) : null;
