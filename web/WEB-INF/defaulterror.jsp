@@ -9,10 +9,10 @@
 <body id="body">
 
 <div id="error_cod">
-    404
+    Ops...
 </div>
 <div id="error_message">
-    <span>Page not found</span>
+    <span>Something is wrong...</span>
     <a href="/dashboard">go to dashboard</a>
 </div>
 
