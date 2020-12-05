@@ -4,6 +4,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -48,7 +49,6 @@ public class GenericDAO<E> {
         } finally {
             em.close();
         }
-
         return entity;
     }
 
@@ -75,6 +75,9 @@ public class GenericDAO<E> {
             System.err.println(e);
         } finally {
             em.close();
+        }
+        if(entities == null){
+            entities = new ArrayList<E>();
         }
         return entities;
     }
@@ -120,6 +123,9 @@ public class GenericDAO<E> {
             System.err.println(e);
         } finally {
             em.close();
+        }
+        if(entities == null){
+            entities = new ArrayList<E>();
         }
         return entities;
     }
