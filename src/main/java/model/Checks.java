@@ -4,8 +4,6 @@ import dao.GenericDAO;
 
 import javax.persistence.*;
 import javax.servlet.http.HttpServletRequest;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -14,20 +12,18 @@ public class Checks{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private LocalDateTime check;
-    private Integer idStaff;
+    private LocalDateTime checkTime;
     @ManyToOne
     private Staff staff;
-    private Integer idBooking;
     @ManyToOne
     private Booking booking;
     private Boolean status;
     private static GenericDAO DAO = new GenericDAO(Checks.class);
 
-    public Checks(LocalDateTime check, Integer idStaff, Integer idBooking, Boolean status) {
-        this.check = check;
-        this.idStaff = idStaff;
-        this.idBooking = idBooking;
+    public Checks(LocalDateTime checkTime, Staff staff, Booking booking, Boolean status) {
+        this.checkTime = checkTime;
+        this.staff = staff;
+        this.booking = booking;
         this.status = status;
     }
 
@@ -41,13 +37,13 @@ public class Checks{
                 continue;
             }
             if(add[0].equals("check")){
-                this.check = LocalDateTime.parse(add[1]);
+                this.checkTime = LocalDateTime.parse(add[1]);
             }
             if(add[0].equals("id_guest")){
-                this.idStaff = Integer.valueOf(add[1]);
+                this.staff = Staff.find(Integer.valueOf(add[1]));
             }
             if(add[0].equals("id_booking")){
-                this.idBooking = Integer.valueOf(add[1]);
+                this.booking = Booking.find(Integer.valueOf(add[1]));
             }
             if(add[0].equals("status")){
                 this.status = Boolean.valueOf(add[1]);
@@ -55,39 +51,23 @@ public class Checks{
         }
     }
 
-    public Checks(ResultSet resultSet){
-        try{
-            this.id = resultSet.getInt("id");
-            this.check = resultSet.getTimestamp("check").toLocalDateTime();
-            this.idStaff = resultSet.getInt("staff_fk");
-            this.idBooking = resultSet.getInt("booking_fk");
-            if(resultSet.getBoolean("status")){
-                this.status = true;
-            }else{
-                this.status = false;
-            }
-        }catch (SQLException e){
-            e.printStackTrace();
-        }
-    }
-
     public Checks(HttpServletRequest request) {
         if(request.getParameter("check").isEmpty()){
-            this.check = null;
+            this.checkTime = null;
         }else{
-            this.check = LocalDateTime.parse(request.getParameter("check"));
+            this.checkTime = LocalDateTime.parse(request.getParameter("check"));
         }
 
         if(request.getParameter("id_staff").isEmpty()){
-            this.idStaff = null;
+            this.staff = null;
         }else{
-            this.idStaff = Integer.valueOf(request.getParameter("id_staff"));
+            this.staff = Staff.find(Integer.valueOf(request.getParameter("id_staff")));
         }
 
         if(request.getParameter("id_booking").isEmpty()){
-            this.idBooking = null;
+            this.booking = null;
         }else{
-            this.idBooking = Integer.valueOf(request.getParameter("id_booking"));
+            this.booking = Booking.find(Integer.valueOf(request.getParameter("id_booking")));
         }
 
         if(request.getParameter("status").isEmpty()){
@@ -110,49 +90,25 @@ public class Checks{
         return this;
     }
 
-    public LocalDateTime getCheck() {
-        return check;
+    public LocalDateTime getCheckTime() {
+        return checkTime;
     }
 
-    public Checks setCheck(LocalDateTime check) {
-        this.check = check;
-        return this;
-    }
-
-    public Integer getIdStaff() {
-        return idStaff;
-    }
-
-    public Checks setIdStaff(Integer idStaff) {
-        this.idStaff = idStaff;
+    public Checks setCheckTime(LocalDateTime check) {
+        this.checkTime = check;
         return this;
     }
 
     public Staff getStaff() {
-        if(staff == null){
-            staff = Staff.find(idStaff);
-        }
         return staff;
     }
 
-    public Checks setStaff(Staff staff) {
+    public Staff setStaff(Staff staff) {
         this.staff = staff;
-        return this;
-    }
-
-    public Integer getIdBooking() {
-        return idBooking;
-    }
-
-    public Checks setIdBooking(Integer idBooking) {
-        this.idBooking = idBooking;
-        return this;
+        return staff;
     }
 
     public Booking getBooking() {
-        if(booking == null){
-            booking = Booking.find(idBooking);
-        }
         return booking;
     }
 
@@ -183,7 +139,7 @@ public class Checks{
     }
 
     public static List<Checks> findAll(Integer id){
-        return DAO.findAll("WHERE booking_fk = " + id);
+        return DAO.findAll("WHERE booking_id = " + id);
     }
 
     public static void update(Checks check){
@@ -204,12 +160,10 @@ public class Checks{
 
     @Override
     public String toString() {
-        return "Check{" +
+        return "Checks{" +
                 "id=" + id +
-                ", check=" + check +
-                ", idStaff=" + idStaff +
+                ", check=" + checkTime +
                 ", staff=" + staff +
-                ", idBooking=" + idBooking +
                 ", booking=" + booking +
                 ", status=" + status +
                 '}';
