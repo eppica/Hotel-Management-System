@@ -6,7 +6,7 @@
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 
         <class>model.Booking</class>
-        <class>model.Check</class>
+        <class>model.Checks</class>
         <class>model.Guest</class>
         <class>model.Payment</class>
         <class>model.Room</class>
@@ -18,9 +18,9 @@
             <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost/hms"/>
             <property name="javax.persistence.jdbc.user" value="root"/>
             <property name="javax.persistence.jdbc.password" value=""/>
-            <property name="hibernate.hbm2ddl.auto" value="create"/>
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
             <property name="hibernate.show_sql" value="true"/>
-            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5Dialect"/>
             <property name="hibernate.format_sql" value="true"/>
         </properties>
 
