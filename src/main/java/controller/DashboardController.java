@@ -12,6 +12,8 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @WebServlet(name = "DashboardController", urlPatterns = {"/dashboard/*"})
@@ -24,8 +26,14 @@ public class DashboardController extends HttpServlet {
             List<Booking> arrivalList = Booking.findAllArrival();
             req.setAttribute("arrivalList", arrivalList);
             List<Booking> departureList = Booking.findAllDeparture();
-            departureList.removeIf(b -> b.getTotal().equals(Payment.sumAll(b.getId())));
+            HashMap<Integer, Boolean> paid = new HashMap<Integer, Boolean>();
+            if(departureList!=null) {
+                for(Booking book : departureList){
+                    paid.put(book.getId(), book.getTotal().equals(Payment.sumAll(book.getId())));
+                }
+            }
             req.setAttribute("departureList", departureList);
+            req.setAttribute("paid", paid);
             req.getRequestDispatcher("/WEB-INF/dashboard.jsp").forward(req, resp);
         }
     }
