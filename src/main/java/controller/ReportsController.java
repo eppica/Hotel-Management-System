@@ -6,28 +6,19 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.query.JRJpaQueryExecuterFactory;
 
-import javax.persistence.EntityManager;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.math.BigDecimal;
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.Date;
-import java.time.LocalDate;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -48,36 +39,34 @@ public class ReportsController extends HttpServlet{
                 if (operation == 5){
                     //bookings
                     LocalDateTime now = LocalDateTime.now().withNano(0);
-                    String reportName = ("BookingsReport"+now+".pdf").trim().replaceAll("-","").replaceAll(":","").replaceAll("T","");
+                    String reportName = ("BookingsReport_"+now+".pdf").trim().replaceAll(":","-").replaceAll("T","_");
                     HashMap params = new HashMap();
                     String reportPath = getServletContext().getRealPath("/WEB-INF/reports/bookings.jasper");
                     try {
-                        EntityManager em = DB.getConnection();
-                        params.put(JRJpaQueryExecuterFactory.PARAMETER_JPA_ENTITY_MANAGER, em);
-                        JasperPrint jp = JasperFillManager.fillReport(reportPath, params);
+                        connection = DB.getConnection();
+                        JasperPrint jp = JasperFillManager.fillReport(reportPath, params, connection);
                         byte[] report = JasperExportManager.exportReportToPdf(jp);
                         resp.setHeader("Content-Disposition", "attachment;filename=" + reportName);
                         resp.getOutputStream().write(report);
-                        em.close();
-                    } catch (JRException e) {
+                        connection.close();
+                    } catch (JRException | SQLException e) {
                         e.printStackTrace();
                     }
 
                 }else if (operation == 6){
                     //guests
                     LocalDateTime now = LocalDateTime.now().withNano(0);
-                    String reportName = ("GuestsReport"+now+".pdf").trim().replaceAll("-","").replaceAll(":","").replaceAll("T","");
+                    String reportName = ("GuestsReport_"+now+".pdf").trim().replaceAll(":","-").replaceAll("T","_");
                     HashMap params = new HashMap();
                     String reportPath = getServletContext().getRealPath("/WEB-INF/reports/guests.jasper");
                     try {
-                        EntityManager em = DB.getConnection();
-                        params.put(JRJpaQueryExecuterFactory.PARAMETER_JPA_ENTITY_MANAGER, em);
-                        JasperPrint jp = JasperFillManager.fillReport(reportPath, params);
+                        connection = DB.getConnection();
+                        JasperPrint jp = JasperFillManager.fillReport(reportPath, params, connection);
                         byte[] report = JasperExportManager.exportReportToPdf(jp);
                         resp.setHeader("Content-Disposition", "attachment;filename=" + reportName);
                         resp.getOutputStream().write(report);
-                        em.close();
-                    } catch (JRException e) {
+                        connection.close();
+                    } catch (JRException | SQLException e) {
                         e.printStackTrace();
                     }
 
@@ -101,14 +90,13 @@ public class ReportsController extends HttpServlet{
 
                 String reportPath = getServletContext().getRealPath("/WEB-INF/reports/rooms.jasper");
                 try {
-                    EntityManager em = DB.getConnection();
-                    params.put(JRJpaQueryExecuterFactory.PARAMETER_JPA_ENTITY_MANAGER, em);
-                    JasperPrint jp = JasperFillManager.fillReport(reportPath, params);
+                    connection = DB.getConnection();
+                    JasperPrint jp = JasperFillManager.fillReport(reportPath, params, connection);
                     byte[] report = JasperExportManager.exportReportToPdf(jp);
                     resp.setHeader("Content-Disposition", "attachment;filename=" + reportName);
                     resp.getOutputStream().write(report);
-                    em.close();
-                } catch (JRException e) {
+                    connection.close();
+                } catch (JRException | SQLException e) {
                     e.printStackTrace();
                 }
             }else if (operation == 3){
@@ -120,17 +108,15 @@ public class ReportsController extends HttpServlet{
                 Date finalDate = (req.getParameter("final") != "") ? Date.valueOf(req.getParameter("final")) : null;
                 params.put("initial", initialDate );
                 params.put("final", finalDate);
-
                 String reportPath = getServletContext().getRealPath("/WEB-INF/reports/payments.jasper");
                 try {
-                    EntityManager em = DB.getConnection();
-                    params.put(JRJpaQueryExecuterFactory.PARAMETER_JPA_ENTITY_MANAGER, em);
-                    JasperPrint jp = JasperFillManager.fillReport(reportPath, params);
+                    connection = DB.getConnection();
+                    JasperPrint jp = JasperFillManager.fillReport(reportPath, params, connection);
                     byte[] report = JasperExportManager.exportReportToPdf(jp);
                     resp.setHeader("Content-Disposition", "attachment;filename=" + reportName);
                     resp.getOutputStream().write(report);
-                    em.close();
-                } catch (JRException e) {
+                    connection.close();
+                } catch (JRException | SQLException e) {
                     e.printStackTrace();
                 }
 
@@ -146,14 +132,13 @@ public class ReportsController extends HttpServlet{
 
                 String reportPath = getServletContext().getRealPath("/WEB-INF/reports/roomTypes.jasper");
                 try {
-                    EntityManager em = DB.getConnection();
-                    params.put(JRJpaQueryExecuterFactory.PARAMETER_JPA_ENTITY_MANAGER, em);
-                    JasperPrint jp = JasperFillManager.fillReport(reportPath, params);
+                    connection = DB.getConnection();
+                    JasperPrint jp = JasperFillManager.fillReport(reportPath, params, connection);
                     byte[] report = JasperExportManager.exportReportToPdf(jp);
                     resp.setHeader("Content-Disposition", "attachment;filename=" + reportName);
                     resp.getOutputStream().write(report);
-                    em.close();
-                } catch (JRException e) {
+                    connection.close();
+                } catch (JRException | SQLException e) {
                     e.printStackTrace();
                 }
             }else if (operation == 7){
@@ -163,14 +148,13 @@ public class ReportsController extends HttpServlet{
                 params.put("accessLevel", req.getParameter("access_level").toLowerCase());
                 String reportPath = getServletContext().getRealPath("/WEB-INF/reports/staff.jasper");
                 try {
-                    EntityManager em = DB.getConnection();
-                    params.put(JRJpaQueryExecuterFactory.PARAMETER_JPA_ENTITY_MANAGER, em);
-                    JasperPrint jp = JasperFillManager.fillReport(reportPath, params);
+                    connection = DB.getConnection();
+                    JasperPrint jp = JasperFillManager.fillReport(reportPath, params, connection);
                     byte[] report = JasperExportManager.exportReportToPdf(jp);
                     resp.setHeader("Content-Disposition", "attachment;filename=" + reportName);
                     resp.getOutputStream().write(report);
-                    em.close();
-                } catch (JRException e) {
+                    connection.close();
+                } catch (JRException | SQLException e) {
                     e.printStackTrace();
                 }
             }else if (operation == 8){
@@ -184,14 +168,13 @@ public class ReportsController extends HttpServlet{
 
                 String reportPath = getServletContext().getRealPath("/WEB-INF/reports/arrivalsDepartures.jasper");
                 try {
-                    EntityManager em = DB.getConnection();
-                    params.put(JRJpaQueryExecuterFactory.PARAMETER_JPA_ENTITY_MANAGER, em);
-                    JasperPrint jp = JasperFillManager.fillReport(reportPath, params);
+                    connection = DB.getConnection();
+                    JasperPrint jp = JasperFillManager.fillReport(reportPath, params, connection);
                     byte[] report = JasperExportManager.exportReportToPdf(jp);
                     resp.setHeader("Content-Disposition", "attachment;filename=" + reportName);
                     resp.getOutputStream().write(report);
-                    em.close();
-                } catch (JRException e) {
+                    connection.close();
+                } catch (JRException | SQLException e) {
                     e.printStackTrace();
                 }
             }

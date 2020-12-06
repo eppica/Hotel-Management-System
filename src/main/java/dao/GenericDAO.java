@@ -18,7 +18,7 @@ public class GenericDAO<E> {
 
     public E executeNamedQuery(String name, HashMap<String, Object> params) {
         E result = null;
-        EntityManager em = DB.getConnection();
+        EntityManager em = DB.getEntityManager();
         try {
             TypedQuery<E> query = em.createNamedQuery(name, this.persistedClass);
             for (String param : params.keySet()) {
@@ -36,7 +36,7 @@ public class GenericDAO<E> {
     }
 
     public E save(E entity) {
-        EntityManager em = DB.getConnection();
+        EntityManager em = DB.getEntityManager();
         try {
             em.getTransaction().begin();
             em.persist(entity);
@@ -53,7 +53,7 @@ public class GenericDAO<E> {
     }
 
     public E find(Integer id) {
-        EntityManager em = DB.getConnection();
+        EntityManager em = DB.getEntityManager();
         E entity = null;
         try {
             entity = em.find(this.persistedClass, id);
@@ -66,7 +66,7 @@ public class GenericDAO<E> {
     }
 
     public List findAll() {
-        EntityManager em = DB.getConnection();
+        EntityManager em = DB.getEntityManager();
         List<E> entities = null;
         try {
             Query query = em.createQuery("from " + persistedClass.getSimpleName());
@@ -83,7 +83,7 @@ public class GenericDAO<E> {
     }
 
     public void update(E entity) {
-        EntityManager em = DB.getConnection();
+        EntityManager em = DB.getEntityManager();
         try {
             em.getTransaction().begin();
             em.merge(entity);
@@ -97,7 +97,7 @@ public class GenericDAO<E> {
     }
 
     public void delete(Integer id) {
-        EntityManager em = DB.getConnection();
+        EntityManager em = DB.getEntityManager();
         E entity = null;
         try {
             entity = em.find(this.persistedClass, id);
@@ -113,7 +113,7 @@ public class GenericDAO<E> {
     }
 
     public List findAll(String args) {
-        EntityManager em = DB.getConnection();
+        EntityManager em = DB.getEntityManager();
         List<E> entities = null;
         try {
             String sql = String.format("FROM %s %s", this.persistedClass.getSimpleName(), args);
@@ -135,7 +135,7 @@ public class GenericDAO<E> {
     }
 
     public BigDecimal sumAll(String column, String args) {
-        EntityManager em = DB.getConnection();
+        EntityManager em = DB.getEntityManager();
         BigDecimal value = null;
         try {
             String sql = String.format("SELECT SUM(%s) FROM %s %s",column, this.persistedClass.getSimpleName(), args);
@@ -154,7 +154,7 @@ public class GenericDAO<E> {
     }
 
     public Integer countAll(String column, String args) {
-        EntityManager em = DB.getConnection();
+        EntityManager em = DB.getEntityManager();
         Integer value = null;
         try {
             String sql = String.format("SELECT COUNT(%s)FROM %s %s",column, this.persistedClass.getSimpleName(), args);
