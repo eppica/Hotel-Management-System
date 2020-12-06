@@ -157,11 +157,18 @@ public class Staff{
         params.put("login", request.getParameter("login"));
         params.put("password", request.getParameter("password"));
 
+        if(Staff.findAll().isEmpty()){
+            Staff staff = new Staff("ADMIN - SHOULD BE DELETED OR UPDATED", AccessLevel.OWNER, "admin", "admin");
+            staff.save();
+        }
+
         Staff staff = (Staff) DAO.executeNamedQuery("authenticate",params);
 
-        if(staff.id != null){
-            request.getSession().setAttribute("sessionStaff", staff);
-            return true;
+        if(staff != null) {
+            if (staff.id != null) {
+                request.getSession().setAttribute("sessionStaff", staff);
+                return true;
+            }
         }
         return false;
     }
