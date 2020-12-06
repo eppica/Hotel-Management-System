@@ -71,6 +71,10 @@ public class StaffController extends HttpServlet {
             Staff staff = new Staff(URLDecoder.decode(data,  StandardCharsets.UTF_8.toString()).split("&"));
             staff.setId(Servlet.getId(req));
             staff.update();
+            Staff staffSession = (Staff) req.getSession().getAttribute("sessionStaff");
+            if(staff.getId().equals(staffSession.getId())){
+                req.getSession().setAttribute("sessionStaff", staff);
+            }
         }else {
             req.getRequestDispatcher("/WEB-INF/404.jsp").forward(req, resp);
         }
@@ -81,6 +85,10 @@ public class StaffController extends HttpServlet {
         Integer operation = Servlet.getOperation(req);
         if (operation == 2) {
             Staff.delete(Servlet.getId(req));
+            Staff staffSession = (Staff) req.getSession().getAttribute("sessionStaff");
+            if(Servlet.getId(req).equals(staffSession.getId())){
+                req.getRequestDispatcher("/auth/logout").forward(req, resp);
+            }
         }else {
             req.getRequestDispatcher("/WEB-INF/404.jsp").forward(req, resp);
         }
