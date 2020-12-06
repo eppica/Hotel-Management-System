@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" type="text/css" href="../css/error.css"/>
-    <title>404</title>
+    <title>500</title>
     <meta name="viewport" content="width=device-width, user-scalable=0"/>
 </head>
 <body id="body">
