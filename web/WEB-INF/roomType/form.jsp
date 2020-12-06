@@ -15,12 +15,12 @@
         <h1><c:choose><c:when test="${roomType == null}">New</c:when><c:otherwise>Edit</c:otherwise></c:choose> Room Type</h1>
         <label for="name">Name</label>
         <input type="text" name="name" id="name" autocomplete="off" autofocus="autofocus"
-               value="${roomType.getName()}">
+               value="${roomType.getName()}" required>
         <label for="description">Description</label>
-        <textarea name="description" id="description" cols="30" rows="5">${roomType.getDescription()}</textarea>
+        <textarea name="description" id="description" cols="30" rows="5" required>${roomType.getDescription()}</textarea>
         <label for="daily_price">Daily Price</label>
         <input type="number" name="daily_price" id="daily_price" min="0.00" max="10000.00" step="0.01"
-               value="${roomType.getDailyPrice()}">
+               value="${roomType.getDailyPrice()}" required>
 
         <div class="submit">
             <button onclick="window.history.go(-1);" type="button">Cancel</button>

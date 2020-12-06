@@ -13,7 +13,7 @@
     <form action="/rooms" id="form" <c:if test="${room == null}">method="POST" </c:if> >
         <h1><c:choose><c:when test="${room == null}">New</c:when><c:otherwise>Edit</c:otherwise></c:choose> Room</h1>
         <label for="number">Number</label>
-        <input type="number" name="number" id="number" autofocus="autofocus" value="${room.getNumber()}">
+        <input type="number" name="number" id="number" autofocus="autofocus" value="${room.getNumber()}" required>
         <label for="id_room_type">Room Type</label>
         <select name="id_room_type" id="id_room_type" required>
             <option disabled selected value></option>

@@ -12,24 +12,24 @@
     <form action="/bookings" id="form" <c:if test="${booking == null}">method="POST" </c:if> >
         <h1><c:choose><c:when test="${booking == null}">New</c:when><c:otherwise>Edit</c:otherwise></c:choose> Booking</h1>
         <label for="arrival">Arrival</label>
-        <input type="date" name="arrival" id="arrival" autocomplete="off" min="${minDateArrival}" value="${booking.getArrival()}">
+        <input type="date" name="arrival" id="arrival" autocomplete="off" min="${minDateArrival}" value="${booking.getArrival()}" required>
         <label for="departure">Departure</label>
-        <input type="date" name="departure" id="departure" autocomplete="off" value="${booking.getDeparture()}">
+        <input type="date" name="departure" id="departure" autocomplete="off" value="${booking.getDeparture()}" required>
         <div class="split">
             <label for="room_type">Room Type</label>
             <label for="id_room">Number</label>
-            <select name="room_type" id="room_type"<c:if test="${booking == null}">disabled </c:if>>
+            <select name="room_type" id="room_type"<c:if test="${booking == null}">disabled </c:if> required>
                 <c:if test="${booking == null}"><option disabled selected value></option></c:if>
                 <c:forEach items="${roomTypeList}" var="roomType">
                     <option value="${roomType.getId()}" <c:if test="${booking.getRoom().getRoomType().getId() == roomType.getId()}">selected</c:if>>${roomType.getName()}</option>
                 </c:forEach>
             </select>
-            <select name="id_room" id="id_room" <c:if test="${booking == null}">disabled </c:if>>
+            <select name="id_room" id="id_room" <c:if test="${booking == null}">disabled </c:if> required>
                 <c:if test="${booking != null}"><option value="${booking.getRoom().getId()}">${booking.getRoom().getNumber()}</option> </c:if>
             </select>
         </div>
         <label for="id_guest">Guest</label>
-        <select name="id_guest" id="id_guest">
+        <select name="id_guest" id="id_guest" required>
             <option disabled selected value></option>
             <c:forEach items="${guestList}" var="guest">
                 <option value="${guest.getId()}" <c:if test="${guest.getId() == booking.getGuest().getId()}"> selected </c:if>>${guest.getName()}</option>
