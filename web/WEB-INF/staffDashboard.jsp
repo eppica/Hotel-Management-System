@@ -24,8 +24,15 @@
             </thead>
             <tbody>
             <c:forEach items="${departureList}" var="departure">
-            <tr><td onclick="window.location.href='/bookings/${departure.getId()}';"> <span class="booking">${departure.getId()}</span><br><span class="guest">${departure.getGuest().getName()}</span> </td><td class="room" onclick="window.location.href='/bookings/${departure.getId()}';">${departure.getRoom().getNumber()}</td><td class="check" onclick="openModal(false, ${departure.getId()}, ${departure.getRoom().getNumber()})">Checkout</td>
-                </c:forEach>
+            <tr><td onclick="window.location.href='/bookings/${departure.getId()}';"> <span class="booking">${departure.getId()}</span><br><span class="guest">${departure.getGuest().getName()}</span> </td><td class="room" onclick="window.location.href='/bookings/${departure.getId()}';">${departure.getRoom().getNumber()}</td>
+                <c:if test="${!paid.get(departure.id)}">
+                    <td class='check' style='background-color:gray;' onclick='window.location = /booking/${departute.id};'>Pay</td>
+                <c:out value=""/></c:if>
+                <c:if test="${paid.get(departure.id)}">
+                    <td class='check' onclick='openModal(false, ${departure.getId()}, ${departure.getRoom().getNumber()})'>Checkout</td>
+                </c:if>
+            </tr>
+            </c:forEach>
             </tbody>
         </table>
     </div>

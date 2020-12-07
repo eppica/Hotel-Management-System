@@ -1,8 +1,7 @@
 package controller;
 
 import model.Booking;
-import model.Check;
-import model.Guest;
+import model.Checks;
 import model.Staff;
 
 import javax.servlet.ServletException;
@@ -23,15 +22,15 @@ public class CheckController extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Integer operation = Servlet.getOperation(req);
         if (operation == 1) {
-            List<Check> checkList = Check.findAll();
+            List<Checks> checkList = Checks.findAll();
             req.setAttribute("checkList", checkList);
             req.getRequestDispatcher("/WEB-INF/check/findAll.jsp").forward(req, resp);
         }else if(operation == 2){
-            Check check = Check.find(Servlet.getId(req));
+            Checks check = Checks.find(Servlet.getId(req));
             req.setAttribute("check", check);
             req.getRequestDispatcher("/WEB-INF/check/find.jsp").forward(req, resp);
         } else if (operation == 3) {
-            Check check = Check.find(Servlet.getId(req));
+            Checks check = Checks.find(Servlet.getId(req));
             req.setAttribute("check", check);
             req.setAttribute("staffList", Staff.findAll());
             req.setAttribute("bookingList", Booking.findAll());
@@ -47,11 +46,11 @@ public class CheckController extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Integer operation = Servlet.getOperation(req);
         if (operation == 1) {
-            Check check = new Check(req);
+            Checks check = new Checks(req);
             check.save();
-            resp.sendRedirect("/bookings/"+check.getIdBooking());
+            resp.sendRedirect("/bookings/"+check.getBooking().getId());
         }else{
-            req.getRequestDispatcher("404.jsp").forward(req, resp);
+            req.getRequestDispatcher("/WEB-INF/404.jsp").forward(req, resp);
         }
     }
 
@@ -61,11 +60,11 @@ public class CheckController extends HttpServlet {
         if (operation == 2) {
             BufferedReader br = new BufferedReader(new InputStreamReader(req.getInputStream()));
             String data = br.readLine();
-            Check check = new Check(URLDecoder.decode(data,  StandardCharsets.UTF_8.toString()).split("&"));
+            Checks check = new Checks(URLDecoder.decode(data,  StandardCharsets.UTF_8.toString()).split("&"));
             check.setId(Servlet.getId(req));
             check.update();
         }else{
-            req.getRequestDispatcher("404.jsp").forward(req, resp);
+            req.getRequestDispatcher("/WEB-INF/404.jsp").forward(req, resp);
         }
     }
 
@@ -73,9 +72,9 @@ public class CheckController extends HttpServlet {
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Integer operation = Servlet.getOperation(req);
         if (operation == 2) {
-            Check.delete(Servlet.getId(req));
+            Checks.delete(Servlet.getId(req));
         }else{
-            req.getRequestDispatcher("404.jsp").forward(req, resp);
+            req.getRequestDispatcher("/WEB-INF/404.jsp").forward(req, resp);
         }
     }
 }

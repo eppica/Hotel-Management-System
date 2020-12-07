@@ -1,22 +1,26 @@
 package model;
 
-import dao.StaffDAO;
+import dao.GenericDAO;
 
+import javax.persistence.*;
 import javax.servlet.http.HttpServletRequest;
-import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-public class Staff {
+@Entity
+@NamedNativeQuery(name = "authenticate", query = "SELECT * FROM Staff WHERE login = :login AND password = :password", resultClass = Staff.class)
+public class Staff{
+    @Id
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Integer id;
     private String name;
+    @Enumerated(EnumType.STRING)
     private AccessLevel accessLevel;
     private String login;
     private String password;
-    private static StaffDAO DAO = new StaffDAO();
+    private static GenericDAO DAO = new GenericDAO(Staff.class);
 
     public Staff(String name, AccessLevel accessLevel, String login, String password) {
         this.name = name;
@@ -51,18 +55,6 @@ public class Staff {
             this.password = null;
         }else{
             this.password = request.getParameter("password");
-        }
-    }
-
-    public Staff(ResultSet resultSet){
-        try{
-            this.id = resultSet.getInt("id");
-            this.name = resultSet.getString("name");
-            this.accessLevel = AccessLevel.valueOf(resultSet.getString("access_level"));
-            this.login = resultSet.getString("login");
-            this.password = resultSet.getString("password");
-        }catch (SQLException e){
-            e.printStackTrace();
         }
     }
 
@@ -133,11 +125,11 @@ public class Staff {
     }
 
     public static Staff save(Staff staff){
-        return DAO.save(staff);
+        return (Staff) DAO.save(staff);
     }
 
     public static Staff find(Integer id){
-        return DAO.find(id);
+        return (Staff) DAO.find(id);
     }
 
     public static List<Staff> findAll(){
@@ -153,7 +145,7 @@ public class Staff {
     }
 
     public Staff save(){
-        return DAO.save(this);
+        return (Staff) DAO.save(this);
     }
 
     public void update(){
@@ -161,10 +153,22 @@ public class Staff {
     }
 
     public static Boolean authenticate(HttpServletRequest request){
-        Staff staff = DAO.authenticate(request.getParameter("login"), request.getParameter("password"));
-        if(staff.id != null){
-            request.getSession().setAttribute("sessionStaff", staff);
-            return true;
+        HashMap<String, Object> params = new HashMap<>();
+        params.put("login", request.getParameter("login"));
+        params.put("password", request.getParameter("password"));
+
+        if(Staff.findAll().isEmpty()){
+            Staff staff = new Staff("ADMIN - SHOULD BE DELETED OR UPDATED", AccessLevel.OWNER, "admin", "admin");
+            staff.save();
+        }
+
+        Staff staff = (Staff) DAO.executeNamedQuery("authenticate",params);
+
+        if(staff != null) {
+            if (staff.id != null) {
+                request.getSession().setAttribute("sessionStaff", staff);
+                return true;
+            }
         }
         return false;
     }

@@ -7,25 +7,18 @@ import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.math.BigDecimal;
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.Date;
-import java.time.LocalDate;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -46,7 +39,7 @@ public class ReportsController extends HttpServlet{
                 if (operation == 5){
                     //bookings
                     LocalDateTime now = LocalDateTime.now().withNano(0);
-                    String reportName = ("BookingsReport"+now+".pdf").trim().replaceAll("-","").replaceAll(":","").replaceAll("T","");
+                    String reportName = ("BookingsReport_"+now+".pdf").trim().replaceAll(":","-").replaceAll("T","_");
                     HashMap params = new HashMap();
                     String reportPath = getServletContext().getRealPath("/WEB-INF/reports/bookings.jasper");
                     try {
@@ -55,16 +48,15 @@ public class ReportsController extends HttpServlet{
                         byte[] report = JasperExportManager.exportReportToPdf(jp);
                         resp.setHeader("Content-Disposition", "attachment;filename=" + reportName);
                         resp.getOutputStream().write(report);
-                    } catch (JRException e) {
+                        connection.close();
+                    } catch (JRException | SQLException e) {
                         e.printStackTrace();
-                    }finally {
-                        DB.closeConnection(connection);
                     }
 
                 }else if (operation == 6){
                     //guests
                     LocalDateTime now = LocalDateTime.now().withNano(0);
-                    String reportName = ("GuestsReport"+now+".pdf").trim().replaceAll("-","").replaceAll(":","").replaceAll("T","");
+                    String reportName = ("GuestsReport_"+now+".pdf").trim().replaceAll(":","-").replaceAll("T","_");
                     HashMap params = new HashMap();
                     String reportPath = getServletContext().getRealPath("/WEB-INF/reports/guests.jasper");
                     try {
@@ -73,10 +65,9 @@ public class ReportsController extends HttpServlet{
                         byte[] report = JasperExportManager.exportReportToPdf(jp);
                         resp.setHeader("Content-Disposition", "attachment;filename=" + reportName);
                         resp.getOutputStream().write(report);
-                    } catch (JRException e) {
+                        connection.close();
+                    } catch (JRException | SQLException e) {
                         e.printStackTrace();
-                    }finally {
-                        DB.closeConnection(connection);
                     }
 
                 }
@@ -93,7 +84,7 @@ public class ReportsController extends HttpServlet{
             Connection connection = null;
             if (operation == 2){
                 LocalDateTime now = LocalDateTime.now().withNano(0);
-                String reportName = ("RoomsReport"+now+".pdf").trim().replaceAll("-","").replaceAll(":","").replaceAll("T","");
+                String reportName = ("RoomsReport_"+now+".pdf").trim().replaceAll(":","-").replaceAll("T","_");
                 HashMap params = new HashMap();
                 params.put("RoomType", Integer.valueOf(req.getParameter("id_room_type")) );
 
@@ -104,21 +95,19 @@ public class ReportsController extends HttpServlet{
                     byte[] report = JasperExportManager.exportReportToPdf(jp);
                     resp.setHeader("Content-Disposition", "attachment;filename=" + reportName);
                     resp.getOutputStream().write(report);
-                } catch (JRException e) {
+                    connection.close();
+                } catch (JRException | SQLException e) {
                     e.printStackTrace();
-                }finally {
-                    DB.closeConnection(connection);
                 }
             }else if (operation == 3){
                 //payments
                 LocalDateTime now = LocalDateTime.now().withNano(0);
-                String reportName = ("PaymentsReport"+now+".pdf").trim().replaceAll("-","").replaceAll(":","").replaceAll("T","");
+                String reportName = ("PaymentsReport_"+now+".pdf").trim().replaceAll(":","-").replaceAll("T","_");
                 HashMap params = new HashMap();
                 Date initialDate = (req.getParameter("initial") != "") ? Date.valueOf(req.getParameter("initial")) : null;
                 Date finalDate = (req.getParameter("final") != "") ? Date.valueOf(req.getParameter("final")) : null;
                 params.put("initial", initialDate );
                 params.put("final", finalDate);
-
                 String reportPath = getServletContext().getRealPath("/WEB-INF/reports/payments.jasper");
                 try {
                     connection = DB.getConnection();
@@ -126,15 +115,14 @@ public class ReportsController extends HttpServlet{
                     byte[] report = JasperExportManager.exportReportToPdf(jp);
                     resp.setHeader("Content-Disposition", "attachment;filename=" + reportName);
                     resp.getOutputStream().write(report);
-                } catch (JRException e) {
+                    connection.close();
+                } catch (JRException | SQLException e) {
                     e.printStackTrace();
-                }finally {
-                    DB.closeConnection(connection);
                 }
 
             }else if (operation == 4){
                 LocalDateTime now = LocalDateTime.now().withNano(0);
-                String reportName = ("RoomTypesReport"+now+".pdf").trim().replaceAll("-","").replaceAll(":","").replaceAll("T","");
+                String reportName = ("RoomTypesReport_"+now+".pdf").trim().replaceAll(":","-").replaceAll("T","_");
                 HashMap params = new HashMap();
 
                 BigDecimal min = (req.getParameter("min_daily_price")!=null) ? new BigDecimal(req.getParameter("min_daily_price")) : null;
@@ -149,14 +137,13 @@ public class ReportsController extends HttpServlet{
                     byte[] report = JasperExportManager.exportReportToPdf(jp);
                     resp.setHeader("Content-Disposition", "attachment;filename=" + reportName);
                     resp.getOutputStream().write(report);
-                } catch (JRException e) {
+                    connection.close();
+                } catch (JRException | SQLException e) {
                     e.printStackTrace();
-                }finally {
-                    DB.closeConnection(connection);
                 }
             }else if (operation == 7){
                 LocalDateTime now = LocalDateTime.now().withNano(0);
-                String reportName = ("StaffReport"+now+".pdf").trim().replaceAll("-","").replaceAll(":","").replaceAll("T","");
+                String reportName = ("StaffReport_"+now+".pdf").trim().replaceAll(":","-").replaceAll("T","_");
                 HashMap params = new HashMap();
                 params.put("accessLevel", req.getParameter("access_level").toLowerCase());
                 String reportPath = getServletContext().getRealPath("/WEB-INF/reports/staff.jasper");
@@ -166,14 +153,13 @@ public class ReportsController extends HttpServlet{
                     byte[] report = JasperExportManager.exportReportToPdf(jp);
                     resp.setHeader("Content-Disposition", "attachment;filename=" + reportName);
                     resp.getOutputStream().write(report);
-                } catch (JRException e) {
+                    connection.close();
+                } catch (JRException | SQLException e) {
                     e.printStackTrace();
-                }finally {
-                    DB.closeConnection(connection);
                 }
             }else if (operation == 8){
                 LocalDateTime now = LocalDateTime.now().withNano(0);
-                String reportName = ("ArrivalsDeparturesReport"+now+".pdf").trim().replaceAll("-","").replaceAll(":","").replaceAll("T","");
+                String reportName = ("ArrivalsDeparturesReport_"+now+".pdf").trim().replaceAll(":","-").replaceAll("T","_");
                 HashMap params = new HashMap();
                 Date initialDate = (req.getParameter("initial") != "") ? Date.valueOf(req.getParameter("initial")) : null;
                 Date finalDate = (req.getParameter("final") != "") ? Date.valueOf(req.getParameter("final")) : null;
@@ -187,10 +173,9 @@ public class ReportsController extends HttpServlet{
                     byte[] report = JasperExportManager.exportReportToPdf(jp);
                     resp.setHeader("Content-Disposition", "attachment;filename=" + reportName);
                     resp.getOutputStream().write(report);
-                } catch (JRException e) {
+                    connection.close();
+                } catch (JRException | SQLException e) {
                     e.printStackTrace();
-                }finally {
-                    DB.closeConnection(connection);
                 }
             }
         }

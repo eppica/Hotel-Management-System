@@ -1,24 +1,26 @@
 package model;
 
-import dao.GuestDAO;
+import dao.GenericDAO;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.servlet.http.HttpServletRequest;
-import java.math.BigDecimal;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-public class Guest {
+@Entity
+public class Guest{
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String name;
     private String document;
     private LocalDate birthDate;
     private String email;
     private String phoneNumber;
-    private static GuestDAO DAO = new GuestDAO();
+    private static GenericDAO DAO = new GenericDAO(Guest.class);
 
     public Guest(String name, String document, LocalDate birthDate, String email, String phoneNumber) {
         this.name = name;
@@ -87,19 +89,6 @@ public class Guest {
         }
     }
 
-    public Guest(ResultSet resultSet){
-        try {
-            this.id = resultSet.getInt("id");
-            this.name = resultSet.getString("name");
-            this.document = resultSet.getString("document");
-            this.birthDate = resultSet.getDate("birth_date").toLocalDate();
-            this.email = resultSet.getString("email");
-            this.phoneNumber = resultSet.getString("phone_number");
-        }catch (SQLException e){
-            e.printStackTrace();
-        }
-    }
-
     public Integer getId() {
         return id;
     }
@@ -155,11 +144,11 @@ public class Guest {
     }
 
     public static Guest save(Guest guest){
-        return DAO.save(guest);
+        return (Guest) DAO.save(guest);
     }
 
     public static Guest find(Integer id){
-        return DAO.find(id);
+        return (Guest) DAO.find(id);
     }
 
     public static List<Guest> findAll(){
@@ -175,7 +164,7 @@ public class Guest {
     }
 
     public Guest save(){
-        return DAO.save(this);
+        return (Guest) DAO.save(this);
     }
 
     public void update(){

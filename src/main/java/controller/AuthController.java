@@ -23,11 +23,11 @@ public class AuthController extends HttpServlet {
                 req.getRequestDispatcher("/WEB-INF/auth/login.jsp").forward(req, resp);
             }
 
-        }else if(operation ==2){
+        }else if(operation == 2){
             req.getSession().removeAttribute("sessionStaff");
             resp.sendRedirect("/auth/login");
         }else{
-            req.getRequestDispatcher("404.jsp").forward(req, resp);
+            req.getRequestDispatcher("/WEB-INF/404.jsp").forward(req, resp);
         }
     }
 

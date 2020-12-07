@@ -29,7 +29,7 @@ public class PaymentController extends HttpServlet {
             Payment payment = new Payment((URLDecoder.decode(data,  StandardCharsets.UTF_8.toString()).split("&")));
             payment.save();
         }else {
-            req.getRequestDispatcher("404.jsp").forward(req, resp);
+            req.getRequestDispatcher("/WEB-INF/404.jsp").forward(req, resp);
         }
     }
 
@@ -43,7 +43,7 @@ public class PaymentController extends HttpServlet {
             payment.setId(Servlet.getId(req));
             payment.update();
         }else{
-            req.getRequestDispatcher("404.jsp").forward(req, resp);
+            req.getRequestDispatcher("/WEB-INF/404.jsp").forward(req, resp);
         }
     }
 
@@ -53,7 +53,7 @@ public class PaymentController extends HttpServlet {
         if (operation == 2) {
             Payment.delete(Servlet.getId(req));
         }else {
-            req.getRequestDispatcher("404.jsp").forward(req, resp);
+            req.getRequestDispatcher("/WEB-INF/404.jsp").forward(req, resp);
         }
     }
 }

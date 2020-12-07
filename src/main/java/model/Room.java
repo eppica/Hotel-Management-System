@@ -1,66 +1,56 @@
 package model;
 
-import dao.RoomDAO;
+import dao.GenericDAO;
 
+import javax.persistence.*;
 import javax.servlet.http.HttpServletRequest;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
+@Entity
 public class Room {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private Integer idRoomType;
+    @ManyToOne
     private RoomType roomType;
     private Integer number;
-    private static RoomDAO DAO = new RoomDAO();
+    private static GenericDAO DAO = new GenericDAO(Room.class);
 
-    public Room(Integer idRoomType, Integer number) {
-        this.idRoomType = idRoomType;
+    public Room(RoomType roomType, Integer number) {
+        this.roomType = roomType;
         this.number = number;
     }
 
     public Room() {
     }
 
-    public Room(String[] data){
-        for(String x : data){
+    public Room(String[] data) {
+        for (String x : data) {
             String[] add = x.split("=");
-            if(add.length == 1){
+            if (add.length == 1) {
                 continue;
             }
-            if(add[0].equals("id_room_type")){
-                this.idRoomType = Integer.valueOf(add[1]);
+            if (add[0].equals("id_room_type")) {
+                this.roomType = RoomType.find(Integer.valueOf(add[1]));
             }
-            if(add[0].equals("number")){
+            if (add[0].equals("number")) {
                 this.number = Integer.valueOf(add[1]);
             }
         }
     }
 
-    public Room(HttpServletRequest request){
-        if(request.getParameter("id_room_type").isEmpty()){
-            this.idRoomType = null;
-        }else{
-            this.idRoomType = Integer.valueOf(request.getParameter("id_room_type"));
+    public Room(HttpServletRequest request) {
+        if (request.getParameter("id_room_type").isEmpty()) {
+            this.roomType = null;
+        } else {
+            this.roomType = RoomType.find(Integer.valueOf(request.getParameter("id_room_type")));
         }
 
-        if(request.getParameter("number").isEmpty()){
+        if (request.getParameter("number").isEmpty()) {
             this.number = null;
-        }else {
+        } else {
             this.number = Integer.valueOf(request.getParameter("number"));
-        }
-    }
-
-    public Room(ResultSet resultSet){
-        try{
-            this.id = resultSet.getInt("id");
-            this.idRoomType = resultSet.getInt("room_type_fk");
-            this.number = resultSet.getInt("number");
-        }catch (SQLException e){
-            e.printStackTrace();
         }
     }
 
@@ -73,27 +63,21 @@ public class Room {
         return this;
     }
 
-    public Integer getIdRoomType() {
-        return idRoomType;
-    }
-
-    public Room setIdRoomType(Integer idRoomType) {
-        this.idRoomType = idRoomType;
-        return this;
-    }
-
     public RoomType getRoomType() {
-        if(roomType == null){
-            roomType = RoomType.find(idRoomType);
-        }
         return roomType;
     }
 
     public String getAvailability() {
-        if(!DAO.findAll("WHERE id = "+this.getId()+ " AND id IN (SELECT room_fk FROM booking WHERE id IN (SELECT booking_fk FROM `check` WHERE status = 1) AND id NOT IN (SELECT booking_fk FROM `check` WHERE status = 0))").isEmpty()){
-            return "Occupied";
-        }else if(!DAO.findAll("WHERE id=" + this.getId() + " AND id IN (SELECT room_fk FROM booking WHERE id NOT IN (SELECT booking_fk FROM `check`))").isEmpty()){
-            return "Booked";
+
+        if (DAO.findAll("WHERE id = " + this.getId() + " AND id IN (SELECT room FROM Booking  WHERE id IN (SELECT booking FROM Checks WHERE status = 1) AND id NOT IN (SELECT booking FROM Checks WHERE status = 0))") != null) {
+            if (!DAO.findAll("WHERE id = " + this.getId() + " AND id IN (SELECT room FROM Booking  WHERE id IN (SELECT booking FROM Checks WHERE status = 1) AND id NOT IN (SELECT booking FROM Checks WHERE status = 0))").isEmpty()) {
+                return "Occupied";
+            }
+        }
+        if(DAO.findAll("WHERE id = " + this.getId() + " AND id IN (SELECT room FROM Booking WHERE id NOT IN (SELECT booking FROM Checks ))") != null) {
+            if (!DAO.findAll("WHERE id = " + this.getId() + " AND id IN (SELECT room FROM Booking WHERE id NOT IN (SELECT booking FROM Checks ))").isEmpty()) {
+                return "Booked";
+            }
         }
         return "Available";
     }
@@ -112,37 +96,39 @@ public class Room {
         return this;
     }
 
-    public static Room save(Room room){
-        return DAO.save(room);
+    public static Room save(Room room) {
+        return (Room) DAO.save(room);
     }
 
-    public static Room find(Integer id){
-        return DAO.find(id);
+    public static Room find(Integer id) {
+        return (Room) DAO.find(id);
     }
 
-    public static List<Room> findAll(){
+    public static List<Room> findAll() {
         return DAO.findAll();
     }
-    public static Integer countAll(String args){
-        return DAO.countAll(args);
+
+    public static Integer countAll(String args) {
+        return DAO.countAll("id", args);
     }
-    public static List<Room> findAll(String args){
+
+    public static List<Room> findAll(String args) {
         return DAO.findAll(args);
     }
 
-    public static void update(Room room){
+    public static void update(Room room) {
         DAO.update(room);
     }
 
-    public static void delete(Integer id){
+    public static void delete(Integer id) {
         DAO.delete(id);
     }
 
-    public Room save(){
-        return DAO.save(this);
+    public Room save() {
+        return (Room) DAO.save(this);
     }
 
-    public void update(){
+    public void update() {
         DAO.update(this);
     }
 
@@ -150,17 +136,15 @@ public class Room {
     public String toString() {
         return "Room{" +
                 "id=" + id +
-                ", idRoomType=" + idRoomType +
                 ", roomType=" + roomType +
                 ", number=" + number +
                 '}';
     }
 
-    public String toJSON(){
+    public String toJSON() {
         return "{" +
-                "\"id\":\"" + id + "\""+
-                ", \"idRoomType\":\"" + idRoomType +"\""+
-                ", \"number\":\"" + number + "\""+
+                "\"id\":\"" + id + "\"" +
+                ", \"number\":\"" + number + "\"" +
                 "}";
     }
 }

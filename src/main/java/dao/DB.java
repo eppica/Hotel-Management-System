@@ -1,8 +1,19 @@
 package dao;
 
-import java.sql.*;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
 public abstract class DB {
+
+    private static EntityManagerFactory emf = Persistence.createEntityManagerFactory("hmsPU");
+
+    public static EntityManager getEntityManager() {
+        return emf.createEntityManager();
+    }
 
     public static Connection getConnection(){
         Connection connection = null;
@@ -17,27 +28,5 @@ public abstract class DB {
         return connection;
     }
 
-    public static void closeConnection(Connection connection, Statement statement){
-        try {
-            if(statement != null){
-                statement.close();
-            }
-            if (connection != null){
-                connection.close();
-            }
-        }catch (SQLException e){
-            e.printStackTrace();
-        }
-    }
 
-
-    public static void closeConnection(Connection connection){
-        try {
-            if (connection != null){
-                connection.close();
-            }
-        }catch (SQLException e){
-            e.printStackTrace();
-        }
-    }
 }

@@ -1,0 +1,33 @@
+body {
+    margin: 0;
+    height: 100vh;
+    font-family: Arial, Helvetica, sans-serif;
+    display: grid;
+    grid-template-columns: 0.4fr 2.3fr 0.4fr;
+    grid-template-rows: 1fr 1.4fr 0.6fr 1fr;
+    gap: 0px 0px;
+    grid-template-areas:
+            ". . ."
+            ". . ."
+            ". . ."
+            ". . .";
+}
+
+#error_cod{
+    grid-area: 2/2/3/3;
+    font-size: 300px;
+    text-align: center;
+}
+
+#error_message{
+    grid-area: 3/2/4/3;
+    text-align: center;
+}
+
+#error_message span{
+    font-size: 40px;
+}
+
+#error_message span{
+    font-size: 25px;
+}

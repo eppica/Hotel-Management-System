@@ -1,22 +1,25 @@
 package model;
 
-import dao.RoomTypeDAO;
+import dao.GenericDAO;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
+@Entity
 public class RoomType {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String name;
     private String description;
     private BigDecimal dailyPrice;
-    private static RoomTypeDAO DAO = new RoomTypeDAO();
+    private static GenericDAO DAO = new GenericDAO(RoomType.class);
 
     public RoomType(String name, String description, BigDecimal dailyPrice) {
         this.name = name;
@@ -43,17 +46,6 @@ public class RoomType {
             if(add[0].equals("daily_price")){
                 this.dailyPrice = new BigDecimal(add[1]);
             }
-        }
-    }
-
-    public RoomType(ResultSet resultSet){
-        try {
-            this.id = resultSet.getInt("id");
-            this.name = resultSet.getString("name");
-            this.description = resultSet.getString("description").replaceAll("[\\n\\t]", "");
-            this.dailyPrice = resultSet.getBigDecimal("daily_price");
-        }catch (SQLException e){
-            e.printStackTrace();
         }
     }
 
@@ -114,11 +106,11 @@ public class RoomType {
     }
 
     public static RoomType save(RoomType roomType){
-        return DAO.save(roomType);
+        return (RoomType) DAO.save(roomType);
     }
 
     public static RoomType find(Integer id){
-        return DAO.find(id);
+        return (RoomType) DAO.find(id);
     }
 
     public static List<RoomType> findAll(){
@@ -138,7 +130,7 @@ public class RoomType {
     }
 
     public RoomType save(){
-        return DAO.save(this);
+        return (RoomType) DAO.save(this);
     }
 
     public void update(){

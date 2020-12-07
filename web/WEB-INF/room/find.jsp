@@ -1,11 +1,3 @@
-
-<%--
-  Created by IntelliJ IDEA.
-  User: Lavinha
-  Date: 5/3/2020
-  Time: 12:52 PM
-  To change this template use File | Settings | File Templates.
---%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
@@ -37,7 +29,7 @@
             <span class="label">Number</span>
             <span class="data">${room.getNumber()}</span>
         </div>
-        <div class="property link" onclick="window.location.href='/roomTypes/${room.getIdRoomType()}';">
+        <div class="property link" onclick="window.location.href='/roomTypes/${room.getRoomType().getId()}';">
             <span class="label">Room Type</span>
             <span class="data">${room.getRoomType().getName()}</span>
         </div>

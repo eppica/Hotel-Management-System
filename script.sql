@@ -1,101 +1,115 @@
+CREATE DATABASE IF NOT EXISTS `hms` DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+USE `hms`;
 
-drop database hms;
-create database hms;
-use hms;
+CREATE TABLE `booking` (
+                           `id` int(11) NOT NULL,
+                           `arrival` date DEFAULT NULL,
+                           `departure` date DEFAULT NULL,
+                           `total` decimal(19,2) DEFAULT NULL,
+                           `guest_id` int(11) DEFAULT NULL,
+                           `room_id` int(11) DEFAULT NULL,
+                           `staff_id` int(11) DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-create table booking
-(
-    id        int auto_increment
-        primary key,
-    room_fk   int            null,
-    guest_fk  int            null,
-    arrival   date           null,
-    departure date           null,
-    total     decimal(13, 4) null,
-    staff_fk  int            null
-);
+CREATE TABLE `checks` (
+                          `id` int(11) NOT NULL,
+                          `checkTime` datetime DEFAULT NULL,
+                          `status` bit(1) DEFAULT NULL,
+                          `booking_id` int(11) DEFAULT NULL,
+                          `staff_id` int(11) DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-create index booking_guest_id_fk
-    on booking (guest_fk);
+CREATE TABLE `guest` (
+                         `id` int(11) NOT NULL,
+                         `birthDate` date DEFAULT NULL,
+                         `document` varchar(255) DEFAULT NULL,
+                         `email` varchar(255) DEFAULT NULL,
+                         `name` varchar(255) DEFAULT NULL,
+                         `phoneNumber` varchar(255) DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-create index booking_room_id_fk
-    on booking (room_fk);
+CREATE TABLE `payment` (
+                           `id` int(11) NOT NULL,
+                           `payTime` datetime DEFAULT NULL,
+                           `paymentMethod` varchar(255) DEFAULT NULL,
+                           `value` decimal(19,2) DEFAULT NULL,
+                           `booking_id` int(11) DEFAULT NULL,
+                           `staff_id` int(11) DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-create index booking_staff_id_fk
-    on booking (staff_fk);
+CREATE TABLE `room` (
+                        `id` int(11) NOT NULL,
+                        `number` int(11) DEFAULT NULL,
+                        `roomType_id` int(11) DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-create table `check`
-(
-    id         int auto_increment
-        primary key,
-    `check`    datetime   null,
-    staff_fk   int        null,
-    booking_fk int        null,
-    status     tinyint(1) null
-);
+CREATE TABLE `roomtype` (
+                            `id` int(11) NOT NULL,
+                            `dailyPrice` decimal(19,2) DEFAULT NULL,
+                            `description` varchar(255) DEFAULT NULL,
+                            `name` varchar(255) DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-create index check_booking_id_fk
-    on `check` (booking_fk);
-
-create index check_staff_id_fk
-    on `check` (staff_fk);
-
-create table guest
-(
-    id           int auto_increment
-        primary key,
-    name         varchar(255) null,
-    document     varchar(32)  null,
-    birth_date   date         null,
-    email        varchar(64)  null,
-    phone_number varchar(32)  null
-);
-
-create table payment
-(
-    id         int auto_increment
-        primary key,
-    value      decimal(13, 4)        not null,
-    method     enum ('CASH', 'CARD') not null,
-    booking_fk int                   null,
-    pay_time   datetime              not null,
-    staff_fk   int                   null
-);
-
-create index payment_booking_fk
-    on payment (booking_fk);
-
-create index payment_staff_fk
-    on payment (staff_fk);
-
-create table room
-(
-    id           int auto_increment
-        primary key,
-    room_type_fk int null,
-    number       int null
-);
-
-create index room_room_type_id_fk
-    on room (room_type_fk);
-
-create table room_type
-(
-    id          int auto_increment
-        primary key,
-    name        varchar(64)    null,
-    description varchar(255)   null,
-    daily_price decimal(13, 4) null
-);
-
-create table staff
-(
-    id           int auto_increment
-        primary key,
-    name         varchar(255)            null,
-    access_level enum ('OWNER', 'STAFF') null,
-    login        varchar(32)             null,
-    password     varchar(64)             null
-);
+CREATE TABLE `staff` (
+                         `id` int(11) NOT NULL,
+                         `accessLevel` varchar(255) DEFAULT NULL,
+                         `login` varchar(255) DEFAULT NULL,
+                         `name` varchar(255) DEFAULT NULL,
+                         `password` varchar(255) DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 
+ALTER TABLE `booking`
+    ADD PRIMARY KEY (`id`),
+    ADD KEY `FKs0yg8nbvp96u5vf3wfh685rcp` (`guest_id`),
+    ADD KEY `FKowymy55vrygpdnacvnbck2js3` (`room_id`),
+    ADD KEY `FKfvwnge63uejojl97650lpyd02` (`staff_id`);
+
+ALTER TABLE `checks`
+    ADD PRIMARY KEY (`id`),
+    ADD KEY `FKmeomx1m6ycre055o90qdksoyw` (`booking_id`),
+    ADD KEY `FKaqc6lyqmy0mv6rwtnuodu2a6n` (`staff_id`);
+
+ALTER TABLE `guest`
+    ADD PRIMARY KEY (`id`);
+
+ALTER TABLE `payment`
+    ADD PRIMARY KEY (`id`),
+    ADD KEY `FKt30qv3axmqwhk1wag867yxqum` (`booking_id`),
+    ADD KEY `FKov0p9jd34njt27gu7jks7mv4i` (`staff_id`);
+
+ALTER TABLE `room`
+    ADD PRIMARY KEY (`id`),
+    ADD KEY `FKklafyw0cu1h3eo2m7vl1f4ga1` (`roomType_id`);
+
+ALTER TABLE `roomtype`
+    ADD PRIMARY KEY (`id`);
+
+ALTER TABLE `staff`
+    ADD PRIMARY KEY (`id`);
+
+
+ALTER TABLE `booking`
+    MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `checks`
+    MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `guest`
+    MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `payment`
+    MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `room`
+    MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `roomtype`
+    MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `staff`
+    MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+INSERT INTO `staff`(accessLevel, login, name, password)
+VALUES ('OWNER', 'admin', 'ADMIN - MUST BE DELETED OR EDITED', 'admin');
+COMMIT;
