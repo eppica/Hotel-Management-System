@@ -28,7 +28,7 @@
 <c:if test="${allowed == false}">
     <style>
         .edit {
-            justify-content: end;
+            justify-content: flex-end;
         }
     </style>
 </c:if>
