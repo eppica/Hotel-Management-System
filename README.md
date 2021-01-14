@@ -17,10 +17,9 @@ Hotel Management System is a web application developed to Programming Language c
 - JavaScript
 
 ## Development Enviroment
-- Intellij Idea 2020.1 (Student Subscription)
-- Apache Server 2.4.41 (provided by WAMPP)
-- MySQL Server 5.7.28 (provided by WAMPP)
-- TomCat 8.5.58
+- Intellij Idea 2020.3.1 (Student Subscription)
+- Apache Server 2.4.41 (provided by XAMPP)
+- MySQL Server 5.7.28 (provided by XAMPP)
 - OpenJDK 15
 - JSTL 1.2 (provided by Maven)
 - MySQL Connector Java 5.1.38 (provided by Maven)
@@ -45,11 +44,10 @@ Each release of this project implements a semester of the Programming Language c
 ## Requirements
 
 To run and edit this project locally, it's required that you have installed the following programs:
->This tutorial will be based on IntelliJ Idea configs
-- IntelliJ 
-- WAMPP
-- Tomcat
+- IntelliJ
+- XAMPP
 - OpenJDK 15
+- Maven
 
 After that, you'll need to clone this repo:
 ```
@@ -58,41 +56,39 @@ git clone https://github.com/LBeghini/Hotel-Management-System.git
 
 ## Setup Environment
 
-### Environment
-- Open the project on IntelliJ
-- Install Maven dependencies
-- Set Run/Debug configurations to Tomcat Server
-- Config Project SDK to OpenJDK 15
+On IntelliJ, open the project cloned from GitHub.
+
+### Maven Dependencies
+
+Anywhere inside the IDE, type `shift+shit` and when the search input appears, type `reload project` and hit enter.
+This will install all Maven dependencies.
+
+### Run Configuration
+
+Anywhere inside the IDE, type `shift+shit` and when the search input appears, type `run/debug configurations` and hit enter.
+This will open the Run/Debug Configurations dialog.
+
+Add a New Configuration clicking on the `+` button or type `alt+insert`. Choose Maven.
+In the Parameters tab, at the Command line input, type:
+```
+package cargo:run
+```
+
+### Project SDK
+
+On IntelliJ, go to `File > Project Structure`.
+On the Project Structure dialog, there's an input to place the Project SDK. 
+
+You can choose one that is alrealdy installed on your machine, or let IntelliJ download if for you.
 
 ### Database
-- Run WAMPP
+- Run XAMPP
+- On XAMPP Dashboard, run MySQL and Apache
+- At any browser, access http://localhost/phpmyadmin.
+- On Database tab, enter and create a new database called `hms` 
 - Create a database ```hms```
-- Connect to database
-    - Go to ```HMS/src/main/java/dao/DB```
-    - Change credentials to your database
->A ```script.sql``` model is provided for creating the database
 
-### How to run
-
-To run this project without and IDE, you can download the ```.WAR``` file provided in the release.  
-Remember that you'll still going to need to run a database.  
-However, the credentials to that database have match the one as follows:   
-
-```
-URL: jdbc:mysql://localhost:3306/hms
-USER: root
-PASSWORD: 
-``` 
-
-Run tomcat 
->This can be done with ```cmd``` 
-
-Open your browser in ```localhost:8080```. You should see a page provided by tomcat.  
-On the manager menu, search for the option to select the WAR file and deploy.
-
->You might have to set user and password for tomcat at this step
-
-After that, you will be able to connect to the application from ```localhost:8080```
+> Remember that the user credentials to the project to access this database is username:`root` and password:` `
 
 
 ## License
