@@ -18,7 +18,6 @@ Hotel Management System is a web application developed to Programming Language c
 
 ## Development Enviroment
 - Intellij Idea 2020.3.1 (Student Subscription)
-- Apache Server 2.4.41 (provided by XAMPP)
 - MySQL Server 5.7.28 (provided by XAMPP)
 - OpenJDK 15
 - JSTL 1.2 (provided by Maven)
@@ -60,12 +59,12 @@ On IntelliJ, open the project cloned from GitHub.
 
 ### Maven Dependencies
 
-Anywhere inside the IDE, type `shift+shit` and when the search input appears, type `reload project` and hit enter.
+Anywhere inside the IDE, type `shift+shift` and when the search input appears, type `reload project` and hit enter.
 This will install all Maven dependencies.
 
 ### Run Configuration
 
-Anywhere inside the IDE, type `shift+shit` and when the search input appears, type `run/debug configurations` and hit enter.
+Anywhere inside the IDE, type `shift+shift` and when the search input appears, type `run/debug configurations` and hit enter.
 This will open the Run/Debug Configurations dialog.
 
 Add a New Configuration clicking on the `+` button or type `alt+insert`. Choose Maven.
@@ -83,10 +82,9 @@ You can choose one that is alrealdy installed on your machine, or let IntelliJ d
 
 ### Database
 - Run XAMPP
-- On XAMPP Dashboard, run MySQL and Apache
+- On XAMPP Dashboard, run MySQL
 - At any browser, access http://localhost/phpmyadmin.
 - On Database tab, enter and create a new database called `hms` 
-- Create a database ```hms```
 
 > Remember that the user credentials to the project to access this database is username:`root` and password:` `
 
