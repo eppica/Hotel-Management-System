@@ -104,7 +104,7 @@ public class APIController extends HttpServlet {
 
                 StringBuilder json = null;
                 if ((arrival != null) && (departure != null) && (roomType != null)) {
-                    List<Room> roomList = Room.findAll("WHERE id = " + roomType + " AND id NOT IN (SELECT room FROM Booking WHERE (arrival <= '" + departure + "' AND departure >= '" + arrival + "') AND id NOT IN (SELECT booking FROM Checks WHERE  status = 0))");
+                    List<Room> roomList = Room.findAll("WHERE roomType = " + roomType + " AND id NOT IN (SELECT room FROM Booking WHERE (arrival <= '" + departure + "' AND departure >= '" + arrival + "') AND id NOT IN (SELECT booking FROM Checks WHERE  status = 0))");
                     if(roomList!=null) {
                         if (!roomList.isEmpty()) {
                             json = new StringBuilder("[");
