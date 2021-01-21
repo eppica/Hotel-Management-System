@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 
 @Entity
-@NamedNativeQuery(name = "findBookedRoom", query = "SELECT * FROM Booking B WHERE B.room_id = :id AND :id NOT IN (SELECT C.booking_id FROM Checks C WHERE status = 0)")
+@NamedNativeQuery(name = "findBookedRoom", query = "SELECT * FROM Booking B WHERE B.room_id = :id AND id NOT IN (SELECT C.booking_id FROM Checks C WHERE status = 0)", resultClass = Booking.class)
 public class Booking{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
