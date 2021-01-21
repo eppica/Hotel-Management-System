@@ -125,8 +125,8 @@ public class ReportsController extends HttpServlet{
                 String reportName = ("RoomTypesReport_"+now+".pdf").trim().replaceAll(":","-").replaceAll("T","_");
                 HashMap params = new HashMap();
 
-                BigDecimal min = (req.getParameter("min_daily_price")!=null) ? new BigDecimal(req.getParameter("min_daily_price")) : null;
-                BigDecimal max = (req.getParameter("max_daily_price")!=null) ? new BigDecimal(req.getParameter("max_daily_price")) : null;
+                BigDecimal min = (req.getParameter("min_daily_price")!="") ? new BigDecimal(req.getParameter("min_daily_price")) : null;
+                BigDecimal max = (req.getParameter("max_daily_price")!="") ? new BigDecimal(req.getParameter("max_daily_price")) : null;
                 params.put("minDailyPrice", min);
                 params.put("maxDailyPrice", max);
 
