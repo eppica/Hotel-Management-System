@@ -1,4 +1,4 @@
-# Hotel Management System
+# :bellhop_bell: Hotel Management System
 
 ## About
 
@@ -88,7 +88,6 @@ You can choose one that is alrealdy installed on your machine, or let IntelliJ d
 
 > Remember that the user credentials to the project to access this database is username:`root` and password:` `
 
-
-## License
+## :balance_scale: License
 
 GPL-2.0 License
