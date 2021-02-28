@@ -32,9 +32,10 @@ To read the entire documentation, go to [Wiki](https://github.com/LBeghini/Hotel
 Each release of this project implements a semester of the Programming Language class.
 
 
-|  CLASS                  |      TAG                                                                            |
-| :------------           | :---------:                                                                         |
-| Programming Language I  |     [v1.0](https://github.com/LBeghini/Hotel-Management-System/releases/tag/1.0)    |
+|  CLASS                    |      TAG                                                                            |
+| :------------             | :---------:                                                                         |
+| Programming Language II   |     [v1.0](https://github.com/LBeghini/Hotel-Management-System/releases/tag/1.0)    |
+| Programming Language III  |     [v2.0](https://github.com/LBeghini/Hotel-Management-System/releases/tag/2.0)    |
 
 
 > Access the release page for a better description of what the release implements 
