@@ -3,8 +3,19 @@
 ## About
 
 
-Hotel Management System is a web application developed to Programming Language class in order to supply the basics necessities of a real hotel while we improve our knowledge
+Hotel Management System is a web application developed to Programming Language class in order to supply the basics necessities of a real hotel while we improve our knowledge. It is a system that implements the basics necessities of a real hotel, receiving guests and managing rooms.
 
+
+## Features
+
+- Booking
+- Check-in and check-out
+- Guests management
+- Rooms management
+- Room Types management
+- Staff management
+- Access Control
+- Strategic reports
 
 ## Technologies
 
