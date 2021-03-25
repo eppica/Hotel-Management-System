@@ -29,6 +29,9 @@ Hotel Management System is a web application developed to Programming Language c
 
 ## Development Enviroment
 - Intellij Idea 2020.3.1 (Student Subscription)
+- XAMPP
+
+## Dependencies
 - MySQL Server 5.7.28 (provided by XAMPP)
 - OpenJDK 15
 - JSTL 1.2 (provided by Maven)
