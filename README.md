@@ -100,6 +100,26 @@ You can choose one that is alrealdy installed on your machine, or let IntelliJ d
 
 > Remember that the user credentials to the project to access this database is username:`root` and password:` `
 
+## Tests
+
+### Functional test
+
+Cypress it's beign utilized to functional testing.  
+To install Cypress, be sure to have installed in you computer the following programs:
+- Node
+
+Then, go to `test` folder and run
+```
+npm install
+```
+to install dependencies, and:
+```
+npx cypress open
+```
+to open Cypress.  
+
+From the prompt that appears you can choose to run a scpecific test, or all tests.
+
 ## :balance_scale: License
 
 GPL-2.0 License
