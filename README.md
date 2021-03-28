@@ -125,4 +125,4 @@ From the prompt that appears you can choose to run a scpecific test, or all test
 
 ## :balance_scale: License
 
-GPL-2.0 License
+[GPL-2.0 License](https://github.com/eppica/Hotel-Management-System/blob/master/LICENSE)
