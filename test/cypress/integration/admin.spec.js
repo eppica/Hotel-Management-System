@@ -2,7 +2,7 @@
 
 
 describe('Admin', () => {
-  it('should succeed on create user', () => {
+  beforeEach(() => {
     cy.visit('localhost:8080')
     cy.location('pathname').should('include', '/auth/login');
 
@@ -11,6 +11,12 @@ describe('Admin', () => {
 
     cy.get('input[type="submit"]').contains('Login').click();
     
+    cy.location('pathname').should('include', '/dashboard');
+  })
+  
+  it('should succeed on create user', () => {
+    cy.visit('localhost:8080/dashboard')
+
     cy.location('pathname').should('include', '/dashboard');
 
     cy.get('a').contains('Staff').click();
@@ -26,6 +32,82 @@ describe('Admin', () => {
 
     cy.get('input[type="submit"]').contains('Submit').click();
   });
+
+  it('should succeed on create room type', () => {
+    cy.visit('localhost:8080/dashboard')
+
+    cy.location('pathname').should('include', '/dashboard');
+
+    cy.get('a').contains('Room Types').click();
+
+    cy.contains('Room Types').should('be.visible');
+
+    cy.get('button').contains('New Room Type').click();
+
+    cy.get('input[name="name"]').type('mock room');
+    cy.get('textarea').type('A beatiful mock room');
+    cy.get('input[name="daily_price"]').type('999.99');
+
+    cy.get('input[type="submit"]').contains('Submit').click();
+  });
+
+  it('should succeed on create room', () => {
+    cy.visit('localhost:8080/dashboard')
+
+    cy.location('pathname').should('include', '/dashboard');
+
+    cy.get('a').contains('Rooms').click();
+
+    cy.contains('Rooms').should('be.visible');
+
+    cy.get('button').contains('New Room').click();
+
+    cy.get('input[name="number"]').type('999');
+    cy.get('select[name="id_room_type"] option').eq(1).then(element => cy.get('select[name=id_room_type]').select(element.val()));
+
+    cy.get('input[type="submit"]').contains('Submit').click();
+  });
+
+  it('should succeed on create guest', () => {
+    cy.visit('localhost:8080/dashboard')
+
+    cy.location('pathname').should('include', '/dashboard');
+
+    cy.get('a').contains('Guests').click();
+
+    cy.contains('Guests').should('be.visible');
+
+    cy.get('button').contains('New Guest').click();
+
+    cy.get('input[name="name"]').type('John Deere');
+    cy.get('input[name="document"]').type('156415616915');
+    cy.get('input[name="birth_date"]').type('1956-09-17');
+    cy.get('input[name="email"]').type('john@deere.com');
+    cy.get('input[name="phone_number"]').type('61956977412');
+
+    cy.get('input[type="submit"]').contains('Submit').click();
+  });
+
+  it('should succeed on create booking', () => {
+    cy.visit('localhost:8080/dashboard')
+
+    cy.location('pathname').should('include', '/dashboard');
+
+    cy.get('a').contains('Bookings').click();
+
+    cy.contains('Bookings').should('be.visible');
+
+    cy.get('button').contains('New Booking').click();
+
+    cy.get('input[name="arrival"]').type('2022-04-01');
+    cy.get('input[name="departure"]').type('2022-04-30');
+    cy.get('select[name="room_type"] option').eq(1).then(element => cy.get('select[name=room_type]').select(element.val()));
+    cy.get('select[name="id_room"] option').eq(1).then(element => cy.get('select[name=id_room]').select(element.val()));
+    cy.get('select[name="id_guest"] option').eq(1).then(element => cy.get('select[name=id_guest]').select(element.val()));
+
+    cy.get('input[type="submit"]').contains('Submit').click();
+  });
+
 });
 
 // Spec files cannot be compiled under '--isolatedModules' because it is considered a global script file.
