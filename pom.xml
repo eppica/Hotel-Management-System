@@ -117,6 +117,12 @@
             <artifactId>hibernate-entitymanager</artifactId>
             <version>5.4.22.Final</version>
         </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>RELEASE</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
 </project>
