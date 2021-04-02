@@ -31,6 +31,11 @@ describe('Admin', () => {
     cy.get('input[name="password"]').type('staff');
 
     cy.get('input[type="submit"]').contains('Submit').click();
+
+    cy.visit('localhost:8080/staff');
+    cy.location('pathname').should('include', '/staff');
+    cy.get('table').contains('td', 'staff').should('be.visible');
+
   });
 
   it('should succeed on create room type', () => {
@@ -49,6 +54,11 @@ describe('Admin', () => {
     cy.get('input[name="daily_price"]').type('999.99');
 
     cy.get('input[type="submit"]').contains('Submit').click();
+
+    cy.visit('localhost:8080/roomTypes');
+    cy.location('pathname').should('include', '/roomTypes');
+    cy.get('table').contains('td', 'mock room').should('be.visible');
+
   });
 
   it('should succeed on create room', () => {
@@ -66,6 +76,10 @@ describe('Admin', () => {
     cy.get('select[name="id_room_type"] option').eq(1).then(element => cy.get('select[name=id_room_type]').select(element.val()));
 
     cy.get('input[type="submit"]').contains('Submit').click();
+
+    cy.visit('localhost:8080/rooms');
+    cy.location('pathname').should('include', '/rooms');
+    cy.get('table').contains('td', '999').scrollIntoView().should('be.visible');
   });
 
   it('should succeed on create guest', () => {
@@ -86,6 +100,11 @@ describe('Admin', () => {
     cy.get('input[name="phone_number"]').type('61956977412');
 
     cy.get('input[type="submit"]').contains('Submit').click();
+
+    cy.visit('localhost:8080/guests');
+    cy.location('pathname').should('include', '/guests');
+    cy.get('table').contains('td', 'John Deere').scrollIntoView().should('be.visible');
+
   });
 
   it('should succeed on create booking', () => {
@@ -106,6 +125,10 @@ describe('Admin', () => {
     cy.get('select[name="id_guest"] option').eq(1).then(element => cy.get('select[name=id_guest]').select(element.val()));
 
     cy.get('input[type="submit"]').contains('Submit').click();
+
+    cy.location('pathname').should('include', '/bookings');
+    cy.get('div').contains('button', 'Checkin').should('be.visible');
+
   });
 
 });
