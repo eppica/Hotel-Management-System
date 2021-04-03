@@ -87,13 +87,14 @@ In the Parameters tab, at the Command line input, type:
 ```
 package cargo:run
 ```
+After that, click on `OK` button
 
 ### Project SDK
 
 On IntelliJ, go to `File > Project Structure`.
 On the Project Structure dialog, there's an input to place the Project SDK. 
 
-You can choose one that is alrealdy installed on your machine, or let IntelliJ download if for you.
+You can choose one that is alrealdy installed on your machine, or let IntelliJ download it for you.
 
 ### Database
 - Run XAMPP
